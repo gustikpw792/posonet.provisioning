@@ -1,0 +1,23 @@
+*/config/development
+*/logs/log-*.php
+!*/logs/index.html
+*/cache/*
+!system/cache/*
+!*/cache/index.html
+!*/cache/.htaccess
+
+user_guide/*
+
+#codeigniter 3
+app/logs/*
+!app/logs/index.html
+!app/logs/.htaccess
+/vendor/
+app/config/config.php
+app/config/database.php
+assets/backup/*
+assets/invoice/*
+assets/tempQr/img/*
+app/config/config.php
+app/config/database.php
+composer.lock
