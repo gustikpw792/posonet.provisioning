@@ -12,7 +12,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="<?php echo base_url('assets/inspinia271/img/favicon/favicon-16x16.png') ?>">
   <link rel="manifest" href="<?php echo base_url('assets/inspinia271/img/favicon/site.webmanifest') ?>">
 
-  <title><?= ucwords(str_replace('_', ' ', ($active == 'pelanggan') ? 'ONU' : $active)) . " | " . 'Provisioning'//$profilP->nama_perusahaan; ?></title>
+  <title><?= $appName['title'] ." | Provisioning ". ucwords(str_replace('_', ' ', ($active == 'pelanggan') ? 'ONU' : $active)) //$profilP->nama_perusahaan; ?></title>
 
   <link href="<?= base_url('assets/inspinia271/css/bootstrap.min.css') ?>" rel="stylesheet">
   <link href="<?= base_url('assets/inspinia271/font-awesome/css/font-awesome.css') ?>" rel="stylesheet">

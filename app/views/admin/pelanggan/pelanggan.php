@@ -120,7 +120,7 @@
                             </table>
                         </div>
 
-                        <div class="xtable-responsive" id="step4">
+                        <div class="ztable-responsive" id="step4">
                             <table class="table table-condensed table-hover" id="table">
                                 <thead>
                                     <tr>

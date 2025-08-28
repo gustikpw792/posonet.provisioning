@@ -60,6 +60,7 @@ class Dashboard extends CI_Controller
 	private function _create_view($segmen = null, $folder = null)
 	{
 		if ($segmen != null && $folder != null) {
+			$data['appName'] = $this->config->item('app_name');
 			$data['profilP'] = $this->dsh->get_by_id(1);
 			$data['active'] = $page = $segmen;
 			$this->load->view("$folder/templates/header", $data);

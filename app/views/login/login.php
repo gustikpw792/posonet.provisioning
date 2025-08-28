@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
     
-    <title><?php echo $title; ?> | Login</title>
+    <title><?= $title ?> | Login</title>
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo base_url('assets/inspinia271/img/favicon/apple-touch-icon.png') ?>">
     <link rel="icon" type="image/png" sizes="32x32" href="<?php echo base_url('assets/inspinia271/img/favicon/favicon-32x32.png') ?>">
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo base_url('assets/inspinia271/img/favicon/favicon-16x16.png') ?>">
@@ -54,7 +54,7 @@
         <hr />
         <div class="row text-center">
             <div class="col-md-6">
-                Copyright PT. POSO MEDIA VISION - POSO NET
+                Copyright PT. POSO MEDIA VISION - POSONET
             </div>
             <div class="col-md-6">
                 <small>© 2020-<?php echo date('Y') ?></small>

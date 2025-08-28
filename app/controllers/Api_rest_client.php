@@ -780,15 +780,29 @@ _handled by %s_";
 		SET ip_address='$request->ip_address', remote_web_state='$state'
 		WHERE gpon_onu='$gpon_onu'");
 
-		if ($remote_state == 'enable' && $this->_is_public_ip_access()['public_access']) {
-			$link = 'http://'. $this->_is_public_ip_access()['remote_ip'] . ":8095";
-			$this->routermodel->setPublicRemoteOnt(
-				(object) [
-					'to-addresses' => $ipRemote,
-				],$ipRemote
-			);
-		} else {
-			$link = "http://$ipRemote";
+		$link = '';
+
+		if ($remote_state == 'enable')
+		{
+			$statusIp = $this->_is_public_ip_access();
+
+			if ($statusIp['public_access']) {
+				$link = 'http://'. $statusIp['remote_ip'] . ":8095";
+				$this->routermodel->setPublicRemoteOnt(
+					(object) [
+						'to-addresses' => $ipRemote,
+					],$ipRemote
+				);
+			} else if ($statusIp['public_access'] == false && $_SERVER['HTTP_HOST'] != 'localhost' && $statusIp['message'] != 'Accessed locally') {
+				$link = 'http://'. $statusIp['remote_ip'] . ":8095";
+				$this->routermodel->setPublicRemoteOnt(
+					(object) [
+						'to-addresses' => $ipRemote,
+					],$ipRemote
+				);
+			} else {
+				$link = "http://$ipRemote";
+			}
 		}
 
 		echo json_encode([
@@ -801,6 +815,8 @@ _handled by %s_";
 	private function _is_public_ip_access()
 	{
 		$server_ip = $_SERVER['SERVER_ADDR'] ?? gethostbyname(gethostname());
+		// $server_ip = $_SERVER['SERVER_ADDR'] ?? gethostbyname($_SERVER['HTTP_HOST']);
+		// $remote_ip = $_SERVER['HTTP_HOST'] ?? $_SERVER['REMOTE_ADDR'] ?? null;
 		$remote_ip = $_SERVER['HTTP_HOST'] ?? $_SERVER['REMOTE_ADDR'] ?? null;
 
 		// If accessed from the same IP, it's local

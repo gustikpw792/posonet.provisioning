@@ -73,11 +73,12 @@ class Login extends CI_Controller
 
 	private function _autentikasi($rdr = '')
 	{
+		$appName = $this->config->item('app_name');
 		if ($this->_cekAdminExist()) {
 			if ($this->session->level == 'administrator' || $this->session->level == 'kolektor' || $this->session->level == 'teknisi') {
 				$this->_admin();
 			} else {
-				$data['title'] = 'POSO TV App';
+				$data['title'] = $appName['title'];
 				$this->load->view('login/login', $data);
 			}
 		}
