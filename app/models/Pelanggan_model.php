@@ -5,7 +5,7 @@ class Pelanggan_model extends CI_Model
 
   var $table = 'pelanggan';
   var $vtable = 'v_pelanggan';
-  var $column = array('no_pelanggan', 'nama_pelanggan','expired', 'serial_number', 'status','gpon_onu', 'ont_phase_state','odp_number');
+  var $column = array('no_pelanggan', 'nama_pelanggan','expired', 'serial_number', 'status','gpon_onu', 'ont_phase_state','odp_name');
   var $order = array(
     'id_pelanggan' => 'DESC'
   );
@@ -114,7 +114,7 @@ class Pelanggan_model extends CI_Model
 
   public function get_by_id($id_pelanggan)
   {
-    $this->db->from($this->table);
+    $this->db->from($this->vtable);
     $this->db->where('id_pelanggan', $id_pelanggan);
     $query = $this->db->get();
 

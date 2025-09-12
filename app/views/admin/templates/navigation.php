@@ -42,8 +42,9 @@
                                     <span class="fa fa-desktop"></span> Provisioning <span class="caret"></span>
                                 </a>
                                 <ul role="menu" class="dropdown-menu">
-                                    <li></span><a href="<?= site_url('dashboard/pelanggan') ?>">ONU</a></li>
-                                    <li><a href="#">ONU Type</a></li>
+                                    <li><a href="<?= site_url('dashboard/pelanggan') ?>">ONU</a></li>
+                                    <li><a href="<?= site_url('dashboard/odp') ?>">ODP</a></li>
+                                    <!-- <li><a href="#">ODP</a></li> -->
                                 </ul>
                             </li>
 

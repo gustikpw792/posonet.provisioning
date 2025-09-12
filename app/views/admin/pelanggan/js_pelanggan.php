@@ -4,7 +4,7 @@
 <!-- <script src="</?php //echo base_url('assets/inspinia271/js/plugins/chosen/chosen.jquery.js') ?>"></script> -->
 
 <script>
-  var save_method, wilMethod, pdf_data;
+  var save_method, wilMethod, pdf_data, id_odp;
 
   $(function() {
     getSelect();
@@ -17,22 +17,59 @@
   }
 
   var id_wilayah = $('[name="id_wilayah"]').select2({
-    placeholder: "Pilih Wilayah Pelanggan Berdomisili",
+    placeholder: "Pilih Wilayah Pelanggan...",
     width: "100%",
-    // dropdownParent : $('.myModal')
+    dropdownParent : $('#myModal')
   });
   var id_paket = $('[name="id_paket"]').select2({
     placeholder: "Pilih Paket Berlangganan",
     width: "100%",
-    // dropdownParent : $('#myModal')
+    dropdownParent : $('#myModal')
   });
   var zstatus = $('[name="status"]').select2({
     placeholder: "Pilih Status Berlangganan",
     width: "100%",
-    // dropdownParent : $('#myModal')
+    dropdownParent : $('#myModal')
   });
 
-  var table, logTable, pdfdata;
+  id_odp = $('#id_odp').select2({
+      minimumInputLength: 3, // Optional: Minimum characters to type before searching
+      ajax: {
+          url: '<?= site_url('odp/s2_get_data_for_select2') ?>', // Your CodeIgniter AJAX endpoint
+          dataType: 'json',
+          delay: 250, // Delay in milliseconds before sending the request
+          data: function (params) {
+              return {
+                  search: params.term, // Search term from the user input
+                  page: params.page // For pagination
+              };
+          },
+          processResults: function (data, params) {
+              params.page = params.page || 1;
+              return {
+                  results: data.items, // Array of objects with 'id' and 'text'
+                  pagination: {
+                      more: (params.page * 10) < data.total_count // Example for pagination
+                  }
+              };
+          },
+          cache: true
+      },
+      placeholder: 'Cari nama ODP...',
+      width: "100%",
+      dropdownParent : $('#myModal')
+
+  });
+
+  $('.table-responsive').on('show.bs.dropdown', function () {
+     $('.table-responsive').css( "overflow", "inherit" );
+  });
+
+  $('.table-responsive').on('hide.bs.dropdown', function () {
+      $('.table-responsive').css( "overflow", "auto" );
+  })
+
+  var table, logTable;
   $(document).ready(function() {
     $("#formChangeSsid").validate({
         rules: {
@@ -150,6 +187,15 @@
 
     });
 
+    /**
+     * COBA DATATABLE ROW DETAILS
+     */
+    
+
+    /**
+     * END 
+     */
+
     <?php
     if (isset($_GET['search'])) {
       echo "table.search('" . html_escape($this->input->get('search')) . "').draw();";
@@ -217,6 +263,7 @@
     $('.ktpfilename').val('');
     id_wilayah.val(null);
     id_paket.val(null).trigger('change');
+    id_odp.val(null).trigger('change');
     zstatus.val('AKTIF').trigger('change');
     $('.date').val("").datepicker("update");
     $('#myModal').modal('show'); // show bootstrap modal
@@ -306,6 +353,12 @@
         id_wilayah.val(data.id_wilayah).trigger('change');
         wilMethod = 'on';
         id_paket.val(data.id_paket).trigger('change');
+        if(data.id_odp == null) {
+          id_odp.val(null).trigger('change');
+        } else{
+          id_odp.val(data.id_odp).trigger('change');
+        }
+        
         zstatus.val(data.status).trigger('change');
         $('[name="nama_pelanggan"]').val(data.nama_pelanggan);
         $('[name="telp"]').val(data.telp);

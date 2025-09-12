@@ -112,5 +112,20 @@ class odp_model extends CI_Model
     $this->db->delete('odp');
   }
 
+  /**
+   *  Model for select2
+   * 
+  */
+  public function s2_get_items($search, $limit, $offset) {
+        $this->db->like('odp_name', $search); // Search by 'name' column
+        // $this->db->limit($limit, $offset);
+        $query = $this->db->get('odp'); // Replace 'your_table' with your table name
+        return $query->result();
+    }
+
+  public function s2_count_items($search) {
+      $this->db->like('odp_name', $search);
+      return $this->db->count_all_results('odp');
+  }
 
 }

@@ -97,6 +97,36 @@ class Odp extends CI_Controller
 		echo json_encode($data);
 	}
 
+	/**
+	 * Select2 server-side request
+	 */
+
+	public function s2_get_data_for_select2() {
+        $search = $this->input->get('search');
+        $page = $this->input->get('page');
+        $limit = 10; // Number of items per page
+        $offset = ($page - 1) * $limit;
+
+        // Fetch data from your model based on search term and pagination
+        $data = $this->odp->s2_get_items($search, $limit, $offset);
+        $total_count = $this->odp->s2_count_items($search); // Total items for pagination
+
+        // Format data for Select2
+        $formatted_data = array();
+        foreach ($data as $item) {
+            $formatted_data[] = array(
+                'id' => $item->id_odp, // The ID of the item
+                'text' => $item->odp_name // The text to display in Select2
+            );
+        }
+
+        echo json_encode(array(
+            'items' => $formatted_data,
+            'total_count' => $total_count
+        ));
+    }
+	
+
 	private function _validate()
 	{
 		$data = array();

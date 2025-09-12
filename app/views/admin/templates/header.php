@@ -42,12 +42,12 @@
     <script type="text/javascript" src="<?php echo base_url('assets/instascan/download/instascan.min.js') ?>"></script>
   <?php endif; ?>
 
-  <?php if ($active == 'pelanggan' || $active == 'kwitansi' || $active == 'master_setoran' || $active == 'kolektor' || $active == 'detail_setoran' || $active == 'wa_notif' || $active == 'settings') : ?>
+  <?php if ($active == 'pelanggan' || $active == 'kwitansi' || $active == 'master_setoran' || $active == 'kolektor' || $active == 'detail_setoran' || $active == 'wa_notif' || $active == 'settings' || $active == 'odp') : ?>
     <link href="<?= base_url('assets/inspinia271/css/plugins/select2/select2.min.css') ?>" rel="stylesheet">
     <style media="screen">
-      .select2-close-mask {
+      /* .select2-close-mask {
         z-index: 2199;
-      }
+      } */
 
       .select2-dropdown {
         z-index: 2200;

@@ -184,4 +184,30 @@ ADD `expiry_time` DATETIME NULL DEFAULT NULL;
 t.transaction_time,t.transaction_status, t.transaction_id, t.status_code, t.payment_type, t.order_id, t.gross_amount, t.settlement_time,
 t.issuer, t.acquirer, t.merchant_id, t.store, t.payment_code, t.va_numbers,t.expiry_time,p.telp
 
+# (2025-08-30) replace script in 'v_pelanggan' with
+SELECT `p`.`id_pelanggan` AS `id_pelanggan`,`p`.`no_pelanggan` AS `no_pelanggan`,`p`.`nama_pelanggan` AS `nama_pelanggan`,
+`p`.`alamat` AS `alamat`,`w`.`wilayah` AS `wilayah`,`t`.`nama_paket` AS `nama_paket`,`t`.`tarif` AS `tarif`,
+`p`.`tgl_instalasi` AS `tgl_instalasi`,`p`.`expired` AS `expired`,`p`.`serial_number` AS `serial_number`,
+`p`.`lokasi_map` AS `lokasi_map`,`p`.`telp` AS `telp`,`p`.`status` AS `status`,`p`.`keterangan` AS `keterangan`,
+`p`.`id_wilayah` AS `id_wilayah`,`p`.`id_paket` AS `id_paket`,`w`.`kode_wilayah` AS `kode_wilayah`,
+`p`.`email` AS `email`, ktp_filename, p.gpon_olt, p.gpon_onu,p.remote_web_state, p.onu_db, p.distance, p.vlan_profile, p.cvlan, p.no_ktp,
+p.ont_phase_state, t.mikrotik_profile,p.name,p.username,p.`password`,p.onu_type,p.description,p.active_connection,IF(p.expired < CURDATE(),'Expired','Active') AS status_berlangganan,
+p.odp_number, p.odp_location, p.sort, o.odp_name, p.id_odp, o.latlong
+FROM `pelanggan` `p` 
+left join `paket` `t` 
+ON `p`.`id_paket` = `t`.`id_paket` 
+left join `wilayah` `w`
+ON `p`.`id_wilayah` = `w`.`id_wilayah` 
+LEFT JOIN odp o
+ON p.id_odp = o.id_odp
+ORDER BY `p`.`id_pelanggan` DESC 
+
+# (2025-08-30) replace script in 'v_onu_los' with
+SELECT v.id_pelanggan,v.gpon_olt,v.gpon_onu,v.no_pelanggan,v.nama_pelanggan, v.expired,v.ont_phase_state, 
+v.odp_number, v.odp_location, v.lokasi_map, v.odp_name, v.latlong
+FROM v_pelanggan v 
+WHERE v.ont_phase_state = 'LOS' OR v.ont_phase_state = 'syncMib' OR v.ont_phase_state = 'logging'
+ORDER BY v.gpon_onu ASC 
+
+
 

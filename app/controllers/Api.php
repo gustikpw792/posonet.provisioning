@@ -49,11 +49,21 @@ ORDER BY id_trx DESC
 LIMIT 1", [$noInternet]);
 
         if ($data->num_rows() > 0) {
-            $res = array(
-                'data' => $data->row(),
-                'status' => true,
-                'message' => 'Invoice found(s)',
-            );
+            if ($data->row()->next_expired < date('Y-m-d')) {
+                $res = array(
+                    'data' => null,
+                    'status' => true,
+                    'message' => 'Tagihan belum keluar..',
+                );
+                
+            } else {
+                $res = array(
+                    'data' => $data->row(),
+                    'status' => true,
+                    'message' => 'Invoice found(s)',
+                );
+            }
+
         } else {
             $res = array(
                 'data' => null,
@@ -68,7 +78,8 @@ LIMIT 1", [$noInternet]);
                 ->set_output(json_encode($res));
     }
 
-    public function updateInvoiceStatus(){
+    public function updateInvoiceStatus()
+    {
         $transaction_status = $this->input->post("transaction_status", TRUE);
         $status = ($transaction_status == 'settlement' || $transaction_status == 'capture') ? 'Lunas' : 'Belum Bayar';
 
@@ -108,6 +119,7 @@ LIMIT 1", [$noInternet]);
             $cek = $this->db->query("SELECT * FROM temp_invoice WHERE order_id=?", [$data['order_id']]);
             $where = array('order_id' => $data['order_id']);
             $isLog = true;
+            
         } else if ($transaction_status == 'pending' || $transaction_status == 'deny') {
             $cek = $this->db->query("SELECT * FROM temp_invoice WHERE kode_invoice=?", [$kode_invoice[1]]);
             $where = array('kode_invoice' => $kode_invoice[1]);
@@ -121,16 +133,30 @@ LIMIT 1", [$noInternet]);
                 if ($isLog) {
                     $tgl = date('Y-m-d H:i:s');
                     $dt = json_encode($data);
-            
-                    $this->db->insert('log', [
-                        'time' => $tgl,
-                        'topic' => 'MIDTRANS',
-                        'message' => $dt
-                    ]);
-                }
+                    
+                    // Perpanjang paket pelanggan atau transaksi benar2 real
+                    if ($this->api['production']) {
+                        // call the activation
+                        $per = $this->_goPerpanjang($data['order_id']);
+                        // log the transaction
+                        $this->db->insert('log', [
+                            'time' => $tgl,
+                            'topic' => 'MIDTRANS',
+                            'message' => $dt
+                        ]);
 
-		        $update = $this->apiModel->updateDataTempInvoice($where, $data);
+                    } else {
+                        $this->db->insert('log', [
+                            'time' => $tgl,
+                            'topic' => 'MIDTRANS-TESTMODE',
+                            'message' => $dt
+                        ]);
+                    }
+                }
+                
                 // Update the order_id in the database
+		        $update = $this->apiModel->updateDataTempInvoice($where, $data);
+
                 $this->output
                     ->set_status_header(200)
                     ->set_content_type('application/json')
@@ -193,4 +219,37 @@ LIMIT 1", [$noInternet]);
                 ->set_output(json_encode(['status' => false, 'message' => 'Error retrieving payment details: ' . $e->getMessage()]));
         }       
     }
+
+    private function _goPerpanjang($order_id)
+    {
+        $getGpon = $this->db->query("SELECT t.kode_invoice,t.no_pelanggan,t.expired,p.gpon_onu
+                FROM temp_invoice t, v_pelanggan p
+                WHERE t.no_pelanggan=p.no_pelanggan 
+                AND t.order_id=?", [$order_id])->row();
+        
+        $dataGpon = (object) array(
+            'gpon_onu' => $getGpon->gpon_onu,
+            'expired' => $getGpon->expired,
+            'username' => 'payment-gateway', // identity for telegram notification
+        );
+        // load model
+		$this->load->model('api_mikrotik_model', 'routermodel');
+        $this->load->model('api_rest_client_model', 'perpanjang');
+
+        return $this->perpanjang->extendThisPaket($dataGpon, true);
+    }
+
+    // public function coba()
+    // {
+    //     $this->load->model('ruangwa_model','wa');
+    //     $sendwa = $this->wa->sendMessageSuccess(
+    //         array(
+    //             'number' => '081340310250',
+    //             'expired' => '20 Oktober 2025',
+    //         )
+    //     );
+
+    //     echo json_encode($sendwa);
+    // }
+
 }

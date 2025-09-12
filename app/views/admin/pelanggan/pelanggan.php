@@ -120,7 +120,7 @@
                             </table>
                         </div>
 
-                        <div class="ztable-responsive" id="step4">
+                        <div class="table-responsive" id="step4">
                             <table class="table table-condensed table-hover" id="table">
                                 <thead>
                                     <tr>
@@ -135,7 +135,7 @@
                                         <th>Expire</th>
                                         <th>Tarif</th>
                                         <th>Status</th>
-                                        <th>Aksi</th>
+                                        <!-- <th>Aksi</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -186,7 +186,7 @@
 
 
 
-        <div class="modal inmodal" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal inmodal" id="myModal" xtabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" style="width:80%">
                 <div class="modal-content animated fadeInDown">
                     <div class="modal-header">
@@ -241,7 +241,7 @@
                                         </div>
                                     </div> -->
                                     <div class="form-group"><label class="col-md-3 control-label ">Wilayah</label>
-                                        <div class="col-md-9"><select name="id_wilayah" class="form-control fokus"></select> <span class="help-block m-b-none"></span>
+                                        <div class="col-md-9"><select name="id_wilayah" id="id_wilayah" class="form-control fokus"></select> <span class="help-block m-b-none"></span>
                                         </div>
                                     </div>
                                     <div class="form-group"><label class="col-md-3 control-label ">No Pelanggan</label>
@@ -270,14 +270,19 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group"><label class="col-md-3 control-label">ODP Number</label>
+                                    <div class="form-group"><label class="col-md-3 control-label ">ODP Name</label>
+                                        <div class="col-md-9"><select name="id_odp" id="id_odp" class="form-control" style="display: none;"></select> <span class="help-block m-b-none"></span>
+                                        </div>
+                                    </div>
+
+                                    <!-- <div class="form-group"><label class="col-md-3 control-label">ODP Number</label>
                                         <div class="col-md-9"><input type="text" name="odp_number" placeholder="ODP-PDL-001" class="form-control"> <span class="help-block m-b-none"></span>
                                         </div>
                                     </div>
                                     <div class="form-group"><label class="col-md-3 control-label">ODP Lat,Long</label>
                                         <div class="col-md-9"><input type="text" name="odp_location" placeholder="Contoh: -2.15205, 120.73167" class="form-control"> <span class="help-block m-b-none"></span>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 <div class="col-md-6 b-r">
@@ -354,7 +359,7 @@
                                         <div class="col-md-9"><input type="text" name="no_ktp" placeholder="Nomor KTP" class="form-control"> <span class="help-block m-b-none"></span>
                                         </div>
                                     </div> -->
-                                    <div class="form-group"><label class="col-md-3 control-label">Foto KTP</label>
+                                    <div class="form-group" style="display: none;"><label class="col-md-3 control-label">Foto KTP</label>
                                         <div class="col-md-9">
                                             <div class="input-group">
                                                 <input type="file" name="file_ktp" placeholder="Foto KTP" class="form-control" onchange="ubahFoto()" aria-label="..."> <span class="help-block m-b-none"></span>
