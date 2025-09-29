@@ -118,7 +118,7 @@ class Api_rest_client extends CI_Controller
 			
 			$ontLocation = ($br->lokasi_map == '' || $br->lokasi_map == null) ? "javascript:void(0)" : urldecode($br->lokasi_map);
 			// $row[] = "<a href=\"$odpLocation\" target=\"_blank\" class=\"btn btn-xs btn-danger\"><span class=\"fa fa-map\"></span> $br->odp_number</a>";
-			$row[] = (empty($br->latlong) || $br->latlong == null) ? ' <a href="#" class="btn btn-xs btn-outline btn-danger" title="ODP kosong"><small>ODP</small></a>' : ' <a href="https://www.google.com/maps/?q=' . $br->latlong . '" class="btn btn-xs btn-outline btn-primary" target="_blank" title="Klik untuk melihat lokasi ODP"><small>' .$odp_name . '</small></a>';
+			$row[] = (empty($br->latlong) || $br->latlong == null) ? ' <a href="#" class="btn btn-xs btn-outline btn-danger" title="ODP kosong"><small>ODP</small></a>' : ' <a href="https://www.google.com/maps/?q=' . $br->latlong . '" class="btn btn-xs btn-outline btn-primary" target="_blank" title="Klik untuk melihat lokasi ODP"><small>' .$br->odp_name . '</small></a>';
 			$row[] = "<a href=\"$ontLocation\" target=\"_blank\" class=\"btn btn-sm\"><span class=\"fa fa-map\"></span> Lokasi ONT</a>";
 
 			$data[] = $row;

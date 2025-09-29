@@ -109,33 +109,92 @@ class Api_telegrambot_model extends CI_Model
         }
     }
 
-    public function sendNewClientToAdmin($data){
+    public function buildNotification($no_pelanggan, $sendContact = true, $watermark = true)
+    {
+        $tmp_notif = $this->config->item('notify_customer');
+        $input_by = ($watermark) ? "input by " . $this->session->username : "\n";
+        $cust = $this->db->query("SELECT * FROM v_pelanggan WHERE no_pelanggan=?",$no_pelanggan)->row();
 
-        $tmp = "*Terima kasih telah berlangganan POSONET*.\n
-Berikut data registrasi Anda.
+        $msg_for_telegram = sprintf($tmp_notif['msg_register_success'], 
+            $cust->no_pelanggan, 
+            $cust->nama_pelanggan, 
+            $cust->telp,
+            $cust->tgl_instalasi,
+            $cust->nama_paket,
+            ribuan($cust->tarif),
+            tgl_lokal($cust->expired),
+            $this->tgrow['bri_nama_pemilik_rekening'],
+            $this->tgrow['bri_no_rekening'],
+            ribuan($cust->tarif + $cust->no_pelanggan),
+            $input_by,
+        );
 
-Nomor Pelanggan : *%s*
-Nama Pelanggan : *%s*
-HP/WA : *%s*
-Tgl Instalasi : %s
-Paket Aktif : %s
-Harga Paket : %s/bulan
-Masa aktif berakhir : %s
+        $msg_for_customer = sprintf($tmp_notif['msg_register_success'], 
+            $cust->no_pelanggan, 
+            $cust->nama_pelanggan, 
+            $cust->telp,
+            $cust->tgl_instalasi,
+            $cust->nama_paket,
+            ribuan($cust->tarif),
+            tgl_lokal($cust->expired),
+            $this->tgrow['bri_nama_pemilik_rekening'],
+            $this->tgrow['bri_no_rekening'],
+            ribuan($cust->tarif + $cust->no_pelanggan),
+            '',
+        );
 
-Pembayaran berikutnya jika melalui transfer
-Bank BRI:
-An. %s:
-Rek: %s
+        if ($sendContact) {
+            $contactName = "WIFI %s. %s";
+            $firstName = sprintf($contactName, $cust->no_pelanggan, $cust->nama_pelanggan);
+            $lastName = $cust->nama_paket;
 
-Jumlah Transfer = %s
-(Transfer pas hingga digit terakhir)
+            return array(
+                'telegram_message' => array(
+                    'chat_id'       => $this->tgrow['tg_chat_id_admin'],
+                    'text'          => $msg_for_telegram,
+                    'parse_mode'    => 'markdown'
+                ),
+                'telegram_contact' => array(
+                    'chat_id'       => $this->tgrow['tg_chat_id_admin'],
+                    'phone_number'  => $this->formatNomor($cust->telp),
+                    'first_name'    => $firstName,
+                    'last_name'     => $lastName
+                ),
+                'wa_message' => array(
+                    'message'      => $msg_for_customer,
+                    'number'      => $cust->telp,
+                ),
+            );
+        } else {
+            return array(
+                'telegram_message' => array(
+                    'chat_id'       => $this->tgrow['tg_chat_id_admin'],
+                    'text'          => $msg_for_telegram,
+                    'parse_mode'    => 'markdown'
+            ));
+        }
+    }
 
-input by %s";
+    public function notifNewClientToAdmin($no_pelanggan, $sendContact = true, $watermark = true)
+    {
+        $data = $this->buildNotification($no_pelanggan, true, true);
+        $feedback = $this->telegram->sendMessage($data['telegram_message']);
+        $kontak = $this->telegram->sendContact($data['telegram_contact']);
+
+        $this->load->model('Ruangwa_model', 'ruangwa');
+        $wa = $this->ruangwa->sendMessageRegisterSuccess($data['wa_message']);
+        return $data;
+    }
+
+    public function sendNewClientToAdmin($data)
+    {
+
+        $tmp_notif = $this->config->item('notify_customer');
 
         $query = "SELECT nama_paket,tarif FROM paket WHERE id_paket=".$data['id_paket'];
         $paket = $this->db->query($query)->row();
 
-        $msg = sprintf($tmp, 
+        $msg = sprintf($tmp_notif['msg_register_success'], 
             $data['no_pelanggan'], 
             $data['nama_pelanggan'], 
             $data['telp'],
@@ -146,7 +205,7 @@ input by %s";
             $this->tgrow['bri_nama_pemilik_rekening'],
             $this->tgrow['bri_no_rekening'],
             ribuan($paket->tarif + $data['no_pelanggan']),
-            $data['input_by'],
+            'input_by ' . $data['input_by'],
         );
 
         $contactName = "WIFI %s. %s";
@@ -214,5 +273,7 @@ input by %s";
         }
     }
     
+    // Notification RuangWA
+
 
 }

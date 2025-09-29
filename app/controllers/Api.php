@@ -241,15 +241,21 @@ LIMIT 1", [$noInternet]);
 
     // public function coba()
     // {
-    //     $this->load->model('ruangwa_model','wa');
-    //     $sendwa = $this->wa->sendMessageSuccess(
-    //         array(
-    //             'number' => '081340310250',
-    //             'expired' => '20 Oktober 2025',
-    //         )
-    //     );
+    //     // $this->load->model('ruangwa_model','wa');
+    //     // $sendwa = $this->wa->sendMessageSuccess(
+    //         //     array(
+    //             //         'number' => '081340310250',
+    //     //         'expired' => '20 Oktober 2025',
+    //     //     )
+    //     // );
 
-    //     echo json_encode($sendwa);
+    //     // echo json_encode($sendwa);
+    //     $this->load->model('api_telegrambot_model','tele');
+    //     // $send = $this->tele->buildNotification('2002');
+    //     $send = $this->tele->notifNewClientToAdmin('2002');
+	// 	// $send = $this->tele->sendNewClientToAdmin('2002');
+
+    //     echo json_encode($send);
     // }
 
 }

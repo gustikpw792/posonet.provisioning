@@ -13,6 +13,7 @@ class Ruangwa_model extends CI_Model {
     {
         parent::__construct();
         $this->endpoint = $this->config->item('ruang_wa'); // Load endpoint configuration
+        $this->msg = $this->config->item('notify_customer'); // Load endpoint configuration
     }
 
 
@@ -28,7 +29,7 @@ class Ruangwa_model extends CI_Model {
         return $res->getBody();
     }
 
-    public function sendMessageSuccess($data)
+    public function sendMessagePaymentSuccess($data)
     {
         if ($data['wamode']) 
         {
@@ -37,7 +38,7 @@ class Ruangwa_model extends CI_Model {
             'form_params' => [
                 'token' => $this->endpoint['token'],
                 'number' => $data['number'],
-                'message' => sprintf($this->endpoint['msg_success'],$data['expired']),
+                'message' => sprintf($this->msg['msg_payment_success'],$data['expired']),
                 'date' => date('Y-m-d'),
                 'time' => date('h:i:s')
             ]];
@@ -47,6 +48,25 @@ class Ruangwa_model extends CI_Model {
             return $res->getBody();
             // return $options;
         }
+    }
+
+    public function sendMessageRegisterSuccess($data)
+    {
+        
+        $client = new Client();
+        $options = [
+        'form_params' => [
+            'token' => $this->endpoint['token'],
+            'number' => $data['number'],
+            'message' => $data['message'],
+            'date' => date('Y-m-d'),
+            'time' => date('h:i:s')
+        ]];
+
+        $request = new Request('POST', $this->endpoint['api_url'].'/send_message');
+        $res = $client->sendAsync($request, $options)->wait();
+        return $res->getBody();
+        
     }
 
     

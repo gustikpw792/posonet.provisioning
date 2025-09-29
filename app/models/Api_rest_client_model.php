@@ -562,7 +562,7 @@ class Api_rest_client_model extends CI_Model
       // $this->updateTempInvoice($cust->no_pelanggan);
 
       // send to RuangWA gateway
-      $sendToWa = $this->ruangwa->sendMessageSuccess(
+      $sendToWa = $this->ruangwa->sendMessagePaymentSuccess(
         array(
           'number' => $cust->telp,
           'expired' => tgl_lokal($data->expired),
@@ -625,7 +625,7 @@ class Api_rest_client_model extends CI_Model
       // ];
 
       // send to RuangWA gateway
-      $sendToWa = $this->ruangwa->sendMessageSuccess(
+      $sendToWa = $this->ruangwa->sendMessagePaymentSuccess(
         array(
           'number' => $plgn->telp,
           'expired' => tgl_lokal($data->expired),
