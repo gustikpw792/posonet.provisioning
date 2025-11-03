@@ -54,7 +54,7 @@
         <hr />
         <div class="row text-center">
             <div class="col-md-6">
-                Copyright PT. POSO MEDIA VISION - POSONET
+                Copyright POSONET
             </div>
             <div class="col-md-6">
                 <small>© 2020-<?php echo date('Y') ?></small>
