@@ -34,7 +34,7 @@ class Api extends CI_Controller {
         $noInternet = $this->input->get('no_internet', TRUE);
 
         // Prepare response
-        $data = $this->db->query("SELECT v.no_pelanggan, v.nama_pelanggan, v.wilayah, v.nama_paket,v.tarif,(v.tarif + v.no_pelanggan) AS trx_amount, 
+        $data = $this->db->query("SELECT v.no_pelanggan, v.nama_pelanggan, v.wilayah, v.nama_paket,v.tarif,v.tarif AS trx_amount, 
 v.expired AS expired_date,t.expired AS next_expired,
 IF(v.expired < CURDATE(),'ISOLIR','AKTIF') AS status_berlangganan, 
 v.telp , 
