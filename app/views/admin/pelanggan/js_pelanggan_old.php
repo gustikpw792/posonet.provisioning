@@ -4,7 +4,7 @@
 <!-- <script src="</?php //echo base_url('assets/inspinia271/js/plugins/chosen/chosen.jquery.js') ?>"></script> -->
 
 <script>
-  var save_method, wilMethod, pdf_data, id_odp, id_odp2;
+  var save_method, wilMethod, pdf_data, id_odp;
 
   $(function() {
     getSelect();
@@ -16,63 +16,21 @@
     $('[name="status"]').load("<?= site_url('getselect/get_enum_values/pelanggan/status') ?>");
   }
 
-  // var id_wilayah = $('[name="id_wilayah"]').select2({
-  //   placeholder: "Pilih Wilayah Pelanggan...",
-  //   width: "100%",
-  //   dropdownParent : $('#myModal')
-  // });
-  // var id_paket = $('[name="id_paket"]').select2({
-  //   placeholder: "Pilih Paket Berlangganan",
-  //   width: "100%",
-  //   dropdownParent : $('#myModal')
-  // });
-  // var zstatus = $('[name="status"]').select2({
-  //   placeholder: "Pilih Status Berlangganan",
-  //   width: "100%",
-  //   dropdownParent : $('#myModal')
-  // });
-
   var id_wilayah = $('[name="id_wilayah"]').select2({
     placeholder: "Pilih Wilayah Pelanggan...",
     width: "100%",
+    dropdownParent : $('#myModal')
   });
   var id_paket = $('[name="id_paket"]').select2({
     placeholder: "Pilih Paket Berlangganan",
     width: "100%",
+    dropdownParent : $('#myModal')
   });
   var zstatus = $('[name="status"]').select2({
     placeholder: "Pilih Status Berlangganan",
     width: "100%",
+    dropdownParent : $('#myModal')
   });
-
-  // id_odp = $('#id_odp').select2({
-  //     minimumInputLength: 3, // Optional: Minimum characters to type before searching
-  //     ajax: {
-  //         url: '</?= site_url('odp/s2_get_data_for_select2') ?>', // Your CodeIgniter AJAX endpoint
-  //         dataType: 'json',
-  //         delay: 250, // Delay in milliseconds before sending the request
-  //         data: function (params) {
-  //             return {
-  //                 search: params.term, // Search term from the user input
-  //                 page: params.page // For pagination
-  //             };
-  //         },
-  //         processResults: function (data, params) {
-  //             params.page = params.page || 1;
-  //             return {
-  //                 results: data.items, // Array of objects with 'id' and 'text'
-  //                 pagination: {
-  //                     more: (params.page * 10) < data.total_count // Example for pagination
-  //                 }
-  //             };
-  //         },
-  //         cache: true
-  //     },
-  //     placeholder: 'Cari nama ODP...',
-  //     // width: "100%",
-  //     // dropdownParent : $('#myModal')
-
-  // });
 
   id_odp = $('#id_odp').select2({
       minimumInputLength: 3, // Optional: Minimum characters to type before searching
@@ -99,7 +57,7 @@
       },
       placeholder: 'Cari nama ODP...',
       width: "100%",
-      // dropdownParent : $('#myModal')
+      dropdownParent : $('#myModal')
 
   });
 
@@ -308,8 +266,7 @@
     id_odp.val(null).trigger('change');
     zstatus.val('AKTIF').trigger('change');
     $('.date').val("").datepicker("update");
-    // $('#myModal').modal('show'); // show bootstrap modal
-    $('#divRegisterForm').toggle('slow'); // show bootstrap modal
+    $('#myModal').modal('show'); // show bootstrap modal
     $('.help-block').empty();
     $('.form-group').removeClass('has-error');
     // $('.fokus').focus();
@@ -336,17 +293,18 @@
       $.ajax({
         url: url,
         type: "POST",
-        // processData: false, //gunakan ini utk upload file
-        // contentType: false, //gunakan ini utk upload file
-        // cache: false, //gunakan ini utk upload file
-        // async: false, //gunakan ini utk upload file
-        // data: new FormData(document.getElementById("form")), //gunakan ini utk upload file
-        data: $('#form').serialize(), // gunakan ini utk kirim data selain upload file
+        data: new FormData(document.getElementById("form")),
+        processData: false,
+        contentType: false,
+        cache: false,
+        async: false,
+        // data: $('#form').serialize(),
         dataType: "JSON",
         success: function(data, status) {
           if (data.status) //if success close modal and reload ajax table
           {
-            showUncfg();
+            tbl_unconfig.destroy().clear();
+            uncfg();
             
             setTimeout(function() {
               connection_status();
@@ -354,8 +312,7 @@
               l.ladda('stop');
             }, 5000);
                         
-            // $('#myModal').modal('hide');
-            $('#divRegisterForm').hide('slow');
+            $('#myModal').modal('hide');
             notif('Berhasil menambah/edit data!', 'Sukses', 'success');
           } else {
             for (var i = 0; i < data.inputerror.length; i++) {
@@ -427,15 +384,13 @@
         $('[name="stb_username"]').val(data.stb_username);
         $('[name="stb_password"]').val(data.stb_password);
         
-        // $('[name="odp_number"]').val(data.odp_number);
-        // $('[name="odp_location"]').val(decodeURIComponent(data.odp_location));
-        id_odp.val(data.id_odp).trigger('change');
+        $('[name="odp_number"]').val(data.odp_number);
+        $('[name="odp_location"]').val(decodeURIComponent(data.odp_location));
         $('[name="sort"]').val(data.sort);
 
 
         $('.ktpfilename').text(data.ktp_filename);
-        // $('#myModal').modal('show');
-        $('#divRegisterForm').show();
+        $('#myModal').modal('show');
         $('.modal-title').text('Edit <?= ucwords(str_replace('_', ' ', $active)); ?>');
         $('#btnSave').text('Update');
         $('#btnSave').attr('disabled', false); //set button enable
@@ -1038,15 +993,6 @@
         }
       },
       'json')
-  }
-
-  function hideRegisForm(){
-    $("#divRegisterForm").hide();
-  }
-
-  function showUncfg(){
-    tbl_unconfig.destroy().clear();
-    uncfg();
   }
 
 

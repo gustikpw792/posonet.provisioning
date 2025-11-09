@@ -50,7 +50,7 @@ class Pelanggan extends CI_Controller
 							<li><a href=\"javascript:void(0)\" onclick=\"delonu('$br->gpon_onu','yes')\"><span class=\"fa fa-trash\"></span> Delete Permanent</a></li>
 							<li><a href=\"javascript:void(0)\" onclick=\"getReplaceOnt('$br->gpon_onu')\"><span class=\"fa fa-exchange\"></span> Replace ONT</a></li>";
 				
-				$editButton = "<li><a href=\"javascript:void(0)\" onclick=\"edits('$br->id_pelanggan')\"><i class=\"glyphicon glyphicon-pencil\"></i> Edit</a></li>
+				$editButton = "<li><a href=\"#lompatAtas\" onclick=\"edits('$br->id_pelanggan')\"><i class=\"glyphicon glyphicon-pencil\"></i> Edit</a></li>
                                 <!--li><a href=\"javascript:void(0)\" onclick=\"deletes('\$br->id_pelanggan')\"><i class=\"glyphicon glyphicon-trash\"></i> Hapus</a></li-->";
 			} elseif ($this->session->level == 'kolektor') {
 				$akses = 	"<li><a href=\"javascript:void(0)\" onclick=\"extendPaket('$br->gpon_onu')\"><span class=\"fa fa-calendar\"></span> Perpanjang Paket</a></li>
@@ -204,7 +204,7 @@ class Pelanggan extends CI_Controller
 		$error = '';
 		// $this->_validate();
 		// upload ktp
-		$ktp_filename = $this->_do_upload();
+		// $ktp_filename = $this->_do_upload();
 		// save data
 		$data = array(
 			'gpon_olt' => $this->input->post('interface'),
@@ -226,7 +226,7 @@ class Pelanggan extends CI_Controller
 			'status' => $this->input->post('status'),
 			'keterangan' => $this->input->post('keterangan'),
 			'no_ktp' => $this->input->post('no_ktp'),
-			'ktp_filename' => $ktp_filename,
+			// 'ktp_filename' => $ktp_filename,
 			
 			'id_odp' => $this->input->post('id_odp'),
 			// 'odp_number' => $this->input->post('odp_number'),

@@ -209,5 +209,7 @@ FROM v_pelanggan v
 WHERE v.ont_phase_state = 'LOS' OR v.ont_phase_state = 'syncMib' OR v.ont_phase_state = 'logging'
 ORDER BY v.gpon_onu ASC 
 
+# (2025-11-09) add 'v.onu_type' before 'FROM v_pelanggan v ' on view 'v_onu_los'
+
 
 

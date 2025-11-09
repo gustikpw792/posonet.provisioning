@@ -112,7 +112,7 @@ class Api_rest_client extends CI_Controller
 							</ul>
 						</div>";
 			$row[] = $br->gpon_onu;
-			$row[] = $br->no_pelanggan.". ". $br->nama_pelanggan;
+			$row[] = $br->no_pelanggan.". ". $br->nama_pelanggan." <span class='btn btn-xs btn-outline'><small class='text-muted'>$br->onu_type</small></span>";
 			$row[] = $br->expired;
 			$row[] = $br->ont_phase_state;
 			
@@ -212,7 +212,8 @@ class Api_rest_client extends CI_Controller
 			$cek = $this->check_onu($key->interface, $key->sn);
 
 			$row = array();
-			$row[] = "<button type=\"button\" class=\"btn btn-primary btn-xs\" onclick=\"regis('$key->interface','$key->model','$key->sn')\" $cek->button>$cek->caption</button>";
+			// $row[] = "<button type=\"button\" class=\"btn btn-primary btn-xs\" onclick=\"regis('$key->interface','$key->model','$key->sn')\" $cek->button>$cek->caption</button>";
+			$row[] = "<a href=\"#\" class=\"btn btn-primary btn-xs\" onclick=\"regis('$key->interface','$key->model','$key->sn')\" $cek->button>$cek->caption</a>";
 			$row[] = $key->interface;
 			$row[] = $key->model;
 			$row[] = $key->sn;

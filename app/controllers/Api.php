@@ -200,23 +200,23 @@ LIMIT 1", [$noInternet]);
         // Call the model method to get payment details
         try {
             $paymentDetails = $this->apiModel->getPaymentDetails($orderId); 
-            if ($paymentDetails) {
+            if ($paymentDetails->num_rows() > 0) {
                 $this->output
                     ->set_status_header(200)
                     ->set_content_type('application/json')
-                    ->set_output(json_encode(['status' => true, 'data' => $paymentDetails]));
+                    ->set_output(json_encode(['status' => true, 'data' => $paymentDetails->row(), 'message' => 'Payment details found']));
             }
             else {
                 $this->output
                     ->set_status_header(200)
                     ->set_content_type('application/json')
-                    ->set_output(json_encode(['status' => false, 'message' => 'Payment details not found']));
+                    ->set_output(json_encode(['status' => false, 'data' => [], 'message' => 'Payment details not found']));
             }
         } catch (Exception $e) {
             $this->output
-                ->set_status_header(500)
+                ->set_status_header(200)
                 ->set_content_type('application/json')
-                ->set_output(json_encode(['status' => false, 'message' => 'Error retrieving payment details: ' . $e->getMessage()]));
+                ->set_output(json_encode(['status' => false, 'data' => [], 'message' => 'Error retrieving payment details: ' . $e->getMessage()]));
         }       
     }
 
