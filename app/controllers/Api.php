@@ -201,6 +201,7 @@ LIMIT 1", [$noInternet]);
         try {
             $paymentDetails = $this->apiModel->getPaymentDetails($orderId); 
             if ($paymentDetails->num_rows() > 0) {
+                //
                 $this->output
                     ->set_status_header(200)
                     ->set_content_type('application/json')

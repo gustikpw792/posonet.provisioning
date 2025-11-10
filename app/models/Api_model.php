@@ -20,6 +20,7 @@ class Api_model extends CI_Model
   {
     $this->db->from('v_temp_invoice');
     $this->db->where('order_id',$order_id);
+    $this->db->where('transaction_status','settlement');
     return $this->db->get();
 
     // return $query->row();
