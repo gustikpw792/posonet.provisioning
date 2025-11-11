@@ -100,7 +100,7 @@
                                                 <div class="col-md-9">
                                                     <div class="row">
                                                         <div class="col-md-6">
-                                                            <input type="text" name="interface" placeholder="Interface OLT" class="form-control">
+                                                            <input type="text" name="interface" placeholder="Interface OLT" class="form-control" readonly>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <select name="onutype" class="form-control">
@@ -115,7 +115,7 @@
                                                 <div class="col-md-9">
                                                     <div class="row">
                                                         <div class="col-md-6">
-                                                            <select name="service_mode" class="form-control">
+                                                            <select name="service_mode" class="form-control" readonly>
                                                                 <option value="pppoe">PPPoE</option>
                                                             </select> <span class="help-block m-b-none"></span>
                                                         </div>
@@ -129,14 +129,27 @@
                                                     <span class="help-block m-b-none"></span>
                                                 </div>
                                             </div>
-                                            <div class="form-group"><label class="col-md-3 control-label ">Wilayah</label>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label text-danger">Wilayah & ID Pelanggan</label>
+                                                <div class="col-md-9">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <select name="id_wilayah" id="id_wilayah" class="form-control fokus"></select> <span class="help-block m-b-none"></span>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <input type="text" name="no_pelanggan" class="form-control" xreadonly placeholder="ID Pelanggan"> <span class="help-block m-b-none"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- <div class="form-group"><label class="col-md-3 control-label ">Wilayah</label>
                                                 <div class="col-md-9"><select name="id_wilayah" id="id_wilayah" class="form-control fokus"></select> <span class="help-block m-b-none"></span>
                                                 </div>
                                             </div>
                                             <div class="form-group"><label class="col-md-3 control-label ">No Pelanggan</label>
                                                 <div class="col-md-9"><input type="text" name="no_pelanggan" class="form-control" xreadonly> <span class="help-block m-b-none"></span>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="form-group"><label class="col-md-3 control-label">Nama Pelanggan</label>
                                                 <div class="col-md-9"><input type="text" name="nama_pelanggan" placeholder="Nama Pelanggan" class="form-control"> <span class="help-block m-b-none"></span>
                                                 </div>
@@ -158,11 +171,27 @@
                                         </div>
     
                                         <div class="col-md-6">
-                                            <div class="form-group"><label class="col-md-3 control-label ">ODP Name</label>
+                                            <!-- <div class="form-group"><label class="col-md-3 control-label ">ODP Name</label>
                                                 <div class="col-md-9"><select name="id_odp" id="id_odp" class="form-control" style="display: none;"></select> <span class="help-block m-b-none"></span>
                                                 </div>
-                                            </div>
+                                            </div> -->
     
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label text-danger">ODP Name</label>
+                                                <div class="col-md-9">
+                                                    <div class="row">
+                                                        <div class="col-md-8">
+                                                            <select name="id_odp" id="id_odp" class="form-control" style="display: none;"></select>
+                                                            <span class="help-block m-b-none"></span>
+                                                        </div>
+                                                        <div class="col-md-4" id="odpName">
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    <span class="help-block m-b-none"></span>
+                                                </div>
+                                            </div>
+
                                             <div class="form-group">
                                                 <label class="col-md-3 control-label text-danger">Paket & Status</label>
                                                 <div class="col-md-9">
@@ -232,7 +261,8 @@
                                         <div class="col-md-12">
                                             <div class="pull-right">
                                                 <a href="#lompatAtas" class="btn btn-default" onclick="hideRegisForm()">Close</a> 
-                                                <button type="button" class="ladda-button ladda-button-demo btn btn-primary" data-style="expand-right" id="btnSave" onclick="save()">Register ONU</button>
+                                                <!-- <button type="button" class="btn btn-primary ladda-button ladda-button-demo" data-style="expand-right" id="btnSave" onclick="save()"><span class="ladda-label">Register ONU</span></button> -->
+                                                <button type="button" class="btn btn-primary ladda-button ladda-button-demo" data-style="expand-right" onclick="save()"><span id="btnSave" class="ladda-label">Register ONU</span></button>
                                             </div>
                                         </div>
                                     </div>

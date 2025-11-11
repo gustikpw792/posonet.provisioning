@@ -33,15 +33,15 @@
   // });
 
   var id_wilayah = $('[name="id_wilayah"]').select2({
-    placeholder: "Pilih Wilayah Pelanggan...",
+    placeholder: "--Wilayah Pelanggan--",
     width: "100%",
   });
   var id_paket = $('[name="id_paket"]').select2({
-    placeholder: "Pilih Paket Berlangganan",
+    placeholder: "--Paket Berlangganan--",
     width: "100%",
   });
   var zstatus = $('[name="status"]').select2({
-    placeholder: "Pilih Status Berlangganan",
+    placeholder: "Status Berlangganan",
     width: "100%",
   });
 
@@ -97,7 +97,7 @@
           },
           cache: true
       },
-      placeholder: 'Cari nama ODP...',
+      placeholder: 'Cari ODP...',
       width: "100%",
       // dropdownParent : $('#myModal')
 
@@ -282,7 +282,7 @@
           $("#btnSave").text('Slot NoPel FULL');
           $("#btnSave").attr('disabled', true);
         } else {
-          // $("#btnSave").text('Register');
+          $("#btnSave").text('Register ONU');
           $("#btnSave").attr('disabled', false);
         }
         $('[name="no_pelanggan"]').val(data.newCode);
@@ -295,7 +295,7 @@
   }
 
   function adds() {
-    $("#btnSave").text('Register');
+    $("#btnSave").text('Register ONU');
     $("#btnSave").attr('disabled', false);
     save_method = 'add';
     wilMethod = 'on';
@@ -317,8 +317,13 @@
   }
 
   function save() {
-    $('#btnSave').text('Registering ONU'); //change button text
-    $('#btnSave').attr('disabled', true); //set button enable
+    if ($('#btnSave').text() == 'Register ONU') {
+      $('#btnSave').text('Registering ONU'); //change button text
+      $('#btnSave').attr('disabled', true); //set button enable
+    } else {
+      $('#btnSave').text('Updating ONU'); //change button text
+      $('#btnSave').attr('disabled', true); //set button enable
+    }
 
     var url;
     if ($('[name="id_paket"]').val() == null || $('[name="status"]').val() == '' || $('[name="vlan_profile"]').val() == '') {
@@ -427,7 +432,7 @@
         $('[name="stb_username"]').val(data.stb_username);
         $('[name="stb_password"]').val(data.stb_password);
         
-        // $('[name="odp_number"]').val(data.odp_number);
+        $('#odpName').html("<a href='https://www.google.com/maps/?q="+data.latlong+"' class='btn btn-outline btn-sm btn-primary' target='_blank'>"+data.odp_name+"</a>");
         // $('[name="odp_location"]').val(decodeURIComponent(data.odp_location));
         id_odp.val(data.id_odp).trigger('change');
         $('[name="sort"]').val(data.sort);

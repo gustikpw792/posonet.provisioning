@@ -153,7 +153,13 @@ class Pelanggan extends CI_Controller
 			
 			$row[] = $phase;
 			
-			$row[] = ($br->onu_db < -27.0) ? "<strong><span class='text-danger'>$br->onu_db</span></strong>" : "<strong><span class='text-success'>$br->onu_db</span></strong>";
+			if ($br->onu_db < -27.0) {
+				$rxPower = "<strong><span class='text-danger'>$br->onu_db</span></strong>";
+			} else {
+				$rxPower = $br->onu_db;
+			}
+			
+			$row[] = $rxPower;
 			$row[] = $br->distance;
 			// paket Pelanggan
 			$row[] = $br->nama_paket;
