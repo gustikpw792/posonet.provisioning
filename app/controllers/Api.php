@@ -61,6 +61,7 @@ LIMIT 1", [$noInternet]);
                     'data' => $data->row(),
                     'status' => true,
                     'message' => 'Invoice found(s)',
+                    'payment_gateway' => [],
                 );
             }
 

@@ -609,6 +609,181 @@ class Pelanggan extends CI_Controller
 		}
 	}
 
+	public function get_unspec()
+	{
+		$getUnspec = $this->db->get('v_unspec')->result();
+		$no = 0;
+		
+		foreach ($getUnspec as $br) {
+			$no++;
+			$row = array();
+			//aktifkan tombol jika gpon_olt sdh di set
+			$btn_mode = ($br->gpon_onu == "") ? 'disabled' : '';
+
+			if ($br->remote_web_state == 'enabled') {
+				$remote = "<li><a href=\"javascript:void(0)\" onclick=\"remote('$br->gpon_onu','disable')\"><span class=\"fa fa-globe\"></span> Close Remote Web</a></li>";
+			} else {
+				$remote = "<li><a href=\"javascript:void(0)\" onclick=\"remote('$br->gpon_onu','enable')\"><span class=\"fa fa-globe\"></span> Open Remote Web</a></li>";
+			}
+
+			if ($this->session->level == 'administrator') {
+				$akses = 	"<li><a href=\"javascript:void(0)\" onclick=\"extendPaket('$br->gpon_onu')\"><span class=\"fa fa-calendar\"></span> Perpanjang Paket</a></li>
+							<!--li role=\"separator\" class=\"divider\"></li-->
+							<!--li><a href=\"javascript:void(0)\" onclick=\"changeSsid('\$br->gpon_onu')\"><span class=\"fa fa-wifi\"></span> Change SSID</a></li-->
+							<li role=\"separator\" class=\"divider\"></li>
+							<li><a href=\"javascript:void(0)\" onclick=\"restore_factory('$br->gpon_onu')\"><span class=\"fa fa-undo\"></span> Restore Factory</a></li>
+							<li><a href=\"javascript:void(0)\" onclick=\"delonu('$br->gpon_onu','no')\"><span class=\"fa fa-trash\"></span> Delete Manual</a></li>
+							<li><a href=\"javascript:void(0)\" onclick=\"delonu('$br->gpon_onu','yes')\"><span class=\"fa fa-trash\"></span> Delete Permanent</a></li>
+							<li><a href=\"javascript:void(0)\" onclick=\"getReplaceOnt('$br->gpon_onu')\"><span class=\"fa fa-exchange\"></span> Replace ONT</a></li>";
+				
+				$editButton = "<li><a href=\"#lompatAtas\" onclick=\"edits('$br->id_pelanggan')\"><i class=\"glyphicon glyphicon-pencil\"></i> Edit</a></li>
+                                <!--li><a href=\"javascript:void(0)\" onclick=\"deletes('\$br->id_pelanggan')\"><i class=\"glyphicon glyphicon-trash\"></i> Hapus</a></li-->";
+			} elseif ($this->session->level == 'kolektor') {
+				$akses = 	"<li><a href=\"javascript:void(0)\" onclick=\"extendPaket('$br->gpon_onu')\"><span class=\"fa fa-calendar\"></span> Perpanjang Paket</a></li>
+							<li role=\"separator\" class=\"divider\"></li>
+							<li><a href=\"javascript:void(0)\" onclick=\"changeSsid('$br->gpon_onu')\"><span class=\"fa fa-wifi\"></span> Change SSID</a></li>";
+
+				$editButton = "";
+			} elseif ($this->session->level == 'teknisi') {
+				$akses = 	"
+							<li><a href=\"javascript:void(0)\" onclick=\"changeSsid('$br->gpon_onu')\"><span class=\"fa fa-wifi\"></span> Change SSID</a></li>
+							<li role=\"separator\" class=\"divider\"></li>
+							<li><a href=\"javascript:void(0)\" onclick=\"restore_factory('$br->gpon_onu')\"><span class=\"fa fa-undo\"></span> Restore Factory</a></li>
+							<li><a href=\"javascript:void(0)\" onclick=\"getReplaceOnt('$br->gpon_onu')\"><span class=\"fa fa-exchange\"></span> Replace ONT</a></li>
+							<li><a href=\"javascript:void(0)\" onclick=\"delonu('$br->gpon_onu','no')\"><span class=\"fa fa-trash\"></span> Delete Manual</a></li>";
+
+				$editButton = "";
+			} else {
+				$akses = $editButton = "";
+			}
+
+			if ($br->ont_phase_state == 'working') {
+				$phase = '<button class="btn btn-outline btn-primary btn-xs">' . $br->ont_phase_state . '</button> ';
+			} else if ($br->ont_phase_state == 'offline' || $br->ont_phase_state == 'DyingGasp' || $br->ont_phase_state == 'syncMib' || $br->ont_phase_state == 'logging') {
+				$phase = '<button class="btn btn-outline btn-default btn-xs">' . $br->ont_phase_state . '</button> ';
+			} else if ($br->ont_phase_state == 'LOS') {
+				$phase = '<button class="btn btn-outline btn-danger btn-xs">' . $br->ont_phase_state . '</button> ';
+			} else if ($br->ont_phase_state == 'Unconfigured'){
+				$phase = '<button class="btn btn-outline btn-warning btn-xs"> Unconfigured </button>';
+			} else {
+				$phase = '<div class="progress progress-striped active">
+                                <div style="width: 90%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="90" role="progressbar" class="progress-bar progress-bar-warning">
+                                    <span class="xsr-only">Registering</span>
+                                </div>
+                            </div>';
+			}
+
+			$statusMap = ($br->lokasi_map == null || empty($br->lokasi_map)) ? '<a href="#" class="btn btn-xs btn-outline btn-danger" title="Lokasi belum di-set"><i class="fa fa-map-marker"></i></a>' : '<a href="' . urldecode($br->lokasi_map) . '" class="btn btn-xs btn-outline btn-primary" target="_blank" title="Klik untuk melihat lokasi pelanggan"><small><i class="fa fa-map-marker"></i></small></a>';
+			$linkMap = ($br->lokasi_map == null || empty($br->lokasi_map)) ? "<a href=\"#\">Lokasi Kosong</a>" : "<a href=\"" . urldecode($br->lokasi_map) . "\" target=\"_blank\">Lihat Lokasi</a>";
+			$odp_name = (empty($br->odp_name) || $br->odp_name == null) ? 'ODP' : "$br->odp_name";
+			$odp = (empty($br->latlong) || $br->latlong == null) ? ' <a href="#" class="btn btn-xs btn-outline btn-danger" title="ODP kosong"><small>ODP</small></a>' : ' <a href="https://www.google.com/maps/?q=' . $br->latlong . '" class="btn btn-xs btn-outline btn-primary" target="_blank" title="Klik untuk melihat lokasi ODP"><small>' .$odp_name . '</small></a>';
+			
+			if ($br->expired < date('Y-m-d')) {
+				$warna = 'text-danger';
+			}
+			elseif ($br->expired == date('Y-m-d')) {
+				$warna = 'text-warning';
+			}
+			elseif ($br->expired > date('Y-m-d')) {
+				$warna = 'text-default';
+			}
+
+			$editBtn = "<div class=\"btn-group\">
+                            <button data-toggle=\"dropdown\" class=\"btn btn-default btn-xs dropdown-toggle\" aria-expanded=\"false\">Action <span class=\"caret\"></span></button>
+                            <ul class=\"dropdown-menu\">
+                                <!--li><a href=\"javascript:void(0)\" onclick=\"views('\$br->id_pelanggan')\"><i class=\"glyphicon glyphicon-eye-open\"></i> Lihat Detail</a></li-->
+                                $editButton
+								<li class=\"divider\"></li>
+                                <li>$linkMap</li>
+							</ul>
+                        </div>";
+
+			$row[] = "<div class=\"btn-group position-static\">
+							<button type=\"button\" class=\"btn btn-xs dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\" $btn_mode>
+								<span class=\"fa fa-info\"> <span class=\"caret\"></span>
+							</button>
+							<ul class=\"dropdown-menu\">
+								<li><a href=\"javascript:void(0)\" onclick=\"show_raw_content('wanip','$br->gpon_onu')\">Show WAN IP</a></li>
+								<li><a href=\"javascript:void(0)\" onclick=\"show_raw_content('attenuation','$br->gpon_onu')\">Show Attenuation</a></li>
+								<li><a href=\"javascript:void(0)\" onclick=\"show_raw_content('detail-info','$br->gpon_onu')\">Show Detail Information</a></li>
+								<li><a href=\"javascript:void(0)\" onclick=\"show_raw_content('iphost','$br->gpon_onu')\">Show IP Host</a></li>
+								<li><a href=\"javascript:void(0)\" onclick=\"show_raw_content('onu-run','$br->gpon_onu')\">Show Running Config</a></li>
+							</ul>
+						</div>
+						<div class=\"btn-group position-static\">
+							<button type=\"button\" class=\"btn btn-xs dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\" $btn_mode>
+								<span class=\"fa fa-cog\"> </span><span class=\"caret\"></span>
+							</button>
+							<ul class=\"dropdown-menu\">
+								$remote
+								<li><a href=\"javascript:void(0)\" onclick=\"reboot('$br->gpon_onu')\"><span class=\"fa fa-refresh\"></span> Reboot</a></li>
+								$akses
+								<li role=\"separator\" class=\"divider\"></li>
+								<li><a href=\"javascript:void(0)\" onclick=\"makeTickets('$br->gpon_onu')\"><span class=\"fa fa-ticket\"></span> Make Ticket</a></li>
+							</ul>
+						</div>
+						$editBtn";
+			// $row[] = "<span class='font-bold'>$br->no_pelanggan</span>";
+			$row[] = $br->gpon_onu;
+			
+			//buat text-danger jika active_connection = disconnected
+			if($br->active_connection=='disconnected'){
+				$nm_pelanggan = "<span class='font-bold text-danger'>$br->no_pelanggan. $br->nama_pelanggan</span>";
+			} else {
+				$nm_pelanggan = "<span class='font-bold'>$br->no_pelanggan. $br->nama_pelanggan</span>";
+			}
+			$row[] = $nm_pelanggan . "<span class='btn btn-xs btn-outline'><small class='text-muted'>$br->onu_type</small></span>";
+			
+			// $row[] = $br->wilayah;
+			
+			
+			$row[] = $phase;
+			
+			if ($br->onu_db < -27.0) {
+				$rxPower = "<strong><span class='text-danger'>$br->onu_db</span></strong>";
+			} else {
+				$rxPower = $br->onu_db;
+			}
+			
+			$row[] = $rxPower;
+			$row[] = $br->distance;
+			// paket Pelanggan
+			// $row[] = $br->nama_paket;
+
+			
+
+
+			$row[] = "<strong><span class='$warna'>$br->expired</span></strong>";
+
+
+			// Status Pelanggan
+			$statusB = ($br->status == 'AKTIF') ? '<a href="#" class="btn btn-xs btn-outline btn-primary" title="Status Pelanggan AKTIF"><small>A</small></a> ' : '<a href="#" class="btn btn-xs btn-danger" title="Status Pelanggan NON-AKTIF"><small>NA</small></a>';
+			// BUTTON GROUP
+			$status = "<div class=\"btn-group\">
+                            $statusB
+                            $statusMap
+							$odp
+                        </div>";
+
+			// $row[] = ribuan($br->tarif);
+			$row[] = $status;
+			//add html for action
+			// $editBtn = "<div class=\"btn-group\">
+            //                 <button data-toggle=\"dropdown\" class=\"btn btn-default btn-xs dropdown-toggle\" aria-expanded=\"false\">Action <span class=\"caret\"></span></button>
+            //                 <ul class=\"dropdown-menu\">
+            //                     <li><a href=\"javascript:void(0)\" onclick=\"views('$br->id_pelanggan')\"><i class=\"glyphicon glyphicon-eye-open\"></i> Lihat Detail</a></li>
+            //                     $editButton
+			// 					<li class=\"divider\"></li>
+            //                     <li>$linkMap</li>
+			// 				</ul>
+            //             </div>";
+			// $row[] = $editBtn;
+			$data[] = $row;
+		}
+
+		echo json_encode($data);
+	}
+
 
 
 	private function _validate()

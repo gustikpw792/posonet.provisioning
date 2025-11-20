@@ -11,6 +11,7 @@
                         <h5>TOOLS</h5>
                         
                         <div class="ibox-tools">
+                            
                             <button class="btn btn-xs" onclick="showUncfg()">Show Unconfig</button>
                             <?php if ($this->session->level == 'administrator' || $this->session->level == 'kolektor'): ?>
                             <button class="btn btn-xs" id="#btnExpiredContent" onclick="toggleExpired()">Show Expired</button>
@@ -52,6 +53,9 @@
 
                                 </ul>
                             </div>
+
+                            <button id="toggleIntervalBtn" class="btn btn-xs btn-default" title="Refresh setiap 15 Menit">Auto Interval: OFF</button>
+
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
                             </a>
@@ -366,7 +370,7 @@
 
             <!-- TABEL OFFLINE -->
             <div class="col-lg-12">
-                <div class="ibox Xcollapsed" id="divoffline">
+                <div class="ibox collapsed" id="divoffline">
                     <div class="ibox-title">
                         <h5><div class="text-uppercase v_offline"></div></h5>
                         <div class="ibox-tools">
@@ -398,6 +402,49 @@
                                         <th>Name</th>
                                         <th>Cause</th>
                                         <th>Expired</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABEL UNSPEC -->
+            <div class="col-lg-12">
+                <div class="ibox Xcollapsed" id="divunspec">
+                    <div class="ibox-title">
+                        <h5><div class="text-uppercase v_unspec"><span class="fa fa-warning"></span> UNSPEC <small class="m-l-sm"> Laser pada ONT tidak normal!</small></div></h5> 
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div class="xtable-responsive" id="unspec">
+                            <table class="table table-condensed table-hover" id="tb-unspec">
+                                <thead>
+                                    <tr>
+                                        <th data-priority="1">Action</th>
+                                        <th data-priority="2">Interface</th>
+                                        <th data-priority="3">Nama</th>
+                                        <th data-priority="4">ontPhase</th>
+                                        <th data-priority="5">dBm</th>
+                                        <th>meter</th>
+                                        <th>Expire</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -204,12 +204,14 @@ ORDER BY `p`.`id_pelanggan` DESC
 
 # (2025-08-30) replace script in 'v_onu_los' with
 SELECT v.id_pelanggan,v.gpon_olt,v.gpon_onu,v.no_pelanggan,v.nama_pelanggan, v.expired,v.ont_phase_state, 
-v.odp_number, v.odp_location, v.lokasi_map, v.odp_name, v.latlong
+v.odp_number, v.odp_location, v.lokasi_map, v.odp_name, v.latlong, v.onu_type
 FROM v_pelanggan v 
 WHERE v.ont_phase_state = 'LOS' OR v.ont_phase_state = 'syncMib' OR v.ont_phase_state = 'logging'
 ORDER BY v.gpon_onu ASC 
 
-# (2025-11-09) add 'v.onu_type' before 'FROM v_pelanggan v ' on view 'v_onu_los'
+# (2025-11-22) create view 'v_unspec'
+ALTER ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `v_unspec` AS SELECT * FROM v_pelanggan
+WHERE onu_db <= -26.00  ;
 
 
 
