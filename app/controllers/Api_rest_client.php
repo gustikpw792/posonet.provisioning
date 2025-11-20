@@ -499,6 +499,8 @@ class Api_rest_client extends CI_Controller
 
 	public function onutype()
 	{
+		ini_set('max_execution_time', 1200);
+
 		$response = $this->_client->get('onutype');
 		$body = json_decode($response->getBody());
 
@@ -659,6 +661,8 @@ _handled by %s_";
 
 	public function get_profile_vlan()
 	{
+		ini_set('max_execution_time', 1200);
+		
 		$data = $this->api->raw_show_gpon_onu_profile_vlan();
 
 		// $data = "\r\nProfile name:  netmedia143\r\nTag mode:      tag\r\nCVLAN:         143\r\nCVLAN priority:7\r\n\r\nProfile name:  netmedia142\r\nTag mode:      tag\r\nCVLAN:         142\r\nCVLAN priority:7\r\n\r\nZXAN#";
@@ -976,7 +980,7 @@ _handled by %s_";
 	*/
 
 	public function setToExpire(){
-		ini_set('max_execution_time', 100);
+		ini_set('max_execution_time', 1200);
 		if ($this->ros['ROS_VERSION'] == 6) {
 			// Run on ROS 6
 			echo json_encode($this->routermodel->match_paket());

@@ -53,7 +53,8 @@ class Api_mikrotik extends CI_Controller
 	}
 	
 	public function all_ppp_active() {
-
+		ini_set('max_execution_time', 1200);
+		
 		$client = new Client($this->_mikrotik);
 		$query = new Query('/ppp/active/print');
 		$secrets = $client->query($query)->read();
