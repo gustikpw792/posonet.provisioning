@@ -14,6 +14,8 @@ class Api_rest_client_model extends CI_Model
     parent::__construct();
     $this->load->database();
 
+    ini_set('max_execution_time', 120);
+
     // $this->load->model('api_kirimwaid_model','kirimwa');
     $this->load->model('api_telegrambot_model','telegram');
     $this->load->model('ruangwa_model','ruangwa');
