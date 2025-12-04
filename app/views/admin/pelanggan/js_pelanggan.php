@@ -527,7 +527,7 @@
 </script>
 
 <script>
-  var tbl_unconfig;
+  var tbl_unconfig, tbl_unspec;
 
   function uncfg() {
     tbl_unconfig = $('#tb-unconfig').DataTable({
@@ -555,7 +555,7 @@
   }
 
   function unSpec() {
-    tbl_unconfig = $('#tb-unspec').DataTable({
+    tbl_unspec = $('#tb-unspec').DataTable({
       ajax: {
         'url': "<?= site_url('pelanggan/get_unspec') ?>",
         'dataSrc': function(d) {
@@ -1062,7 +1062,7 @@
   }
 
   function showUncfg(){
-    tbl_unconfig.destroy().clear();
+    tbl_unspec.destroy().clear();
     uncfg();
   }
 
@@ -1110,7 +1110,7 @@
         isIntervalOn = !isIntervalOn;
         if (isIntervalOn) {
             toggleBtn.textContent = 'Auto Interval: ON';
-            toggleBtn.classList.remove('btn-info');
+            toggleBtn.classList.remove('btn-default');
             toggleBtn.classList.add('btn-success');
             // Start the interval
             intervalID = setInterval(function() {
@@ -1132,7 +1132,7 @@
         } else {
             toggleBtn.textContent = 'Auto Interval: OFF';
             toggleBtn.classList.remove('btn-success');
-            toggleBtn.classList.add('btn-info');
+            toggleBtn.classList.add('btn-default');
             // Stop the interval
             clearInterval(intervalID);
             console.log('Auto-refresh stopped.');
