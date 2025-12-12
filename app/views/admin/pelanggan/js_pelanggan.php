@@ -1062,7 +1062,7 @@
   }
 
   function showUncfg(){
-    tbl_unspec.destroy().clear();
+    tbl_unconfig.destroy().clear();
     uncfg();
   }
 
