@@ -613,6 +613,7 @@ class Pelanggan extends CI_Controller
 	{
 		$getUnspec = $this->db->get('v_unspec')->result();
 		$no = 0;
+		$data = array();
 		
 		foreach ($getUnspec as $br) {
 			$no++;
