@@ -288,7 +288,7 @@ class Pelanggan extends CI_Controller
 			$this->olt->saveLogEvent('PSB', "New Customer! " . $onu->data->name ." ". $onu->data->ppp_profile . " Exp=" . $data['expired'] . " by " . $data['input_by']);
 		}
 
-
+		
 		//send new client data to Admin telegram
 		$this->load->model('Api_telegrambot_model','telegramModel');
 

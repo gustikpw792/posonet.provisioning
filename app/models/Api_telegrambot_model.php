@@ -15,7 +15,11 @@ class Api_telegrambot_model extends CI_Model
         
         // START telegram api configuration
         $this->tgrow = array();
-        $this->tgbot = $this->db->query("SELECT * FROM settings where option_name LIKE 'tg_%' OR option_name LIKE 'bri_%'")->result();
+        $this->tgbot = $this->db->query("SELECT * FROM settings 
+        where option_name LIKE 'tg_%' 
+        OR option_name LIKE 'bri_%' 
+        OR option_name LIKE 'ruangwa_%'")->result();
+
         foreach ($this->tgbot as $key) {
 			$this->tgrow["$key->option_name"] = $key->option_value;
 		}
@@ -181,8 +185,10 @@ class Api_telegrambot_model extends CI_Model
         $feedback = $this->telegram->sendMessage($data['telegram_message']);
         $kontak = $this->telegram->sendContact($data['telegram_contact']);
 
-        $this->load->model('Ruangwa_model', 'ruangwa');
-        $wa = $this->ruangwa->sendMessageRegisterSuccess($data['wa_message']);
+        if ($this->tgrow['ruangwa_enable']) {
+            $this->load->model('Ruangwa_model', 'ruangwa');
+            $wa = $this->ruangwa->sendMessageRegisterSuccess($data['wa_message']);
+        }
         return $data;
     }
 

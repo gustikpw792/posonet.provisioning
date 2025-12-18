@@ -102,35 +102,31 @@ LIMIT 1", [$noInternet]);
     public function updateInvoiceStatus()
     {
         $notif = $this->input->post("data", TRUE);
-        $this->output
-            ->set_status_header(200)
-            ->set_content_type('application/json')
-            ->set_output(json_encode(['data' => $notif, 'status' => true, 'message' => 'Invoice Order_ID updated successfully']));
-        exit();
+        $is_production = $this->input->post("is_production", TRUE);
 
-        $transaction_status = $this->input->post("transaction_status", TRUE);
+        $transaction_status = $notif["transaction_status"];
         $status = ($transaction_status == 'settlement' || $transaction_status == 'capture') ? 'Lunas' : 'Belum Bayar';
 
-        $kode_invoice = explode('-', $this->input->post("order_id", TRUE));
+        $kode_invoice = explode('-', $notif["order_id"]);
 
         $data = array(
-            'order_id' => $this->input->post("order_id", TRUE),   
-            'transaction_time' => $this->input->post("transaction_time", TRUE),
+            'order_id' => $notif["order_id"],   
+            'transaction_time' => $notif["transaction_time"],
             'transaction_status' => $transaction_status,
-            'transaction_id' => $this->input->post("transaction_id", TRUE),
-            'status_code' => $this->input->post("status_code", TRUE),
-            'payment_type' => $this->input->post("payment_type", TRUE),
-            'gross_amount' => $this->input->post("gross_amount", TRUE),
+            'transaction_id' => $notif["transaction_id"],
+            'status_code' => $notif["status_code"],
+            'payment_type' => $notif["payment_type"],
+            'gross_amount' => $notif["gross_amount"],
             'status' => $status,
-            'issuer' => $this->input->post("issuer", TRUE),
-            'acquirer' => $this->input->post("acquirer", TRUE),
-            'settlement_time' => $this->input->post("settlement_time", TRUE),
-            'merchant_id' => $this->input->post("merchant_id", TRUE),
-            'store' => $this->input->post("store", TRUE),
-            'payment_code' => $this->input->post("payment_code", TRUE),
-            'signature_key' => $this->input->post("signature_key", TRUE),
-            'va_numbers' => json_encode($this->input->post("va_numbers", TRUE)),
-            'expiry_time' => $this->input->post("expiry_time", TRUE),
+            'issuer' => $notif["issuer"],
+            'acquirer' => $notif["acquirer"],
+            'settlement_time' => $notif["settlement_time"],
+            'merchant_id' => $notif["merchant_id"],
+            'store' => $notif["store"],
+            'payment_code' => $notif["payment_code"],
+            'signature_key' => $notif["signature_key"],
+            'va_numbers' => json_encode($notif["va_numbers"]),
+            'expiry_time' => $notif["expiry_time"],
         );
 
         // Validate input
