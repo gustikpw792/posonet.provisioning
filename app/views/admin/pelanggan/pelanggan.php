@@ -104,7 +104,7 @@
                                                 <div class="col-md-9">
                                                     <div class="row">
                                                         <div class="col-md-6">
-                                                            <input type="text" name="interface" placeholder="Interface OLT" class="form-control" readonly>
+                                                            <input type="text" name="interface" placeholder="Interface OLT" class="form-control">
                                                         </div>
                                                         <div class="col-md-6">
                                                             <select name="onutype" class="form-control">
