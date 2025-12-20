@@ -69,17 +69,21 @@ LIMIT 1", [$noInternet]);
                         'subscription' => array(
                             'paket' => $dt->nama_paket,
                             'tarif' => (int) $dt->tarif,
-                            'start_date' => substr($dt->bulan_penagihan,0,8) . '20',
-                            'end_date' => $dt->next_expired,
+                            // 'start_date' => substr($dt->bulan_penagihan,0,8) . '20',
+                            'expired_date' => $dt->expired_date,
                         ),
                         'billing' => array(
-                            'billing_periode' => substr($dt->bulan_penagihan,0,8) . '20 s/d ' . $dt->next_expired,
+                            'billing_periode_start' => substr($dt->bulan_penagihan,0,8). '20',
+                            'billing_periode_end' => $dt->next_expired,
                             'tarif' => (int) $dt->tarif,
                             'total_amount' => (int) $dt->tarif,
                             'currency' => 'IDR',
+                            'kode_invoice' => $dt->kode_invoice,
+                            'status' => $dt->payment_status,
                         ),
                     ),
                     'status' => true,
+                    'time' => date('Y-m-d H:i:s'),
                     'message' => 'Invoice found(s)',
                     'payment_gateway' => 'MIDTRANS',
                 );
@@ -99,7 +103,7 @@ LIMIT 1", [$noInternet]);
                 ->set_output(json_encode($res));
     }
 
-    public function updateInvoiceStatus()
+    public function updateBillingStatus()
     {
         $notif = $this->input->post("data", TRUE);
         $is_production = $this->input->post("is_production", TRUE);
