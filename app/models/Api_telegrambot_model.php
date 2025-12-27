@@ -136,7 +136,7 @@ class Api_telegrambot_model extends CI_Model
         $msg_for_customer = sprintf($tmp_notif['msg_register_success'], 
             $cust->no_pelanggan, 
             $cust->nama_pelanggan, 
-            $cust->telp,
+            ($cust->telp != '') ? $cust->telp : '123456789100',
             $cust->tgl_instalasi,
             $cust->nama_paket,
             ribuan($cust->tarif),
