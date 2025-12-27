@@ -254,9 +254,14 @@ class Billing_api extends CI_Controller {
         // Call the model method to get payment details
         try {
             $paymentDetails = $this->apiModel->getPaymentDetails($orderId); 
+            
             if ($paymentDetails->num_rows() > 0) {
+                $profil = $this->db->get('profil_perusahaan')->row();
+                $paymentData = $paymentDetails->row();
+                $paymentData->telp_cs = substr_replace(str_replace(' ', '', $profil->telp_cs),'+62', 0, 1);
+
                 $data = array(
-                    'data' => $paymentDetails->row(),
+                    'data' => $paymentData,
                     'message' => 'Payment details found',
                     'status' => true,
                 );

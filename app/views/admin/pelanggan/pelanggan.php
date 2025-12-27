@@ -495,7 +495,7 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group"><label class="col-md-3 control-label ">Metode Pembayaran</label>
+                                <!-- <div class="form-group"><label class="col-md-3 control-label ">Metode Pembayaran</label>
                                     <div class="col-md-9">
                                         <label class="checkbox-inline"> <input type="radio" value="transfer" id="transfer" name="metode_pembayaran" onchange="item('hide')"> Transfer </label>
                                         <label class="checkbox-inline"> <input type="radio" checked="" value="kolektor" id="kolektor" name="metode_pembayaran" onchange="item('hide')"> Kolektor </label>
@@ -521,7 +521,7 @@
                                     <div class="col-md-9">
                                         <textarea name="md_keterangan" placeholder="Keterangan" class="typeahead_1 form-control"></textarea>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <div class="form-group"><label class="col-md-3 control-label ">Paket</label>
                                     <div class="col-md-9">
