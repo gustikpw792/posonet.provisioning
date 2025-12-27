@@ -439,4 +439,33 @@ class Api_mikrotik_model extends CI_Model
     }
    }
 
+   public function closeConnection($username)
+   {
+      if ($this->mikrotik['ROS_VERSION'] == 6) {
+        $this->close_connection_ppp($username);
+      } elseif ($this->mikrotik['ROS_VERSION'] == 7) {
+        $this->pppCloseConnection($username);
+      } else {
+        echo json_encode(['error' => 'RouterOS version not match! Api_mikrotik_model Line 449']);
+      }
+   }
+
+   public function changeSecret($username, $profileName)
+   {
+        if ($this->mikrotik['ROS_VERSION'] == 6) {
+          $set_expire = $this->change_ppp_secret_profile($username, $profileName);
+          $this->close_connection_ppp($username);
+        } elseif ($this->mikrotik['ROS_VERSION'] == 7) {
+          $set_expire = $this->patchRestSecret(
+            (object) array(
+              'name' => $username, 
+              'profile' => $profileName
+              )
+          );
+          $this->pppCloseConnection($username);
+        } else {
+          echo json_encode(['error' => 'RouterOS version not match! Api_rest_client_model Line 601']);
+        }
+   }
+
 }

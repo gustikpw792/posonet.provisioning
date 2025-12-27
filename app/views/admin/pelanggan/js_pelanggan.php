@@ -14,6 +14,8 @@
     $('[name="id_wilayah"]').load("<?= site_url('getselect/pilih_mul/wilayah/id_wilayah/wilayah') ?>");
     $('[name="id_paket"]').load("<?= site_url('getselect/pilih_mul_dua/paket/id_paket/tarif/nama_paket') ?>");
     $('[name="status"]').load("<?= site_url('getselect/get_enum_values/pelanggan/status') ?>");
+    $('[name="id_karyawan"]').load("<?php echo site_url('getselect/pilih_mul_dua/karyawan/id_karyawan/kode_karyawan/nama_lengkap/') ?>"); // gunakan ini jika id jabatan belum diketahui
+
   }
 
   // var id_wilayah = $('[name="id_wilayah"]').select2({
@@ -852,6 +854,20 @@
       }, 'json');
   }
 
+  var id_karyawan = $('[name="id_karyawan"]').select2({
+    placeholder: "Pilih Nama Penerima",
+    width: "100%",
+    // dropdownParent : $('#myModal')
+  });
+
+  function item(params = 'hide') {
+    if (params == 'hide') {
+      $('.hidemode').hide('slow');
+    } else {
+      $('.hidemode').show('slow');
+    }
+  }
+
   function extendPaket(gpon_onu) {
     $.post(
       "<?= site_url('api_rest_client/getExtendPaket') ?>", {
@@ -859,10 +875,23 @@
       },
       function(data, status) {
         $('#extendPaketLabel').html('Perpanjang Paket ' + data.name + ' | ' + data.gpon_onu);
+        $('#md_no_pelanggan').text(data.name);
         $('[name="md_nama_paket"]').val(data.nama_paket);
         $('[name="md_gpon_onu"]').val(data.gpon_onu);
         $('[name="md_tgl_expired"]').val(data.expired);
+
+        $('#' + data.metode_pembayaran).prop('checked', true);
+        if (data.metode_pembayaran == 'antar') {
+          item('show');
+        } else {
+          item('hide');
+          id_karyawan.val(null).trigger('change');
+        }
+
+        id_karyawan.val(data.penerima).trigger('change');
+
         $('#extendPaket').modal('show');
+
       }, 'json')
   }
 

@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class kwitansi_model extends CI_Model
+class Kwitansi_model extends CI_Model
 {
 
   var $table = 'kwitansi';
@@ -135,4 +135,5 @@ class kwitansi_model extends CI_Model
   {
     return $this->db->query("SELECT * FROM kolektor WHERE wilayah LIKE '%$id_wilayah%'")->row();
   }
+
 }

@@ -35,25 +35,25 @@ class Api extends CI_Controller {
 
         // Prepare response
         $data = $this->db->query("SELECT v.no_pelanggan, v.nama_pelanggan, v.wilayah, v.nama_paket,v.tarif,v.tarif AS trx_amount, 
-v.expired AS expired_date,t.expired AS next_expired,
-IF(v.expired < CURDATE(),'ISOLIR','AKTIF') AS status_berlangganan, 
-v.telp , 
-IF(v.expired>=CURDATE(), 'BELUM ADA TAGIHAN/LUNAS', 'BELUM BAYAR') AS payment_status, 
-t.kode_invoice
+            v.expired AS expired_date,t.expired AS next_expired,
+            IF(v.expired < CURDATE(),'ISOLIR','AKTIF') AS status_berlangganan, 
+            v.telp , 
+            IF(v.expired>=CURDATE(), 'BELUM ADA TAGIHAN/LUNAS', 'BELUM BAYAR') AS payment_status, 
+            t.kode_invoice
 
-FROM v_pelanggan v 
-LEFT JOIN temp_invoice t 
-ON v.no_pelanggan=t.no_pelanggan
-WHERE v.no_pelanggan=?
-ORDER BY id_trx DESC
-LIMIT 1", [$noInternet]);
+            FROM v_pelanggan v 
+            LEFT JOIN temp_invoice t 
+            ON v.no_pelanggan=t.no_pelanggan
+            WHERE v.no_pelanggan=?
+            ORDER BY id_trx DESC
+            LIMIT 1", [$noInternet]);
 
         if ($data->num_rows() > 0) {
             if ($data->row()->next_expired < date('Y-m-d')) {
                 $res = array(
                     'data' => null,
                     'status' => true,
-                    'message' => 'Tagihan belum keluar..',
+                    'message' => 'Tagihan belum tersedia!',
                 );
                 
             } else {
@@ -136,7 +136,7 @@ LIMIT 1", [$noInternet]);
                     $dt = json_encode($data);
                     
                     // Perpanjang paket pelanggan atau transaksi benar2 real
-                    if ($this->api['production']) {
+                    if ($this->input->post("is_production", TRUE)) {
                         // call the activation
                         $per = $this->_goPerpanjang($data['order_id']);
                         // log the transaction

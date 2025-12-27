@@ -498,7 +498,7 @@ class Api_rest_client_model extends CI_Model
     return $this->extendThisPaket($data, $wamode);
   }
 
-  public function extendThisPaket($data, $wamode=false) {
+  public function extendThisPaket($data, $metodePembayaran='antar', $wamode=false) {
 
     // $data = (object) array(
 		// 	'gpon_onu' => $this->input->post('gpon_onu'),
@@ -519,47 +519,36 @@ class Api_rest_client_model extends CI_Model
     if ($exp->num_rows() > 0) {
       // update expired
       $updateExp = $this->db->query("UPDATE pelanggan SET expired='$data->expired' WHERE gpon_onu='$data->gpon_onu'");
+      
       // ubah secret dari Expire ke paket asli
-      if ($this->mikrotik['ROS_VERSION'] == 6) {
-        $restore_paket = $this->routermodel->change_ppp_secret_profile($cust->username, $cust->mikrotik_profile);
-      } elseif ($this->mikrotik['ROS_VERSION'] == 7) {
-        $restore_paket = $this->routermodel->patchRestSecret(
-          (object) array(
-            'name' => $cust->username, 
-            'profile' => $cust->mikrotik_profile
-            )
-        );
-      } else {
-        			echo json_encode(['error' => 'RouterOS version not match! Api_rest_client_model Line 503']);
-      }
+      $changeSecret = $this->routermodel->changeSecret($cust->username, $cust->mikrotik_profile);
 
+      // reboot ont (untuk zte F660 versi lama). 
       if ($cust->ont_phase_state == 'working') {
-        // reboot ont (untuk zte F660 versi lama). 
         $request = $this->api->reboot($cust->gpon_onu);
       }
 
+      // close connection di ppp>active connection
       if ($cust->active_connection == 'connected') {
-        // close connection di ppp>active connection
-        if ($this->mikrotik['ROS_VERSION'] == 6) {
-          $this->routermodel->close_connection_ppp($cust->username);
-        } elseif ($this->mikrotik['ROS_VERSION'] == 7) {
-          $this->routermodel->pppCloseConnection($cust->username);
-        } else {
-          echo json_encode(['error' => 'RouterOS version not match! Api_rest_client_model Line 518']);
-        }
+        $closeConnection = $this->routermodel->closeConnection($cust->username);
       }
 
-      /**
-       * KIRIM PESAN KE TELEGRAM
-       */
-      $template = "*Perubahan Masa aktif Paket*\nName : %s\nProfile : %s\nExpired to : %s\nTgl Input : %s \n\n _handled by %s_";
-      $teletext = sprintf($template, $cust->no_pelanggan .". ". $cust->nama_pelanggan, $cust->mikrotik_profile, $data->expired, date('Y-m-d H:i:s'), $data->username);
-      
-      // $sendToTelegram = ""; 
-      $sendToTelegram = $this->telegram->sendToAdmin($teletext);
-      
+      // Update Invoice Status
+      //$saveSuccessPayment = $this->updateTempInvoice($cust->no_pelanggan, $metodePembayaran);
+
+      // KIRIM PESAN KE TELEGRAM
+      $sendToTelegram = $this->_sendToTelegram(
+        (object) array(
+          'no_pelanggan' => $cust->no_pelanggan .". ". $cust->nama_pelanggan,
+          'mikrotik_profile' => $cust->mikrotik_profile,
+          'expired' => $data->expired,
+          'time' => date('Y-m-d H:i:s'),
+          'username' => $data->username,
+        )
+      );
       // save to Log table
       $this->saveLogEvent('Payment', "Payment success! $cust->no_pelanggan. $cust->nama_pelanggan $cust->mikrotik_profile Exp=$data->expired by $data->username");
+      
       // update temp_invoice
       // $this->updateTempInvoice($cust->no_pelanggan);
 
@@ -573,8 +562,7 @@ class Api_rest_client_model extends CI_Model
       );
 
       return [
-        'message' => "Paket berhasil diperpanjang ke $data->expired. ONT pelanggan auto restart!",
-        // 'kirimwa' => $sendToTelegram,
+        'message' => "$cust->no_pelanggan. $cust->nama_pelanggan Perpanjang ke $data->expired. ONT pelanggan auto restart!",
         'status' => true,
       ];
     }
@@ -585,20 +573,8 @@ class Api_rest_client_model extends CI_Model
       if ($data->expired < date('Y-m-d')) {
         $expp = $this->db->query("SELECT no_pelanggan, nama_pelanggan, username FROM pelanggan WHERE gpon_onu = '$data->gpon_onu'")->row();
         
-        if ($this->mikrotik['ROS_VERSION'] == 6) {
-          $set_expire = $this->routermodel->change_ppp_secret_profile($expp->username, 'Expired');
-          $this->routermodel->close_connection_ppp($expp->username);
-        } elseif ($this->mikrotik['ROS_VERSION'] == 7) {
-          $set_expire = $this->routermodel->patchRestSecret(
-            (object) array(
-              'name' => $expp->username, 
-              'profile' => 'Expired'
-              )
-          );
-          $this->routermodel->pppCloseConnection($expp->username);
-        } else {
-          echo json_encode(['error' => 'RouterOS version not match! Api_rest_client_model Line 588']);
-        }
+        // change secret mikrotik
+        $changeSecret = $this->routermodel->changeSecret($expp->username, 'Expired');
 
         $msg = "Paket kembali ke expired";
         $modewa = false;
@@ -609,22 +585,19 @@ class Api_rest_client_model extends CI_Model
       
       $plgn = $this->db->query("SELECT telp,no_pelanggan,name,mikrotik_profile FROM v_pelanggan WHERE gpon_onu = '$data->gpon_onu'")->row();
 
-      /**
-       * KIRIM PESAN KE TELEGRAM
-       */
-      $template = "*Perubahan Masa aktif Paket*\nName : %s\nProfile : %s\nExpired to : %s\nTgl Input : %s \n\n _handled by %s_";
-      $teletext = sprintf($template, $plgn->name, $plgn->mikrotik_profile, $data->expired, date('Y-m-d H:i:s'), $data->username);
-
-      // $sendToTelegram = "";
-      $sendToTelegram = $this->telegram->sendToAdmin($teletext);
+      // KIRIM PESAN KE TELEGRAM
+      $sendToTelegram = $this->_sendToTelegram(
+        (object) array(
+          'no_pelanggan' => $plgn->name,
+          'mikrotik_profile' => $plgn->mikrotik_profile,
+          'expired' => $data->expired,
+          'time' => date('Y-m-d H:i:s'),
+          'username' => $data->username,
+        )
+      );
 
       // save to Log table
       $this->saveLogEvent('Payment', "Payment success! $plgn->name $plgn->mikrotik_profile Exp=$data->expired by $data->username");
-
-      // $datat = [
-      //   'message' => "Pelanggan Yth, terima kasih telah melakukan pembayaran. Masa aktif Internet Anda telah diperpanjang hingga " . tgl_lokal($data->expired) . ". \n$plgn->no_pelanggan",
-      //   'phone_number' => ($plgn->telp == '') ? '081340310250' : $plgn->telp,
-      // ];
 
       // send to RuangWA gateway
       $sendToWa = $this->ruangwa->sendMessagePaymentSuccess(
@@ -638,14 +611,12 @@ class Api_rest_client_model extends CI_Model
       $updateExp = $this->db->query("UPDATE pelanggan SET expired='$data->expired' WHERE gpon_onu='$data->gpon_onu'");
       return [
         'message' => $msg, 
-        // 'notif' => $datat, 
         'status' => true, 
-        // 'data' => $datat
       ];
     }
   }
 
-  public function updateTempInvoice($no_pelanggan){
+  public function updateTempInvoice($no_pelanggan, $metodePembayaran){
     $yMonth = date('Y-m');
     $now = date('Y-m-d');
     $dateTime = date('Y-m-d H:i:s');
@@ -682,7 +653,7 @@ class Api_rest_client_model extends CI_Model
         'expired' => $getInvoice->expired,
         'tgl_input' => $dateTime,
         'status' => 'Lunas',
-        'metode_pembayaran' => 'antar',
+        'metode_pembayaran' => (isset($metodePembayaran)) ? $metodePembayaran : 'antar',
         'penerima' => $id_kolektor,
         'kode_wilayah' => $getInvoice->kode_wilayah,
         'remark' => $getInvoice->tarif,
@@ -694,6 +665,11 @@ class Api_rest_client_model extends CI_Model
  
   }
 
+  private function _sendToTelegram($data) {
+      $template = "*Perubahan Masa aktif Paket*\nName : %s\nProfile : %s\nExpired to : %s\nTgl Input : %s \n\n _handled by %s_";
+      $teletext = sprintf($template, $data->no_pelanggan, $data->mikrotik_profile, $data->expired, $data->time, $data->username);
+      return $this->telegram->sendToAdmin($teletext);
+  }
 
   /**
    * ada 2 kondisi untuk melakukan konfigurasi ulang

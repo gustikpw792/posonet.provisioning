@@ -400,29 +400,12 @@ class Kwitansi extends CI_Controller
 		} else {
 			return FALSE;
 		}
-	}
+	}	
 
 	public function tes2()
 	{
 		$this->load->view('admin/kwitansi/qrscan');
 	}
-
-	// private function _saveqr($wilayah, $bulanPenagihan)
-	// {
-	// 	$query = $this->db->query("SELECT kode_invoice FROM temp_invoice WHERE no_pelanggan LIKE '%$wilayah%' AND bulan_penagihan LIKE '%$bulanPenagihan%' ");
-	// 	$jumlah = 0;
-	// 	foreach ($query->result() as $qr) {
-	// 		$this->_generateQr($qr->kode_invoice);
-	// 		$jumlah++;
-	// 	}
-
-	// 	if ($query->num_rows() === $jumlah) {
-	// 		return TRUE;
-	// 	} else {
-	// 		return FALSE;
-	// 	}
-
-	// }
 
 	public function kwitansikawua()
 	{
@@ -466,7 +449,7 @@ class Kwitansi extends CI_Controller
 					$rekening['no_rekening'] = $rk->option_value;
 				}
 			}
-		
+
 
 
 		$data = array(
@@ -481,5 +464,105 @@ class Kwitansi extends CI_Controller
 		// echo json_encode($data);
 		// var_dump($data);
 		$this->load->view('admin/kwitansi/invoice_inet', $data);
+	}
+	
+	public function cetakKwitansiByPeriode($no_pelanggan, $periode = [])
+	{
+		$periode = ['',
+		'2025-01-02', '2025-02-02','2025-03-02','2025-04-02','2025-05-02','2025-06-02',
+		'2025-07-02','2025-08-02','2025-09-02','2025-10-02','2025-11-02','2025-12-02',];
+		
+		$query = $this->db->query("SELECT no_pelanggan,nama_pelanggan,wilayah,alamat,
+		nama_paket,tarif,serial_number,tgl_instalasi,expired,keterangan,lokasi_map,telp,status,
+		kode_wilayah,sort FROM v_pelanggan WHERE no_pelanggan = ?", $no_pelanggan);
+
+		if ($query->num_rows() > 0) {
+			$profil = $this->kwitansi->profil_perusahaan();
+			$dt = $query->row();
+			$terms = array(); //BELUM DIPAKAI
+			$rek = $this->db->query("SELECT * FROM settings WHERE option_name LIKE 'bri_%'")->result();
+			$rekening = array();
+
+			foreach ($rek as $rk) {
+				if ($rk->option_name === 'bri_bank') {
+					$rekening['nama_bank'] = $rk->option_value;
+				}
+				if ($rk->option_name === 'bri_nama_pemilik_rekening') {
+					$rekening['pemilik_rekening'] = $rk->option_value;
+				}
+				if ($rk->option_name === 'bri_no_rekening') {
+					$rekening['no_rekening'] = $rk->option_value;
+				}
+			}
+
+			$data = [];
+
+			for ($i=1; $i <= 12 ; $i++) { 
+				$dataInvoice = $this->kwitansi->cek_temp_invoice($no_pelanggan, $periode[$i]); // ambil dati temp_invoice
+				
+				$row = [];
+
+				$row['kode_invoice'] = $dataInvoice->kode_invoice;
+				$row['no_pelanggan'] = $dataInvoice->no_pelanggan;
+				$row['nama_pelanggan'] = $dt->nama_pelanggan;
+				$ww = explode(' ', $dt->wilayah);
+				$row['wilayah'] = $ww[0];
+				$row['nama_paket'] = $dt->nama_paket;
+				$row['tarif'] = $dt->tarif;
+				$row['status'] = $dt->status;
+				$row['tgl_instalasi'] = $dt->tgl_instalasi;
+				$row['expired'] = $dt->expired;
+				$row['serial_number'] = $dt->serial_number;
+				$row['status_map'] = strlen($dt->lokasi_map) <= 5 ? 'Belum Ada' : 'Ada';
+				$row['lokasi_map'] = strlen($dt->lokasi_map) <= 5 ? '#' : $dt->lokasi_map;
+				// $blnPenagihan = (int) substr($dataInvoice->bulan_penagihan, 5, 2);
+				$row['keterangan'] = $dt->keterangan;
+				$row['bulan_penagihan'] = bulan_tahun($dataInvoice->bulan_penagihan);
+				$row['masa_aktif'] = tgl_lokal($dataInvoice->expired);
+				$row['tgl_cetak'] = $dataInvoice->bulan_penagihan;
+				$row['url_gambar'] = base_url() . '/assets/tempQr/img/' . '22512015156.png';
+				//pemisah angka ribuan
+				$row['tarif_rp'] = "Rp. " . ribuan($dt->tarif) . ",-";
+				$row['tarif_rp_trx'] = "Rp. " . ribuan($dt->tarif + $dataInvoice->no_pelanggan) . ",-";
+				$row['sort'] = $dt->sort;
+				// Pengaturan nama file, dll
+				$kodewil = 'WIL';
+				if (strlen($dt->no_pelanggan) == 5) {
+					$kodewil = substr($dt->no_pelanggan, 0, 2);
+				} elseif (strlen($dt->no_pelanggan) == 4) {
+					$kodewil = substr($dt->no_pelanggan, 0, 1);
+				} elseif (strlen($dt->no_pelanggan) == 3) {
+					$kodewil = substr($dt->no_pelanggan, 0, 1);
+				} elseif (strlen($dt->no_pelanggan) == 2) {
+					$kodewil = substr($dt->no_pelanggan, 0, 1);
+				} else {
+					$kodewil = substr($dt->no_pelanggan, 0, 1);
+				}
+				$namafile = FCPATH . 'assets/invoice/' . $no_pelanggan .'_1sd12' . '.pdf';
+
+				$data[] = $row;
+			}
+
+			$kirim = array(
+				'logo' => base_url() . '/assets/posonet/img/primahomelogo3.png',
+				'company' => $profil,
+				'cust' => $data,
+				'terms' => $terms,
+				'rekening' => $rekening,
+				'namafile' => $namafile,
+				'outputMode' => 'FILE', // STREAM = just temporarly open in browser | FILE = save to storage server
+			);
+			
+			$fl = $this->load->view('admin/kwitansi/invoice_inet_periode', $kirim, true);
+			
+			if (strlen($fl) > 0) { // jika ada teks error, return rollback db
+				return ['namafile' => $namafile, 'rollback' => true, 'message' => $fl];
+			} else {
+				return ['namafile' => $namafile, 'rollback' => false, 'message' => $fl];
+			}
+			
+		}
+		
+
 	}
 }

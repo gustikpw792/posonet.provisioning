@@ -998,7 +998,8 @@ _handled by %s_";
 	
 	*/
 	public function getExtendPaket() {
-		$gpon_onu = $this->input->post('gpon_onu');
+		$gpon_onu = $this->input->post('gpon_onu', TRUE);
+
 		$res = $this->db->query("SELECT id_pelanggan, name, gpon_onu, onu_type, nama_paket, expired, telp
 			FROM v_pelanggan
 			WHERE gpon_onu = '$gpon_onu'")->row();

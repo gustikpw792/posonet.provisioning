@@ -213,5 +213,5 @@ ORDER BY v.gpon_onu ASC
 ALTER ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `v_unspec` AS SELECT * FROM v_pelanggan
 WHERE onu_db <= -26.00  ;
 
-
+# (2025-12-21) add column 'mode' with enum 'SANDBOX','PRODUCTION' default SANDBOX in table temp_invoice
 

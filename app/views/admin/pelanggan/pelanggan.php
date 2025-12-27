@@ -490,6 +490,39 @@
                         <form id="formExtendPaket" action="#" class="form-horizontal">
                             <input type="text" name="md_gpon_onu" hidden>
                             <div class="col-md-12">
+                                <div class="form-group"><label class="col-md-3 control-label ">Kode Pelanggan</label>
+                                    <div class="col-md-9"> <span class="text-primary" id="md_no_pelanggan" style="font-size: 20pt; font-weight: bold;"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group"><label class="col-md-3 control-label ">Metode Pembayaran</label>
+                                    <div class="col-md-9">
+                                        <label class="checkbox-inline"> <input type="radio" value="transfer" id="transfer" name="metode_pembayaran" onchange="item('hide')"> Transfer </label>
+                                        <label class="checkbox-inline"> <input type="radio" checked="" value="kolektor" id="kolektor" name="metode_pembayaran" onchange="item('hide')"> Kolektor </label>
+                                        <label class="checkbox-inline"> <input type="radio" value="antar" id="antar" name="metode_pembayaran" onchange="item('show')"> Antar Langsung</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group hidemode" style="display:none"><label class="col-md-3 control-label ">Pilih Penerima</label>
+                                    <div class="col-md-9">
+                                        <select name="id_karyawan" class="form-control"></select> <span class="help-block m-b-none"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group"><label class="col-md-3 control-label ">Remark Tarif</label>
+                                    <div class="col-md-9">
+                                        <input type="number" name="remark" step="5000" class="form-control input-lg m-b-sm" placeholder="Remark tarif setoran">
+                                        
+                                        <span class="text-primary" id="md_kd_pelanggan"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group"><label class="col-md-3 control-label">Keterangan</label>
+                                    <div class="col-md-9">
+                                        <textarea name="md_keterangan" placeholder="Keterangan" class="typeahead_1 form-control"></textarea>
+                                    </div>
+                                </div>
+
                                 <div class="form-group"><label class="col-md-3 control-label ">Paket</label>
                                     <div class="col-md-9">
                                         <input type="text" name="md_nama_paket" class="form-control m-b-sm" disabled>
