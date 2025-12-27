@@ -290,10 +290,9 @@ class Pelanggan extends CI_Controller
 
 		
 		//send new client data to Admin telegram
-		$this->load->model('Api_telegrambot_model','telegramModel');
+		// $this->load->model('Api_telegrambot_model','telegramModel');
 
-		$telegram = $this->telegramModel->notifNewClientToAdmin($data['no_pelanggan']);
-		// $telegram = $this->telegramModel->sendNewClientToAdmin($data);
+		// $telegram = $this->telegramModel->notifNewClientToAdmin($data['no_pelanggan']);
 
 		echo json_encode(
 			array(
