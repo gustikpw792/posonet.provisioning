@@ -298,7 +298,7 @@ class Pelanggan extends CI_Controller
 			array(
 				"status" => TRUE,
 				"callback" => $onu,
-				"telegram" => ($telegram == null) ? [] : $telegram,
+				"telegram" => (!isset($telegram)) ? [] : $telegram,
 				"message" => $error
 			),
 		);
