@@ -119,10 +119,12 @@ class Api_telegrambot_model extends CI_Model
         $input_by = ($watermark) ? "input by " . $this->session->username : "\n";
         $cust = $this->db->query("SELECT * FROM v_pelanggan WHERE no_pelanggan=?",$no_pelanggan)->row();
 
+        $telp = ($cust->telp != '') ? $cust->telp : '082398470228';
+
         $msg_for_telegram = sprintf($tmp_notif['msg_register_success'], 
             $cust->no_pelanggan, 
             $cust->nama_pelanggan, 
-            ($cust->telp != '') ? $cust->telp : '123456789100',
+            $telp,
             $cust->tgl_instalasi,
             $cust->nama_paket,
             ribuan($cust->tarif),
@@ -136,7 +138,7 @@ class Api_telegrambot_model extends CI_Model
         $msg_for_customer = sprintf($tmp_notif['msg_register_success'], 
             $cust->no_pelanggan, 
             $cust->nama_pelanggan, 
-            ($cust->telp != '') ? $cust->telp : '123456789100',
+            $telp,
             $cust->tgl_instalasi,
             $cust->nama_paket,
             ribuan($cust->tarif),
@@ -160,13 +162,13 @@ class Api_telegrambot_model extends CI_Model
                 ),
                 'telegram_contact' => array(
                     'chat_id'       => $this->tgrow['tg_chat_id_admin'],
-                    'phone_number'  => $this->formatNomor($cust->telp),
+                    'phone_number'  => $this->formatNomor($telp),
                     'first_name'    => $firstName,
                     'last_name'     => $lastName
                 ),
                 'wa_message' => array(
                     'message'      => $msg_for_customer,
-                    'number'      => $cust->telp,
+                    'number'      => $telp,
                 ),
             );
         } else {
