@@ -963,6 +963,12 @@ _handled by %s_";
 
 	}
 
+	public function closeAllRemoteWeb()
+	{
+		$res = $this->api->closeAllRemoteWeb();
+		echo json_encode($res);
+	}
+
 	public function baseinfo($gpon_olt){
 		return $this->api->raw_gpon_onu_baseinfo($gpon_olt);
 		// echo json_encode($data);
@@ -1644,5 +1650,6 @@ Expired to : 2023-11-20
 Tgl Input : 2023-10-19 08:49:08";
 		echo json_encode($data);
 	}
+
 
 }

@@ -212,6 +212,9 @@ class Pelanggan extends CI_Controller
 		// upload ktp
 		// $ktp_filename = $this->_do_upload();
 		// save data
+		$this->load->model('Maps_model','maps_model');
+        $coordinates = $this->maps_model->extract_coordinates($this->input->post('lokasi_map'));
+		
 		$data = array(
 			'gpon_olt' => $this->input->post('interface'),
 			'onu_type' => $this->input->post('onutype'),
@@ -242,7 +245,11 @@ class Pelanggan extends CI_Controller
 			'stb_username' => $this->input->post('no_pelanggan'),
 			'stb_password' => rand(111111,999999),
 			'input_by' => $this->session->username,
-			'sort' => $this->input->post('sort')
+			'sort' => $this->input->post('sort'),
+
+			// maps coordinate
+			'latitude' => $coordinates['latitude'],
+			'longitude' => $coordinates['longitude'],
 		);
 
 		
@@ -317,6 +324,12 @@ class Pelanggan extends CI_Controller
 
 		$tgl_pasang = $this->input->post('tgl_instalasi');
 		$tgl_pasang = ($tgl_pasang == null || $tgl_pasang == '') ? NULL : $tgl_pasang;
+
+		// get coordinate from short link google maps
+		$this->load->model('Maps_model','maps_model');
+        $coordinates = $this->maps_model->extract_coordinates($this->input->post('lokasi_map'));
+
+
 		$data = array(
 			'nama_pelanggan' => $this->input->post('nama_pelanggan'),
 			'id_paket' => $this->input->post('id_paket'),
@@ -342,6 +355,9 @@ class Pelanggan extends CI_Controller
 			'id_wilayah' => $this->input->post('id_wilayah'),
 			'no_pelanggan' => $this->input->post('no_pelanggan'),
 			'sort' => $this->input->post('sort'),
+			// maps coordinate
+			'latitude' => $coordinates['latitude'],
+			'longitude' => $coordinates['longitude'],
 		);
 
 		$this->pelanggan->update(array('id_pelanggan' => $this->input->post('id_pelanggan')), $data);

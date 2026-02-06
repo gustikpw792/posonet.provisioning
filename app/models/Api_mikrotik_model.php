@@ -31,7 +31,10 @@ class Api_mikrotik_model extends CI_Model
     
     $this->_restClient = new GClient([
       'base_uri' => $this->mikrotik['REST_URL'],
-      'timeout' => 9.0
+      'timeout' => 9.0,
+      'headers' => [
+        'Connection' => 'keep-alive',
+      ],
     ]);
 
     $this->_clientMtik = new RClient($this->_mikrotik);

@@ -932,14 +932,26 @@
       }, 'json');
   }
 
-  function unsaved_onu() {
-    notif('Detect onu', 'Checking on progress', 'warning');
-    $.get("<?= site_url('api_rest_client/getUnsyncOnu') ?>",
+  function close_all_remote_web() {
+    notif('Please wait a few seconds...', 'Close all remote web on progress', 'success');
+    $.get("<?= site_url('api_rest_client/closeAllRemoteWeb') ?>",
       function(data, status) {
-        notif(data.message, 'Detect UNSYNC ONU success', 'success');
-        console.log("Message: " + data.founds + "\nStatus: " + status);
+        notif(data.message, 'REMOTE WEB MANAGEMENT', 'success');
+        console.log("Message: " + data.message + "\nStatus: " + status);
         reload_table();
       }, 'json');
+  }
+
+  function unsaved_onu() {
+    if (confirm('ONU di OLT yg tidak terdaftar di aplikasi akan ditampilkan!')) {
+      notif('Detect unsaved onu', 'Checking on progress', 'warning');
+      $.get("<?= site_url('api_rest_client/getUnsyncOnu') ?>",
+        function(data, status) {
+          notif(data.message, 'Detect UNSYNC ONU success', 'success');
+          console.log("Message: " + data.founds + "\nStatus: " + status);
+          reload_table();
+        }, 'json');
+    }
   }
 
   function getReplaceOnt(gpon_onu) {
@@ -1130,6 +1142,46 @@
   //   los();
   // }, 300000); //ms
 
+  // document.addEventListener('DOMContentLoaded', function() {
+  //   const toggleBtn = document.getElementById('toggleIntervalBtn');
+  //   let intervalID;
+  //   let isIntervalOn = true;
+  //   console.log('Auto-refreshing data is ON.');
+
+  //   toggleBtn.addEventListener('click', function() {
+  //       isIntervalOn = !isIntervalOn;
+  //       if (!isIntervalOn) {
+  //           toggleBtn.textContent = 'Auto Interval: ON';
+  //           toggleBtn.classList.remove('btn-default');
+  //           toggleBtn.classList.add('btn-success');
+  //           // Start the interval
+  //           intervalID = setInterval(function() {
+  //               // Add your auto-refresh logic here
+  //               console.log('Auto-refreshing data...');
+  //               // For example, you could call a function that reloads table data
+  //               // table.ajax.reload(); 
+  //               connection_status();
+  //               tbl_offline.destroy().clear();
+  //               tbl_expired.destroy().clear();
+  //               tbl_unconfig.destroy().clear();
+  //               tbl_los.destroy().clear();
+  //               onustate();
+  //               offline();
+  //               expired();
+  //               uncfg();
+  //               los();
+  //           }, 900000); // 15 minutes interval
+  //       } else {
+  //           toggleBtn.textContent = 'Auto Interval: OFF';
+  //           toggleBtn.classList.remove('btn-success');
+  //           toggleBtn.classList.add('btn-default');
+  //           // Stop the interval
+  //           clearInterval(intervalID);
+  //           console.log('Auto-refresh stopped.');
+  //       }
+  //   });
+  // });
+
   document.addEventListener('DOMContentLoaded', function() {
     const toggleBtn = document.getElementById('toggleIntervalBtn');
     let intervalID;
@@ -1167,7 +1219,7 @@
             console.log('Auto-refresh stopped.');
         }
     });
-});
+  });
 
 </script>
 

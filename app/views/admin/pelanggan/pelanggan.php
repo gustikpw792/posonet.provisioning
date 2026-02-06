@@ -46,6 +46,7 @@
                                     Manual<span class="fa fa-info"> <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
+                                    <li><a href="javascript:void(0)" onclick="close_all_remote_web()">Close all remote web</a></li>
                                     <li><a href="javascript:void(0)" onclick="update_onurx()">Update OnuRx dBm</a></li>
                                     <li><a href="javascript:void(0)" onclick="unsaved_onu()">Detect Unsaved ONU</a></li>
                                     <li><a href="javascript:void(0)" onclick="reconfig()">Proses Pindah Port / Reconfig</a></li>
@@ -54,7 +55,7 @@
                                 </ul>
                             </div>
 
-                            <button id="toggleIntervalBtn" class="btn btn-xs btn-default" title="Refresh setiap 15 Menit">Auto Interval: OFF</button>
+                            <button id="toggleIntervalBtn" class="btn btn-xs btn-default" title="Refresh data dari OLT setiap 15 Menit">Auto Refresh: OFF</button>
 
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>

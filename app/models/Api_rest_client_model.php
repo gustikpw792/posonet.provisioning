@@ -486,6 +486,42 @@ class Api_rest_client_model extends CI_Model
     return json_decode($response->getBody());
   }
 
+  public function closeAllRemoteWeb()
+  {
+    $query = $this->db->query("SELECT gpon_onu,remote_web_state FROM pelanggan WHERE remote_web_state=?",['enabled'])->result();
+
+    try {
+      // Mengirim sebagai JSON
+      $response = $this->_client->request('POST','close_all_remoteweb', [
+          'json' => $query, // Guzzle otomatis mengkonversi ke JSON
+          'headers' => [
+              'Content-Type' => 'application/json',
+              'Accept' => 'application/json'
+          ]
+      ]);
+      
+      $res = json_decode($response->getBody());
+
+      if ($res->status) {
+        $data = [
+            'remote_web_state' => 'disabled',
+        ];
+        $this->db->where('remote_web_state', 'enabled');
+        $this->db->update('pelanggan', $data);
+        
+        return [
+          'affected_rows' => $this->db->affected_rows(),
+          'status' => $res->status,
+          'message' => $res->message
+        ];
+      }
+
+    } catch (Exception $e) {
+      return "Error: " . $e->getMessage() . "\n";
+    }
+  }
+
+
   public function perpanjangPaketFromDetailSetoran($no_pelanggan, $expired, $wamode=false) {
     $qry = $this->db->query("SELECT gpon_onu FROM pelanggan WHERE no_pelanggan='$no_pelanggan'")->row();
     // return [$qry->gpon_onu, $expired];

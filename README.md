@@ -215,3 +215,5 @@ WHERE onu_db <= -26.00  ;
 
 # (2025-12-21) add column 'mode' with enum 'SANDBOX','PRODUCTION' default SANDBOX in table temp_invoice
 
+# (2026-02-06) add column longitude and latitude with VARCHAR in table pelanggan after sort
+
