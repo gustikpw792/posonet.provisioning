@@ -288,7 +288,7 @@ class Pelanggan extends CI_Controller
 
 				$makePPPSecret = $this->routermodel->putRestSecret($secretData);
 			} else {
-				$error = 'RouterOS version not match! Pelanggan Line 241';
+				$error = 'RouterOS version not match! Pelanggan Line 291';
 			}
 			
 			// save to Log table
@@ -297,9 +297,9 @@ class Pelanggan extends CI_Controller
 
 		
 		//send new client data to Admin telegram
-		// $this->load->model('Api_telegrambot_model','telegramModel');
+		$this->load->model('Api_telegrambot_model','telegramModel');
 
-		// $telegram = $this->telegramModel->notifNewClientToAdmin($data['no_pelanggan']);
+		$telegram = $this->telegramModel->notifNewClientToAdmin($data['no_pelanggan']);
 
 		echo json_encode(
 			array(

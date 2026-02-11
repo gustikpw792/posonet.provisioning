@@ -190,7 +190,7 @@ class Billing_api extends CI_Controller {
                     
                     // Perpanjang paket pelanggan atau transaksi benar2 real
                     if ($this->input->post("is_production", TRUE)) {
-                        // call the activation
+                        // call the activation and save transcaction log
                         $per = $this->_goPerpanjang($data['order_id']);
                         // log the transaction
                         $this->db->insert('log', [
@@ -303,7 +303,8 @@ class Billing_api extends CI_Controller {
                 FROM temp_invoice t, v_pelanggan p
                 WHERE t.no_pelanggan=p.no_pelanggan 
                 AND t.order_id=?", [$order_id])->row();
-        
+
+        // prepare activation and notification telegram
         $dataGpon = (object) array(
             'gpon_onu' => $getGpon->gpon_onu,
             'expired' => $getGpon->expired,

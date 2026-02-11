@@ -167,10 +167,28 @@ class Api_mikrotik_model extends CI_Model
     return "$no Profile changed! [$changedProfile]";
   }
 
-  /* 
-  Set to Expire on ROS7 REST
-  */
-  public function match_paket_rest(){
+  
+
+  
+
+
+  public function get_ppp_ip_address($username = false)
+  {
+    //get by name for return .id
+    $query = (new Query('/ppp/active/print',))
+    ->where('name', $username);
+    
+    return $this->_clientMtik->query($query)->read();
+  }
+
+  /**
+	 * REST HTTP ROUTEROS 7,9^
+	 *
+   * Set to Expire
+   */
+
+  public function match_paket_rest()
+  {
     /***
      * apabila paket ppp secret mikrotik tidak sama dengan yang ada di database. 
      * maka ubah ppp secret di mikrotik dengan yang di database
@@ -224,23 +242,8 @@ class Api_mikrotik_model extends CI_Model
     return "$no PPP Secret Profile changed! <br>Expired = [$changedToExpired]<br>Not Match = [$notMatch]";
   }
 
-  
-
-
-  public function get_ppp_ip_address($username = false)
-  {
-    //get by name for return .id
-    $query = (new Query('/ppp/active/print',))
-    ->where('name', $username);
-    
-    return $this->_clientMtik->query($query)->read();
-  }
-
-  /**
-	 * REST HTTP ROUTEROS 7,9^
-	 */
-
-   function getRestSecret($username=false) {
+   function getRestSecret($username=false) 
+   {
     $query = (!$username) ? "" : "?name=$username";
 
     $response = $this->_restClient->get("ppp/secret$query",
@@ -251,7 +254,8 @@ class Api_mikrotik_model extends CI_Model
     return $response->getBody();
    }
 
-   function putRestSecret($data) {
+   function putRestSecret($data) 
+   {
     /** Contoh data
       *  $data = (object) array(
       *		'name'      => "COBA",
@@ -272,7 +276,8 @@ class Api_mikrotik_model extends CI_Model
    }
 
 
-   function patchRestSecret($data) {
+   function patchRestSecret($data) 
+   {
 
     /* 
     $data = (object) array(
@@ -298,7 +303,8 @@ class Api_mikrotik_model extends CI_Model
     return $response->getBody();
    }
 
-   function patchRestSecretById($id, $data) {
+   function patchRestSecretById($id, $data) 
+   {
     /* 
     $data = (object) array(
       'profile' => 'Expired'
@@ -315,7 +321,8 @@ class Api_mikrotik_model extends CI_Model
     return $response->getBody();
    }
 
-   function deleteRestSecret($data) {
+   function deleteRestSecret($data) 
+   {
 
     /**Contoh data yang diminta harus dalam bentuk object
      * $data = (object) array('name' => $data->username);
@@ -341,7 +348,8 @@ class Api_mikrotik_model extends CI_Model
 
    }
 
-   function getRestActiveConnection($username=false) {
+   function getRestActiveConnection($username=false) 
+   {
     $query = (!$username) ? "" : "?name=$username";
 
     $response = $this->_restClient->get("ppp/active$query",
@@ -352,7 +360,8 @@ class Api_mikrotik_model extends CI_Model
     return $response->getBody();
    }
    
-   function pppCloseConnection($data) {
+   function pppCloseConnection($data) 
+   {
      
     /**
      * $data = $data->username;
@@ -378,7 +387,8 @@ class Api_mikrotik_model extends CI_Model
 
    }
 
-   function getRemoteNAT($comment='REMOTEONT') {
+   function getRemoteNAT($comment='REMOTEONT') 
+   {
     //  http://192.168.50.1:8090/rest/ip/firewal/nat?comment=REMOTEONT-dontdelete
 
     $query = ($comment == '') ? "" : "?comment=$comment";
@@ -391,7 +401,8 @@ class Api_mikrotik_model extends CI_Model
     return $response->getBody();
    }
 
-   function patchRemoteNATById($id, $data) {
+   function patchRemoteNATById($id, $data) 
+   {
     /* 
     $data = (object) array(
       'to-addresses' => '10.50.10.100'
@@ -408,7 +419,8 @@ class Api_mikrotik_model extends CI_Model
     return $response->getBody();
    }
 
-   public function setPublicRemoteOnt($data,$dst) {
+   public function setPublicRemoteOnt($data,$dst) 
+   {
     /**
      * $data = (object) array(
      *   'to-addresses' => '10.50.10.100'
