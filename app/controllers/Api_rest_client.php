@@ -540,11 +540,11 @@ class Api_rest_client extends CI_Controller
 
 		//delete onu di database sql
 		if ($permanent == 'yes'){
-			$this->api->saveLogEvent('DELETE PERMANENT', "$logData->no_pelanggan. $logData->nama_pelanggan [$logData->nama_paket / $logData->tgl_instalasai / $logData->expired / $logData->lokasi_map / $logData->telp /ID $logData->id_pelanggan] by " . $data['input_by']);
+			$this->api->saveLogEvent('DELETE PERMANENT', "$logData->no_pelanggan. $logData->nama_pelanggan [$logData->nama_paket / $logData->tgl_instalasi / $logData->expired / $logData->lokasi_map / $logData->telp /ID $logData->id_pelanggan] by " . $data['input_by']);
 			$delete_cust = $this->db->query("DELETE FROM pelanggan WHERE gpon_onu = '$gpon_onu'");
 			
 		} else {
-			$this->api->saveLogEvent('DELETE MANUAL', "$logData->no_pelanggan. $logData->nama_pelanggan [$logData->nama_paket / $logData->tgl_instalasai / $logData->expired / $logData->lokasi_map / $logData->telp /ID $logData->id_pelanggan] by " . $data['input_by']);
+			$this->api->saveLogEvent('DELETE MANUAL', "$logData->no_pelanggan. $logData->nama_pelanggan [$logData->nama_paket / $logData->tgl_instalasi / $logData->expired / $logData->lokasi_map / $logData->telp /ID $logData->id_pelanggan] by " . $data['input_by']);
 			$updateOntPhase = $this->db->query("UPDATE pelanggan SET ont_phase_state='Unconfigured', remote_web_state='disabled' WHERE gpon_onu = '$gpon_onu'");
 		}
 		/**
