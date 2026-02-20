@@ -292,7 +292,7 @@ class Pelanggan extends CI_Controller
 			}
 			
 			// save to Log table
-			$this->olt->saveLogEvent('PSB', "New Customer! " . $onu->data->name ." ". $onu->data->ppp_profile . " Exp=" . $data['expired'] . " by " . $data['input_by']);
+			$this->olt->saveLogEvent('PSB', "New Client! " . $onu->data->name ." ". $onu->data->ppp_profile . " Exp=" . $data['expired'] . " by " . $data['input_by']);
 		}
 
 		
@@ -369,7 +369,10 @@ class Pelanggan extends CI_Controller
 		// $path = $this->delete_ktp($id_pelanggan);
 					
 		// save to Log table
-		$logData = $this->db->query("SELECT id_pelanggan, no_pelanggan, nama_pelanggan, telp, tgl_instalasai, nama_paket, expired, lokasi_map FROM v_pelanggan WHERE id_pelanggan=?", [$id_pelanggan])->row();
+		$logData = $this->db->query("SELECT id_pelanggan, no_pelanggan, nama_pelanggan, telp, tgl_instalasi, nama_paket, expired, lokasi_map 
+		FROM v_pelanggan 
+		WHERE id_pelanggan=?",[$id_pelanggan])->row();
+
 		$this->olt->saveLogEvent('DELETE PERMANENT', "$logData->no_pelanggan. $logData->nama_pelanggan [$logData->nama_paket / $logData->tgl_instalasai / $logData->expired / $logData->lokasi_map / $logData->telp /ID $logData->id_pelanggan] by " . $data['input_by']);
 
 		// delete from database
