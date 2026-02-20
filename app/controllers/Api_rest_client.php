@@ -523,7 +523,7 @@ class Api_rest_client extends CI_Controller
 		$gpon_onu = $this->input->post('gpon_onu');
 		$permanent = $this->input->post('permanent');
 		//ambil username pppoe utk delete secret di mikrotik
-		$qry = $this->db->query("SELECT username, name from pelanggan WHERE gpon_onu = '$gpon_onu'")->row();
+		$qry = $this->db->query("SELECT username, name, id_pelanggan, no_pelanggan, nama_pelanggan, telp, tgl_instalasi, nama_paket, expired, lokasi_map FROM pelanggan WHERE gpon_onu = '$gpon_onu'")->row();
 		//delete onu di olt
 		$delete_onu = $this->api->delete_onu($gpon_onu, $qry->username);
 		//delete onu di mikrotik
@@ -533,11 +533,18 @@ class Api_rest_client extends CI_Controller
 		elseif ($this->ros['ROS_VERSION'] == 7) {
 			$delete_secret = $this->routermodel->deleteRestSecret((object) array('name' => $qry->username));
 		}
+
+		// save to Log table
+		$logData = $qry;
+
+
 		//delete onu di database sql
 		if ($permanent == 'yes'){
+			$this->api->saveLogEvent('DELETE PERMANENT', "$logData->no_pelanggan. $logData->nama_pelanggan [$logData->nama_paket / $logData->tgl_instalasai / $logData->expired / $logData->lokasi_map / $logData->telp /ID $logData->id_pelanggan] by " . $data['input_by']);
 			$delete_cust = $this->db->query("DELETE FROM pelanggan WHERE gpon_onu = '$gpon_onu'");
 			
 		} else {
+			$this->api->saveLogEvent('DELETE MANUAL', "$logData->no_pelanggan. $logData->nama_pelanggan [$logData->nama_paket / $logData->tgl_instalasai / $logData->expired / $logData->lokasi_map / $logData->telp /ID $logData->id_pelanggan] by " . $data['input_by']);
 			$updateOntPhase = $this->db->query("UPDATE pelanggan SET ont_phase_state='Unconfigured', remote_web_state='disabled' WHERE gpon_onu = '$gpon_onu'");
 		}
 		/**
@@ -1322,6 +1329,16 @@ Ket	: ";
 		$btn = '';
 		foreach ($q as $d) {
 			if ($d->topic == 'PSB') {
+				$btn = "<button type=\"button\" class=\"btn btn-xs btn-outline btn-success\">$d->topic</button>";
+				$time = $d->time;
+				$msg = $d->message;
+			}
+			if ($d->topic == 'DELETE MANUAL') {
+				$btn = "<button type=\"button\" class=\"btn btn-xs btn-outline btn-success\">$d->topic</button>";
+				$time = $d->time;
+				$msg = $d->message;
+			}
+			if ($d->topic == 'DELETE PERMANENT') {
 				$btn = "<button type=\"button\" class=\"btn btn-xs btn-outline btn-success\">$d->topic</button>";
 				$time = $d->time;
 				$msg = $d->message;
