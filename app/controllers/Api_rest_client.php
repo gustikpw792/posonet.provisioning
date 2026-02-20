@@ -523,7 +523,7 @@ class Api_rest_client extends CI_Controller
 		$gpon_onu = $this->input->post('gpon_onu');
 		$permanent = $this->input->post('permanent');
 		//ambil username pppoe utk delete secret di mikrotik
-		$qry = $this->db->query("SELECT username, name, id_pelanggan, no_pelanggan, nama_pelanggan, telp, tgl_instalasi, nama_paket, expired, lokasi_map FROM pelanggan WHERE gpon_onu = '$gpon_onu'")->row();
+		$qry = $this->db->query("SELECT username, name, id_pelanggan, no_pelanggan, nama_pelanggan, telp, tgl_instalasi, nama_paket, expired, lokasi_map FROM v_pelanggan WHERE gpon_onu = '$gpon_onu'")->row();
 		//delete onu di olt
 		$delete_onu = $this->api->delete_onu($gpon_onu, $qry->username);
 		//delete onu di mikrotik
