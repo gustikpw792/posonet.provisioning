@@ -37,5 +37,14 @@ class Provisioning_model extends CI_Model
     return json_decode($response->getBody());
   }
 
+  public function get_uncfg() 
+  {
+    $olts = $this->db->query("SELECT * from olt")->result();
+
+    return $olts;
+
   
+  }
+
+
 }

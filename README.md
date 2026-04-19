@@ -217,3 +217,5 @@ WHERE onu_db <= -26.00  ;
 
 # (2026-02-06) add column longitude and latitude with VARCHAR in table pelanggan after sort
 
+# add onu_type in v_expired
+

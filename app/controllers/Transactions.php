@@ -33,20 +33,20 @@ class Transactions extends CI_Controller
 			$row = array();
 			$row[] = $no;
 			$row[] = $br->settlement_time;
-			$row[] = $br->kode_invoice;
+			// $row[] = $br->kode_invoice;
 			$row[] = "<span class='font-bold'>$br->order_id</span>";
 			$row[] = "<span class='font-bold'>$br->no_pelanggan $br->nama_pelanggan</span>";
 
             if ($br->activation_status == 'SUCCESS') {
                 $txt_act = ' 
-                    <button type="button" class="btn btn-primary btn-xs" alt="Pelanggan telah diperpanjang ke !' . $br->client_expiry . '">
+                    <span class="btn btn-primary btn-xs" title="Pelanggan telah diperpanjang ke !' . $br->client_expiry . '">
                         ' . $br->activation_status . '
-                    </button>';
+                    </span>';
             } else {            
                 $txt_act = '
-                    <button type="button" class="btn btn-warning btn-xs"  alt="Tgl Expired Pelanggan ' . $br->client_expiry . ' <> Tgl Expired Invoice ' . $br->invoice_expiry . '">
+                    <span class="btn btn-warning btn-xs"  title="Tgl Expired Pelanggan ' . $br->client_expiry . ' <> Tgl Expired Invoice ' . $br->invoice_expiry . '">
                         ' . $br->activation_status . '
-                    </button>';
+                    </span>';
             }
 
 			$row[] = $txt_act;

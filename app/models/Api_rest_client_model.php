@@ -561,7 +561,9 @@ class Api_rest_client_model extends CI_Model
 
       // reboot ont (untuk zte F660 versi lama). 
       if ($cust->ont_phase_state == 'working') {
-        $request = $this->api->reboot($cust->gpon_onu);
+        if ($cust->onu_type == 'ZTE-F660' ) {
+          $request = $this->api->reboot($cust->gpon_onu);
+        }
       }
 
       // close connection di ppp>active connection

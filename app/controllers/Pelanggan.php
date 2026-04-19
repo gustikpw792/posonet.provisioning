@@ -373,7 +373,7 @@ class Pelanggan extends CI_Controller
 		FROM v_pelanggan 
 		WHERE id_pelanggan=?",[$id_pelanggan])->row();
 
-		$this->olt->saveLogEvent('DELETE PERMANENT', "$logData->no_pelanggan. $logData->nama_pelanggan [$logData->nama_paket / $logData->tgl_instalasai / $logData->expired / $logData->lokasi_map / $logData->telp /ID $logData->id_pelanggan] by " . $data['input_by']);
+		$this->olt->saveLogEvent('DELETE PERMANENT', "$logData->no_pelanggan. $logData->nama_pelanggan [$logData->nama_paket / $logData->tgl_instalasi / $logData->expired / $logData->lokasi_map / $logData->telp /ID $logData->id_pelanggan] by --");
 
 		// delete from database
 		$this->pelanggan->delete_by_id($id_pelanggan);

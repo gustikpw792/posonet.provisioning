@@ -16,13 +16,13 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <div class="xtable-responsive" id="step4">
+                        <div class="table-responsive" id="step4">
                             <table class="table table-hover" id="table">
                                 <thead>
                                     <tr>
                                         <th>#</th>
                                         <th>SETTLEMENT TIME</th>
-                                        <th>INVOICE CODE</th>
+                                        <!-- <th>INVOICE CODE</th> -->
                                         <th>ORDER ID</th>
                                         <th>CLIENT NAME</th>
                                         <th>ACTIVATION STATUS</th>

@@ -41,13 +41,94 @@
                                     </div>
                                 </div>
                             </form>
+
+                            <span class="pull-right">
+                                <a href="#" class="btn btn-primary" onclick="regInvoice()" id="step4"><i class="fa fa-hdd-o"></i> Register Invoice</a>
+                            </span>
+                            Lama registrasi tergantung banyaknya jumlah pelanggan! Bisa >30 detik <br><br>
+                            </div>
+
+                        <div class="row">
+                            <h2>Warna Kertas</h2>(Opsional)
+                            <table id="tablex" class="table table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Bulan</th>
+                                        <th>Warna Kertas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Januari</td>
+                                        <td class="info">Biru</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Februari</td>
+                                        <td class="warning">Kuning</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Maret</td>
+                                        <td class="success">Hijau</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4</td>
+                                        <td>April</td>
+                                        <td class="danger">Merah</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5</td>
+                                        <td>Mei</td>
+                                        <td class="info">Biru</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6</td>
+                                        <td>Juni</td>
+                                        <td class="warning">Kuning</td>
+                                    </tr>
+                                    <tr>
+                                        <td>7</td>
+                                        <td>Juli</td>
+                                        <td class="success">Hijau</td>
+                                    </tr>
+                                    <tr>
+                                        <td>8</td>
+                                        <td>Agustus</td>
+                                        <td class="danger">Merah</td>
+                                    </tr>
+                                    <tr>
+                                        <td>9</td>
+                                        <td>September</td>
+                                        <td class="info">Biru</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10</td>
+                                        <td>Oktober</td>
+                                        <td class="warning">Kuning</td>
+                                    </tr>
+                                    <tr>
+                                        <td>11</td>
+                                        <td>November</td>
+                                        <td class="success">Hijau</td>
+                                    </tr>
+                                    <tr>
+                                        <td>12</td>
+                                        <td>Desember</td>
+                                        <td class="danger">Merah</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <div class="ibox-footer">
-                        <span class="pull-right">
+                        <!-- <span class="pull-right">
                             <a href="#" class="btn btn-primary" onclick="regInvoice()" id="step4"><i class="fa fa-hdd-o"></i> Register Invoice</a>
                         </span>
-                        Lama registrasi tergantung banyaknya jumlah pelanggan! Bisa >30 detik <br><br>
+                        Lama registrasi tergantung banyaknya jumlah pelanggan! Bisa >30 detik <br><br> -->
                     </div>
                 </div>
             </div>
@@ -92,10 +173,10 @@
                         </div>
                     </div>
                     <div class="ibox-footer">
-                        <span class="pull-right">
+                        <!-- <span class="pull-right"> -->
                             <!-- <a href="#" class="btn btn-primary" onclick="regInvoice()"  id="step4"><i class="fa fa-hdd-o"></i> Register Invoice</a> -->
-                        </span>
-                        Daftar Invoice yang telah ter-Registrasi ke sistem! <br><br>
+                        <!-- </span> -->
+                        <!-- Daftar Invoice yang telah ter-Registrasi ke sistem! <br><br> -->
                     </div>
                 </div>
 
@@ -104,11 +185,11 @@
         </div>
 
 
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-md-5">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title panel-primary">
-                        <h5>Warna Kertas <?php echo ucwords(str_replace('_', ' ', $active)); ?> (Opsional)</h5>
+                        <h5>Warna Kertas </?php echo ucwords(str_replace('_', ' ', $active)); ?> (Opsional)</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -192,8 +273,8 @@
                     <div class="ibox-footer">
                         <span class="pull-right">
                         </span>
-                        <!-- Daftar Invoice yang telah ter-Registrasi ke sistem! <br><br> -->
+                        Daftar Invoice yang telah ter-Registrasi ke sistem! <br><br>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->

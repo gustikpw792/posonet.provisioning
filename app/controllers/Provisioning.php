@@ -9,13 +9,41 @@ class Provisioning extends CI_Controller
 		if (!is_logged_in()) {
 			redirect('login?_rdr=' . urlencode(current_url()));
 		}
-		$this->load->model('Provisioning_model', 'prov');
+		// $this->load->model('Provisioning_model', 'prov');
 	}
 
 	public function index()
 	{
 		set_status_header(401);
 	}
+
+	// coba2
+	public function get_unconfig()
+	{
+		$this->load->model('Provisioning_model', 'olt_model');
+
+		$olts = $this->olt_model->get_uncfg();
+
+		echo json_encode($olts);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	// bisa dihapus, cuma pakai tes
 	public function get_tcont()

@@ -57,6 +57,16 @@ class Maps_model extends CI_Model {
      * Ekstrak koordinat dari URL Google Maps
      */
     public function extract_coordinates($url) {
+        if (empty($url)) {
+            return [
+                'error' => 'Koordinat tidak ditemukan',
+                'url_decode' => '',
+                'url' => $url,
+                'latitude' => '',
+                'longitude' => '',
+            ];
+        }
+
         try {
             // 1. Ikuti redirect untuk mendapatkan URL akhir
             $response = $this->client->get($url, [
