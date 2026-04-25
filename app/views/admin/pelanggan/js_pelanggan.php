@@ -869,6 +869,9 @@
   }
 
   function extendPaket(gpon_onu) {
+    $("#btnSaveExtendPaket").text('Perpanjang');
+    $('#btnSaveExtendPaket').attr('disabled', false);
+
     $.post(
       "<?= site_url('api_rest_client/getExtendPaket') ?>", {
         gpon_onu: gpon_onu
