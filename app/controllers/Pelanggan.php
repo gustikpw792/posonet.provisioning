@@ -325,9 +325,14 @@ class Pelanggan extends CI_Controller
 		$tgl_pasang = $this->input->post('tgl_instalasi');
 		$tgl_pasang = ($tgl_pasang == null || $tgl_pasang == '') ? NULL : $tgl_pasang;
 
-		// get coordinate from short link google maps
-		$this->load->model('Maps_model','maps_model');
-        $coordinates = $this->maps_model->extract_coordinates($this->input->post('lokasi_map'));
+		if ($this->input->post('lokasi_map') != '') {
+			// get coordinate from short link google maps
+			$this->load->model('Maps_model','maps_model');
+			$coordinates = $this->maps_model->extract_coordinates($this->input->post('lokasi_map'));
+		} else {
+			$coordinates['latitude'] = '';
+			$coordinates['longitude'] = '';
+		}
 
 
 		$data = array(
