@@ -113,7 +113,8 @@ class Maps_model extends CI_Model {
 
         // https://goo.gl/maps/uNF89z8kYcbvXJAHA
         // https://www.google.com/maps/place/2%C2%B007'24.9%22S+120%C2%B042'16.7%22E/@-2.1235807,120.7040948,189m/data=!3m2!1e3!4b1!4m6!3m5!1s0x0:0x0!7e2!8m2!3d-2.1235821!4d120.7046425?shorturl=1
-        '/place\/.*?\/@(.*?\d+\.\d+,.*?\d+\.\d+)/',
+        // '/place\/.*?\/@(.*?\d+\.\d+,.*?\d+\.\d+)/',
+        '/place\/.*?\/@(-?\d+\.\d+,-?\d+\.\d+).*?\//',
 
         // Berhasil untuk link ini https://maps.app.goo.gl/6jJR8aU3pw2WQUTq8
         // https://www.google.com/maps/place/Rumah+Makan+Mataram/@-2.11692,120.700455,776m/data=!3m1!1e3!4m6!3m5!1s0x2d91d8087ae25f9f:0x1349232db7dbc591!8m2!3d-2.1176241!4d120.699944!16s%2Fg%2F11j7xbndrx?entry=ttu&g_ep=EgoyMDI2MDIwMS4wIKXMDSoKLDEwMDc5MjA3M0gBUAM%3D
