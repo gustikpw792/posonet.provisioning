@@ -252,6 +252,7 @@ class Api extends CI_Controller {
     public function map_odp()
     {
         $data['rows'] = $this->db->get('v_map_pelanggan')->result();
+        $data['odp'] = $this->db->get('odp')->result();
         echo json_encode($data);
     }
 
