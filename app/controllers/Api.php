@@ -13,6 +13,14 @@ class Api extends CI_Controller {
         $this->api = $this->config->item('public_api');
         $this->load->model('Api_model', 'apiModel');
         // get_auth_bearer();
+
+        header('Access-Control-Allow-Origin: *');
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+        header("Access-Control-Allow-Headers: Content-Type, Content-Length, Accept-Encoding, X-Requested-With, Origin");
+
+        if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+            exit(0);
+        }
     }
 
 
