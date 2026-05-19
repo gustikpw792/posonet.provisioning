@@ -160,7 +160,7 @@ class Pelanggan extends CI_Controller
 			}
 			
 			$row[] = $rxPower;
-			$row[] = $br->distance;
+			// $row[] = $br->distance;
 			// paket Pelanggan
 			$row[] = $br->nama_paket;
 

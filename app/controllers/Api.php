@@ -241,6 +241,12 @@ class Api extends CI_Controller {
         return $this->perpanjang->extendThisPaket($dataGpon, true);
     }
 
+    public function map_odp()
+    {
+        $data = $this->db->get('v_map_pelanggan')->result();
+        echo json_encode($data);
+    }
+
     // public function coba()
     // {
     //     // $this->load->model('ruangwa_model','wa');

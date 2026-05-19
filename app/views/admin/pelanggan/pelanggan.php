@@ -352,7 +352,7 @@
                                         <th>Tgl Instalasi</th>
                                         <th data-priority="4">ontPhase</th>
                                         <th data-priority="5">dBm</th>
-                                        <th>meter</th>
+                                        <!-- <th>meter</th> -->
                                         <th>Paket</th>
                                         <th>Expire</th>
                                         <th>Tarif</th>
