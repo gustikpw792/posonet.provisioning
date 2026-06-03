@@ -18,22 +18,6 @@
 
   }
 
-  // var id_wilayah = $('[name="id_wilayah"]').select2({
-  //   placeholder: "Pilih Wilayah Pelanggan...",
-  //   width: "100%",
-  //   dropdownParent : $('#myModal')
-  // });
-  // var id_paket = $('[name="id_paket"]').select2({
-  //   placeholder: "Pilih Paket Berlangganan",
-  //   width: "100%",
-  //   dropdownParent : $('#myModal')
-  // });
-  // var zstatus = $('[name="status"]').select2({
-  //   placeholder: "Pilih Status Berlangganan",
-  //   width: "100%",
-  //   dropdownParent : $('#myModal')
-  // });
-
   var id_wilayah = $('[name="id_wilayah"]').select2({
     placeholder: "--Wilayah Pelanggan--",
     width: "100%",
@@ -46,35 +30,6 @@
     placeholder: "Status Berlangganan",
     width: "100%",
   });
-
-  // id_odp = $('#id_odp').select2({
-  //     minimumInputLength: 3, // Optional: Minimum characters to type before searching
-  //     ajax: {
-  //         url: '</?= site_url('odp/s2_get_data_for_select2') ?>', // Your CodeIgniter AJAX endpoint
-  //         dataType: 'json',
-  //         delay: 250, // Delay in milliseconds before sending the request
-  //         data: function (params) {
-  //             return {
-  //                 search: params.term, // Search term from the user input
-  //                 page: params.page // For pagination
-  //             };
-  //         },
-  //         processResults: function (data, params) {
-  //             params.page = params.page || 1;
-  //             return {
-  //                 results: data.items, // Array of objects with 'id' and 'text'
-  //                 pagination: {
-  //                     more: (params.page * 10) < data.total_count // Example for pagination
-  //                 }
-  //             };
-  //         },
-  //         cache: true
-  //     },
-  //     placeholder: 'Cari nama ODP...',
-  //     // width: "100%",
-  //     // dropdownParent : $('#myModal')
-
-  // });
 
   id_odp = $('#id_odp').select2({
       minimumInputLength: 3, // Optional: Minimum characters to type before searching
@@ -428,7 +383,7 @@
         $('[name="service_mode"]').val(data.access_mode);
         $('[name="vlan_profile"]').val(data.vlan_profile);
         $('[name="cvlan"]').val(data.cvlan);
-        $('[name="serial_number"]').val(data.serial_number).prop('disabled', true);
+        $('[name="serial_number"]').val(data.serial_number).prop('readonly', true);
         $('[name="expired"]').val(data.expired);
         $('[name="odp_number"]').val(data.odp_number);
         $('[name="stb_username"]').val(data.stb_username);

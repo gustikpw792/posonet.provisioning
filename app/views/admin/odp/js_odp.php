@@ -1,10 +1,11 @@
 <script src="<?php echo base_url('assets/inspinia271/js/plugins/dataTables/datatables.min.js') ?>"></script>
-<script src="<?php echo base_url('assets/inspinia271/js/plugins/bootstrapTour/bootstrap-tour.min.js') ?>"></script>
-<script src="<?php echo base_url('assets/inspinia271/js/plugins/datapicker/bootstrap-datepicker.js') ?>"></script>
+<!-- <script src="</?php echo base_url('assets/inspinia271/js/plugins/bootstrapTour/bootstrap-tour.min.js') ?>"></script> -->
+<!-- <script src="</?php echo base_url('assets/inspinia271/js/plugins/datapicker/bootstrap-datepicker.js') ?>"></script> -->
+<script src="<?= base_url('assets/inspinia271/js/plugins/select2/select2.full.min.js') ?>"></script>
 
 <script>
 
-  var table;
+  var table,id_odp_parent;
   $(document).ready(function() {
     $('.btnFokus').focus(); // fokus ke field ketika tombol tambah di klik
 
@@ -83,6 +84,37 @@
     // });
 
   });
+
+
+  id_odp_parent = $('#id_odp_parent').select2({
+      minimumInputLength: 3, // Optional: Minimum characters to type before searching
+      ajax: {
+          url: '<?= site_url('odp/s2_get_data_for_select2') ?>', // Your CodeIgniter AJAX endpoint
+          dataType: 'json',
+          delay: 250, // Delay in milliseconds before sending the request
+          data: function (params) {
+              return {
+                  search: params.term, // Search term from the user input
+                  page: params.page // For pagination
+              };
+          },
+          processResults: function (data, params) {
+              params.page = params.page || 1;
+              return {
+                  results: data.items, // Array of objects with 'id' and 'text'
+                  pagination: {
+                      more: (params.page * 10) < data.total_count // Example for pagination
+                  }
+              };
+          },
+          cache: true
+      },
+      placeholder: 'Cari ODP...',
+      width: "100%",
+      dropdownParent : $('#myModal')
+
+  });
+
 </script>
 
 <script type="text/javascript">
@@ -99,6 +131,8 @@
     $('#form')[0].reset(); // reset form on modals
     $('[name="id_odp"]').val('');
     $('[name="description"]').val(description);
+    $('[name="type"]').val('odp').trigger('change');
+    id_odp_parent.val(null).trigger('change');
     $('#myModal').modal('show'); // show bootstrap modal
     $('.help-block').empty();
     $('.fokus').focus();
@@ -157,6 +191,19 @@
         $('[name="odp_name"]').val(data.odp_name);
         $('[name="latlong"]').val(data.latlong);
         $('[name="description"]').val(data.description);
+        $('[name="type"]').val(data.type);
+        $('[name="capacity"]').val(data.capacity);
+
+        if(data.id_odp_parent == null) {
+          id_odp_parent.val(null).trigger('change');
+        } else{
+          id_odp_parent.val(data.id_odp_parent).trigger('change');
+        }
+
+        $('#odpName').html("<a href='https://www.google.com/maps/?q="+data.latlong+"' class='btn btn-outline btn-sm btn-primary' target='_blank'>"+data.odp_parent_name+"</a>");
+
+        id_odp_parent.val(data.id_odp_parent).trigger('change');
+
         $('#myModal').modal('show');
         $('.modal-title').text('Edit <?php echo ucwords(str_replace('_', ' ', $active)); ?>');
       },
@@ -187,7 +234,7 @@
 
 //   function views(id) {
 //     $.ajax({
-//       url: "<?php echo site_url('odp/vget_edit/') ?>" + id,
+//       url: "</?php echo site_url('odp/vget_edit/') ?>" + id,
 //       type: "GET",
 //       dataType: "JSON",
 //       success: function(data) {
@@ -196,7 +243,7 @@
 //         $('.v3').text(data.wilayah);
 //         $('.v4').text(data.keterangan);
 //         $('#DetailModal').modal('show');
-//         $('.modal-title').text('Detail <?php echo ucwords(str_replace('_', ' ', $active)); ?>');
+//         $('.modal-title').text('Detail </?php echo ucwords(str_replace('_', ' ', $active)); ?>');
 //       },
 //       error: function(jqXHR, textStatus, errorThrown) {
 //         notif('Gagal mengambil data!', 'Error', 'error');

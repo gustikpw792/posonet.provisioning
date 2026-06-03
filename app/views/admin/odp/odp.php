@@ -23,6 +23,7 @@
                                         <th>#</th>
                                         <th>ODP Name</th>
                                         <th>Latitude-Longitude</th>
+                                        <th>Type</th>
                                         <th>Description</th>
                                         <th class="text-center" style="width:180px">Action</th>
                                     </tr>
@@ -59,12 +60,47 @@
                                         <div class="col-md-9"><input name="latlong" type="text" class="form-control" placeholder="-2.07443, 120.68493"> <span class="help-block m-b-none"></span>
                                         </div>
                                     </div>
+                                    <div class="form-group"><label class="col-md-3 control-label ">Type</label>
+                                        <div class="col-md-9">
+                                            <select class="form-control" name="type" id="">
+                                                <option value="odp" selected>ODP</option>
+                                                <option value="joint">JOINT</option>
+                                                <option value="odp">OLT</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group"><label class="col-md-3 control-label ">Kapasitas Client</label>
+                                        <div class="col-md-9">
+                                            <select class="form-control" name="capacity" id="">
+                                                <option value="4">4</option>
+                                                <option value="8" selected>8</option>
+                                                <option value="16">16</option>
+                                            </select>
+                                        </div>
+                                    </div>
 
                                 </div>
 
                                 <div class="col-md-6 b-r">
+                                    <div class="form-group">
+                                        <label class="col-md-3 control-label text-danger">Relasi ODP</label>
+                                        <div class="col-md-9">
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <select name="id_odp_parent" id="id_odp_parent" class="form-control" style="display: none;"></select>
+                                                    <span class="help-block m-b-none"></span>
+                                                </div>
+                                                <div class="col-md-4" id="odpName">
+                                                    
+                                                </div>
+                                            </div>
+                                            <span class="help-block m-b-none"></span>
+                                        </div>
+                                    </div>
+
+
                                     <div class="form-group"><label class="col-md-3 control-label">Description</label>
-                                        <div class="col-md-9"><textarea name="description" placeholder="Keterangan Tambahan" class="form-control"></textarea> <span class="help-block m-b-none"></span>
+                                        <div class="col-md-9"><textarea name="description" placeholder="Keterangan Tambahan" class="form-control" rows="5"></textarea> <span class="help-block m-b-none"></span>
                                         </div>
                                     </div>
                                 </div>

@@ -31,6 +31,7 @@ class Odp extends CI_Controller
 			$row[] = (empty($br->latlong) || $br->latlong == null) ? '' : ' <a href="https://www.google.com/maps/?q=' . $br->latlong . '" target="_blank" title="Klik untuk melihat lokasi ODP"><strong>' .$br->latlong . '</strong></a>';
 			// $row[] = "<span class='font-bold'>$br->latlong</span>";
 			
+			$row[] = "<small>$br->type</small>";
 			$row[] = "<small>$br->description</small>";
 
 			//add html for action
@@ -56,6 +57,9 @@ class Odp extends CI_Controller
 			'odp_name' => $this->input->post('odp_name'),
 			'latlong' => str_replace(' ','',$this->input->post('latlong')),
 			'description' => $this->input->post('description'),
+			'type' => $this->input->post('type'),
+			'capacity' => $this->input->post('capacity'),
+			'id_odp_parent' => $this->input->post('id_odp_parent'),
 		);
 		$insert = $this->odp->save($data);
 		echo json_encode(array("status" => TRUE));
@@ -68,6 +72,9 @@ class Odp extends CI_Controller
 			'odp_name' => $this->input->post('odp_name'),
 			'latlong' => str_replace(' ','',$this->input->post('latlong')),
 			'description' => $this->input->post('description'),
+			'type' => $this->input->post('type'),
+			'capacity' => $this->input->post('capacity'),
+			'id_odp_parent' => $this->input->post('id_odp_parent'),
 		);
 		$this->odp->update(array('id_odp' => $this->input->post('id_odp')), $data);
 		echo json_encode(array("status" => TRUE));
@@ -91,8 +98,12 @@ class Odp extends CI_Controller
 		$data = array(
 			'id_odp' => $q->id_odp,
 			'odp_name' => $q->odp_name,
-			'latlong' => $q->latlong,
+			'latlong' => $q->odp_latlong,
 			'description' => $q->description,
+			'type' => $q->type,
+			'capacity' => $q->capacity,
+			'id_odp_parent' => $q->id_odp_parent,
+			'odp_parent_name' => $q->odp_parent_name,
 		);
 		echo json_encode($data);
 	}
