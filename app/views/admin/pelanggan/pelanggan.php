@@ -479,6 +479,23 @@
         </div>
     </div>
 
+    <div class="modal fade" id="mapModal" tabindex="-1" role="dialog" aria-labelledby="mapModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info" id="headerMapModal">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="mapModalLabel">New message</h4>
+                </div>
+                <div class="modal-body">
+                    <iframe id="iframeOnMap" src="" width="100%" height="450px" frameborder="0"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="extendPaket" tabindex="-1" role="dialog" aria-labelledby="extendPaketLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

@@ -661,6 +661,16 @@
     );
   }
 
+  function show_on_map(nopel) {
+      // Isi source iframe dan tampilkan modal dengan efek transisi halus
+      let targetUrl = 'http://localhost/odp-marker/?cari=' + nopel
+      $('#iframeOnMap').attr('src', decodeURIComponent(targetUrl));
+      $('#mapModal').modal('show');
+      $('#mapModalLabel').html('Finding ' + nopel + ' on map');
+
+      
+  }
+
   function reboot(gpon_onu) {
     if (confirm('Yakin ingin reboot ont?')) {
       $.post(

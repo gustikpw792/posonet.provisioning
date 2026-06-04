@@ -91,7 +91,9 @@ class Pelanggan extends CI_Controller
 			$linkMap = ($br->lokasi_map == null || empty($br->lokasi_map)) ? "<a href=\"#\">Lokasi Kosong</a>" : "<a href=\"" . urldecode($br->lokasi_map) . "\" target=\"_blank\">Lihat Lokasi</a>";
 			$odp_name = (empty($br->odp_name) || $br->odp_name == null) ? 'ODP' : "$br->odp_name";
 			$odp = (empty($br->latlong) || $br->latlong == null) ? ' <a href="#" class="btn btn-xs btn-outline btn-danger" title="ODP kosong"><small>ODP</small></a>' : ' <a href="https://www.google.com/maps/?q=' . $br->latlong . '" class="btn btn-xs btn-outline btn-primary" target="_blank" title="Klik untuk melihat lokasi ODP"><small>' .$odp_name . '</small></a>';
-			
+			$viewOnMap = '<a href="javascript:void(0)" class="btn btn-xs btn-outline btn-info" title="Show On Map" onclick="show_on_map(' . $br->no_pelanggan . ')"><i class="fa fa-map"></i></a>';
+
+
 			if ($br->expired < date('Y-m-d')) {
 				$warna = 'text-danger';
 			}
@@ -177,6 +179,7 @@ class Pelanggan extends CI_Controller
                             $statusB
                             $statusMap
 							$odp
+							$viewOnMap
                         </div>";
 
 			$row[] = ribuan($br->tarif);
