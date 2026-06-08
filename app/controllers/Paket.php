@@ -59,7 +59,7 @@ class Paket extends CI_Controller {
 		$data = $this->prov->getTcont();
 
 		foreach ($data as $key) {
-			$text .= "<option value='tcont $key->type profile $key->profile_name'>tcont $key->type profile $key->profile_name</option>";
+			$text .= "<option value='tcont 1 profile $key->profile_name'>tcont 1 profile $key->profile_name</option>";
 		}
 
 		echo $text;
