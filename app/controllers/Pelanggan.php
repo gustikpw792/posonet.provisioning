@@ -909,4 +909,13 @@ class Pelanggan extends CI_Controller
 
 		echo json_encode($output);
 	}
+
+	public function tesxy()
+	{
+		$this->load->model('maps_model');
+		$url= 'https://maps.app.goo.gl/kkFYVHZJy55LoJTe6';
+		// $url = 'https://www.google.com/maps/place/VQ32%2BFMV,+Maya+Sari,+Kec.+Pamona+Sel.,+Kabupaten+Poso,+Sulawesi+Tengah+94664/@-2.1462716,120.7516306,184m/data=!3m1!1e3!4m6!3m5!1s0x2d91d7a97ac8f079:0xbaedd54a7a523df1!8m2!3d-2.1462193!4d120.7516306!16s%2Fg%2F11plhdh7dy?entry=ttu&g_ep=EgoyMDI2MDYwMy4xIKXMDSoASAFQAw%3D%3D';
+		$coordinates = $this->maps_model->extract_coordinates($url);
+		echo json_encode($coordinates);
+	}
 }
