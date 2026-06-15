@@ -91,7 +91,12 @@ class Pelanggan extends CI_Controller
 			$linkMap = ($br->lokasi_map == null || empty($br->lokasi_map)) ? "<a href=\"#\">Lokasi Kosong</a>" : "<a href=\"" . urldecode($br->lokasi_map) . "\" target=\"_blank\">Lihat Lokasi</a>";
 			$odp_name = (empty($br->odp_name) || $br->odp_name == null) ? 'ODP' : "$br->odp_name";
 			$odp = (empty($br->latlong) || $br->latlong == null) ? ' <a href="#" class="btn btn-xs btn-outline btn-danger" title="ODP kosong"><small>ODP</small></a>' : ' <a href="https://www.google.com/maps/?q=' . $br->latlong . '" class="btn btn-xs btn-outline btn-primary" target="_blank" title="Klik untuk melihat lokasi ODP"><small>' .$odp_name . '</small></a>';
-			$viewOnMap = '<a href="javascript:void(0)" class="btn btn-xs btn-outline btn-info" title="Show On Map" onclick="show_on_map(' . $br->no_pelanggan . ')"><i class="fa fa-map"></i></a>';
+			
+			// if (strlen($br->latitude) > 5) {
+				$viewOnMap = '<a href="javascript:void(0)" class="btn btn-xs btn-outline btn-info" title="Show On Map" onclick="show_on_map(' . $br->no_pelanggan . ')"><i class="fa fa-map"></i></a>';
+			// } else {
+				// $viewOnMap = '<a href="javascript:void(0)" class="btn btn-xs btn-outline btn-danger" title="Show On Map" onclick="alert(\'Tidak bisa konversi short url map pelanggan ke koordinat Latitude,Longitude!\nGanti link map pelanggan!\')"><i class="fa fa-map"></i></a>';
+			// }
 
 
 			if ($br->expired < date('Y-m-d')) {
@@ -913,7 +918,7 @@ class Pelanggan extends CI_Controller
 	public function tesxy()
 	{
 		$this->load->model('maps_model');
-		$url= 'https://maps.app.goo.gl/kkFYVHZJy55LoJTe6';
+		$url= 'https://maps.app.goo.gl/G7zhjyD1AvmfKNus7';
 		// $url = 'https://www.google.com/maps/place/VQ32%2BFMV,+Maya+Sari,+Kec.+Pamona+Sel.,+Kabupaten+Poso,+Sulawesi+Tengah+94664/@-2.1462716,120.7516306,184m/data=!3m1!1e3!4m6!3m5!1s0x2d91d7a97ac8f079:0xbaedd54a7a523df1!8m2!3d-2.1462193!4d120.7516306!16s%2Fg%2F11plhdh7dy?entry=ttu&g_ep=EgoyMDI2MDYwMy4xIKXMDSoASAFQAw%3D%3D';
 		$coordinates = $this->maps_model->extract_coordinates($url);
 		echo json_encode($coordinates);

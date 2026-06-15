@@ -28,7 +28,7 @@ class Odp extends CI_Controller
 			$row[] = $no;
 			$row[] = "<span class='font-bold'>$br->odp_name</span>";
 			
-			$row[] = (empty($br->latlong) || $br->latlong == null) ? '' : ' <a href="https://www.google.com/maps/?q=' . $br->latlong . '" target="_blank" title="Klik untuk melihat lokasi ODP"><strong>' .$br->latlong . '</strong></a>';
+			$row[] = (empty($br->odp_latlong) || $br->odp_latlong == null) ? '' : ' <a href="https://www.google.com/maps/?q=' . $br->odp_latlong . '" target="_blank" title="Klik untuk melihat lokasi ODP"><strong>' .$br->odp_latlong . '</strong></a>';
 			// $row[] = "<span class='font-bold'>$br->latlong</span>";
 			
 			$row[] = "<small>$br->type</small>";

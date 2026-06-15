@@ -5,7 +5,7 @@ class odp_model extends CI_Model
 
   var $table = 'odp';
   var $vtable = 'v_odp';
-  var $column = array('id_odp', 'odp_name', 'latlong', 'description', 'odp_parent_name');
+  var $column = array('id_odp', 'odp_name', 'odp_latlong', 'description', 'odp_parent_name');
   var $order = array(
     'id_odp' => 'DESC',
   );
