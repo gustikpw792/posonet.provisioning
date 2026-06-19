@@ -118,6 +118,9 @@ class Maps_model extends CI_Model {
 
         // $url = "https://www.google.com/maps/place/VQ32%2BFMV,+Maya+Sari,+Kec.+Pamona+Sel.,+Kabupaten+Poso,+Sulawesi+Tengah+94664/@-2.1462193,120.7516306,736m/data=!3m2!1e3!4b1!4m6!3m5!1s0x2d91d7a97ac8f079:0xbaedd54a7a523df1!8m2!3d-2.1462193!4d120.7516306!16s%2Fg%2F11plhdh7dy?entry=ttu&g_ep=EgoyMDI2MDYwMy4xIKXMDSoASAFQAw%3D%3D";
         // '/@(-?\d+\.\d+),(-?\d+\.\d+)/',
+
+        // https://www.google.com/maps/place/VQ32+FMV/data=!4m7!3m6!1s0x2d91d7a97ac8f079:0xbaedd54a7a523df1!8m2!3d-2.1462193!4d120.7516306!16s/g/11plhdh7dy!19sChIJefDIeqnXkS0R8T1SekrV7bo?entry=tts&g_ep=EgoyMDI2MDYwMy4xIPu8ASoASAFQAw==&skid=6f7288c9-f0d9-4b21-9d69-e2b6e341aa2a
+        '/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/',
         
         // Berhasil untuk link ini https://maps.app.goo.gl/6jJR8aU3pw2WQUTq8
         // https://www.google.com/maps/place/Rumah+Makan+Mataram/@-2.11692,120.700455,776m/data=!3m1!1e3!4m6!3m5!1s0x2d91d8087ae25f9f:0x1349232db7dbc591!8m2!3d-2.1176241!4d120.699944!16s%2Fg%2F11j7xbndrx?entry=ttu&g_ep=EgoyMDI2MDIwMS4wIKXMDSoKLDEwMDc5MjA3M0gBUAM%3D

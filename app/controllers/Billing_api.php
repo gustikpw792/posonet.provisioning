@@ -157,6 +157,7 @@ class Billing_api extends CI_Controller {
             'va_numbers' => json_encode($this->input->post("va_numbers", TRUE)),
             'expiry_time' => $this->input->post("expiry_time", TRUE),
             'mode' => ($this->input->post("is_production", TRUE)) ? 'PRODUCTION' : 'SANDBOX',
+            'raw_response' => json_encode($this->input->post("raw_response", TRUE)),
         );
 
         // Validate input

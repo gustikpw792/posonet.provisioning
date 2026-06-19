@@ -346,6 +346,8 @@
     $('.form-group').removeClass('has-error');
     $('.help-block').empty();
 
+    $('#btnSave').attr('disabled', false); //set button enable
+
     wilMethod = 'off';
     $('#form')[0].reset(); // reset form on modals
     $.ajax({
