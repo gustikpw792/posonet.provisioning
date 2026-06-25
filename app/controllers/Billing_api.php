@@ -134,7 +134,11 @@ class Billing_api extends CI_Controller {
         }
 
         $transaction_status = $this->input->post("transaction_status", TRUE);
-        $status = ($transaction_status == 'settlement' || $transaction_status == 'capture') ? 'Lunas' : 'Belum Bayar';
+        if ($this->input->post("is_production", TRUE)) {
+            $status = ($transaction_status == 'settlement' || $transaction_status == 'capture') ? 'Lunas' : 'Belum Bayar';
+        } else {
+            $status = 'Belum Bayar';
+        }
 
         $kode_invoice = explode('-', $this->input->post("order_id", TRUE));
 
@@ -157,7 +161,7 @@ class Billing_api extends CI_Controller {
             'va_numbers' => json_encode($this->input->post("va_numbers", TRUE)),
             'expiry_time' => $this->input->post("expiry_time", TRUE),
             'mode' => ($this->input->post("is_production", TRUE)) ? 'PRODUCTION' : 'SANDBOX',
-            'raw_response' => json_encode($this->input->post("raw_response", TRUE)),
+            // 'raw_response' => json_encode($this->input->post("raw_response", TRUE)),
         );
 
         // Validate input

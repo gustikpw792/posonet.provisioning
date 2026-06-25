@@ -28,9 +28,8 @@
                             </div>
                         </div>
 
-                        <!-- <div class="row"> -->
-                            <br><br>
-                            <table id="resultcari" class="table table-hover " style="display:none">
+                        <div class="table-responsive">
+                            <table id="resultcari" class="table table-hover" style="display:none">
                                 <thead>
                                 <tr>
                                     <th>Nama</th>
@@ -45,7 +44,7 @@
                                 
                                 </tbody>
                             </table>
-                        <!-- </div> -->
+                        </div>
 
                         <!-- <button class="ladda-button btn btn-warning" data-style="zoom-in">Submit</button> -->
                     </div>

@@ -13,20 +13,9 @@
 <script>
   var l = $( '.ladda-button-demo' ).ladda();
 
-function cariz() {
-  $.post("<?php echo site_url('pembayaran/cari') ?>",
-  {
-    cari: $('#cari').val(),
-  },
-  function(data, status){
-    $('#tbhasil').html(data);
-    $('#resultcari').show();
-    $('#panelDetail').hide();
-    l.ladda('stop');
-    $('#resModal').modal('show');
-    // console.log(data);
-  });
-}
+
+
+
 
 function getDetailInvoice(nopel) {
   $.post("<?php echo site_url('pembayaran/getDetailInvoice') ?>",
@@ -190,35 +179,6 @@ function getDetailInvoice(nopel) {
     });
 
   }
-
-  // function listScanned(id_master_setoran) {
-  //   $.ajax({
-  //     url: "<?= site_url('detail_setoran/tesdatax/') ?>" + id_master_setoran,
-  //     type: "GET",
-  //     dataType: "JSON",
-  //     success: function(data) {
-  //       setTable(data.data);
-  //       countScanned(id_master_setoran);
-  //     },
-  //     error: function(jqXHR, errorThrown, textStatus) {
-  //       alert('error getting data from server!' + textStatus);
-  //     }
-  //   });
-  // }
-
-  // function countScanned(id_master_setoran) {
-  //   $.ajax({
-  //     url: "</?= site_url('detail_setoran/invoiceCountBy2/') ?>" + id_master_setoran,
-  //     type: "GET",
-  //     dataType: "JSON",
-  //     success: function(data) {
-  //       $("#update_remark").html(data.data);
-  //     },
-  //     error: function(jqXHR, errorThrown, textStatus) {
-  //       alert('error getting data from server!' + textStatus);
-  //     }
-  //   });
-  // }
 
   function getKeterangan(kodePelanggan, kodeInvoice) {
     $.ajax({
@@ -404,6 +364,39 @@ function getDetailInvoice(nopel) {
     wamode = !wamode;
     console.log(wamode);
   }
+</script>
+
+<script>
+  $(document).ready(function() {
+      $('#cari').on('keypress', function(e) {
+          // Cek apakah tombol yang ditekan adalah Enter (kode 13)
+          if (e.which === 13) {
+              e.preventDefault(); // Mencegah form reload atau aksi default
+
+              // alert('enter');
+              cariTagihan();   // Panggil fungsi Anda
+          }
+      });
+
+
+      function cariTagihan() {
+        $.post("<?php echo site_url('pembayaran/cari') ?>",
+        {
+          cari: $('#cari').val(),
+        },
+        function(data, status){
+          $('#tbhasil').html(data);
+          $('#resultcari').show();
+          $('#panelDetail').hide();
+          l.ladda('stop');
+          // $('#resModal').modal('show');
+          // console.log(data);
+        });
+      }
+
+      
+  });
+
 </script>
 
 </body>

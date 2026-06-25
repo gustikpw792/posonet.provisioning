@@ -25,7 +25,6 @@
                                     <span class="fa fa-users"></span> Master <span class="caret"></span>
                                 </a>
                                 <ul role="menu" class="dropdown-menu">
-                                    <!-- <li><a href="</?= site_url('dashboard/pelanggan') ?>">Data Pelanggan</a></li> -->
                                     <li><a href="<?= site_url('dashboard/karyawan') ?>">Karyawan</a></li>
                                     <li><a href="<?= site_url('dashboard/kolektor') ?>">Kolektor</a></li>
                                     <li><a href="<?= site_url('dashboard/paket') ?>">Paket</a></li>
@@ -61,6 +60,7 @@
                                     <span class="fa fa-calculator"></span> Transaksi <span class="caret"></span>
                                 </a>
                                 <ul role="menu" class="dropdown-menu">
+                                    <li><a href="<?= site_url('dashboard/pembayaran') ?>">Pembayaran</a></li>
                                     <li><a href="<?= site_url('dashboard/kwitansi') ?>">Kwitansi</a></li>
                                     <li><a href="<?= site_url('dashboard/master_setoran') ?>">Setoran</a></li>
                                     <li><a href="<?= site_url('dashboard/transactions') ?>">Transaksi</a></li>
