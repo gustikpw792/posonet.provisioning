@@ -36,14 +36,14 @@ class Billing_api extends CI_Controller {
         // Prepare response
 
         //check if no_internet available
-        $query = $this->db->query("SELECT no_pelanggan FROM pelanggan WHERE no_pelanggan=?",[$noInternet]);
+        $query = $this->db->query("SELECT no_pelanggan, status FROM pelanggan WHERE no_pelanggan=?",[$noInternet]);
 
         if ($query->num_rows())
         {
             $data = $this->db->query("SELECT v.no_pelanggan, v.nama_pelanggan, v.wilayah, v.nama_paket,v.tarif,v.tarif AS trx_amount, 
                 v.expired AS expired_date,t.expired AS next_expired, t.bulan_penagihan, v.status,
                 IF(v.expired < CURDATE(),'ISOLIR','AKTIF') AS status_berlangganan, v.telp , 
-                IF(t.status = 'Lunas' AND t.transaction_status = 'settlement', 'PAID', 'UNPAID') AS payment_status,  
+                IF(t.status = 'Lunas' OR t.transaction_status = 'settlement', 'PAID', 'UNPAID') AS payment_status,  
                 t.kode_invoice
 
                 FROM v_pelanggan v 
@@ -52,20 +52,26 @@ class Billing_api extends CI_Controller {
                 WHERE v.no_pelanggan=?
                 ORDER BY id_trx DESC
                 LIMIT 1", [$noInternet]);
+            
+            $profil = $this->db->query("SELECT telp_cs FROM profil_perusahaan")->row();
+
 
             if ($data->num_rows() > 0) {
-                if ($data->row()->next_expired < date('Y-m-d')) {
-                    $res = array(
-                        'data' => null,
-                        'status' => true,
-                        'message' => 'Tagihan belum tersedia!',
-                    );
-                    
-                } else {
-                    $dt = $data->row();
 
-                    $profil = $this->db->query("SELECT telp_cs FROM profil_perusahaan")->row();
+                // date diff
+                // 1. Ubah string tanggal menjadi objek DateTime
+                $date1 = new DateTime($data->row()->expired_date);
+                $date2 = new DateTime(date('Y-m-d'));
 
+                // 2. Hitung selisih antara kedua tanggal
+                $selisih = $date1->diff($date2);
+
+                // 3. Ambil total selisih dalam satuan hari
+                $total_hari = $selisih->days;
+                $dt = $data->row();
+
+
+                if ($dt->status === 'NONAKTIF' || $selisih->days >= 25) {
                     $res = array(
                         'data' => array(
                             'account' => array(
@@ -75,31 +81,63 @@ class Billing_api extends CI_Controller {
                                 'status' => $dt->status,
                             ),
                             'subscription' => array(
-                                'paket' => $dt->nama_paket,
-                                'tarif' => (int) $dt->tarif,
-                                'expired_date' => $dt->expired_date,
                                 'status' => $dt->status_berlangganan,
                             ),
                             'billing' => array(
-                                'billing_periode_start' => substr($dt->bulan_penagihan,0,8). '20',
-                                'billing_periode_end' => $dt->next_expired,
-                                'total_amount' => (int) $dt->tarif,
-                                'currency' => 'IDR',
-                                'kode_invoice' => $dt->kode_invoice,
                                 'status' => $dt->payment_status,
-                            ),
-                            'profile' => array(
-                                'telp_cs' => 
-                                substr_replace(
-                                    str_replace(' ', '', $profil->telp_cs),
-                                    '+62', 0, 1),
                             ),
                         ),
                         'status' => true,
-                        'time' => date('Y-m-d H:i:s'),
-                        'message' => 'Invoice found(s)',
-                        'payment_gateway' => 'MIDTRANS',
+                        'message' => 'Status ISOLIR! <br> Silahkan hubungi CS kami melalui WhatsApp <br><a href="https://wa.me/'
+                        . substr_replace(
+                            str_replace(' ', '', $profil->telp_cs),'+62', 0, 1)
+                        . '" class="btn btn-sm btn-info">'. $profil->telp_cs .'</a>' ,
                     );
+                } else {
+                    if ($data->row()->next_expired < date('Y-m-d')) {
+                        $res = array(
+                            'data' => null,
+                            'status' => true,
+                            'message' => 'Tagihan belum tersedia!',
+                        );
+                        
+                    } else {
+
+                        $res = array(
+                            'data' => array(
+                                'account' => array(
+                                    'no_internet' => $dt->no_pelanggan,
+                                    'nama_pelanggan' => $dt->nama_pelanggan,
+                                    'telp' => $dt->telp,
+                                    'status' => $dt->status,
+                                ),
+                                'subscription' => array(
+                                    'paket' => $dt->nama_paket,
+                                    'tarif' => (int) $dt->tarif,
+                                    'expired_date' => $dt->expired_date,
+                                    'status' => $dt->status_berlangganan,
+                                ),
+                                'billing' => array(
+                                    'billing_periode_start' => substr($dt->bulan_penagihan,0,8). '20',
+                                    'billing_periode_end' => $dt->next_expired,
+                                    'total_amount' => (int) $dt->tarif,
+                                    'currency' => 'IDR',
+                                    'kode_invoice' => $dt->kode_invoice,
+                                    'status' => $dt->payment_status,
+                                ),
+                                'profile' => array(
+                                    'telp_cs' => 
+                                    substr_replace(
+                                        str_replace(' ', '', $profil->telp_cs),
+                                        '+62', 0, 1),
+                                ),
+                            ),
+                            'status' => true,
+                            'time' => date('Y-m-d H:i:s'),
+                            'message' => 'Invoice found(s)',
+                            'payment_gateway' => 'MIDTRANS',
+                        );
+                    }
                 }
             } else {
                 $res = array(
