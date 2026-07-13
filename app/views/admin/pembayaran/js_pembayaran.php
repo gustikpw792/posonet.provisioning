@@ -104,6 +104,7 @@ function getDetailInvoice(nopel) {
 
   var dataScan, tabelku, kode_invoice, row_index, id_master_setoran, listKamera;
   $(document).ready(function() {
+    
     $('[data-toggle="tooltip"]').tooltip();
     listScanned($("#id_master_setoran").val());
     // Mengambil index row tabel untuk update keterangan & remark
