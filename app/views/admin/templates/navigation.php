@@ -43,6 +43,7 @@
                                 <ul role="menu" class="dropdown-menu">
                                     <li><a href="<?= site_url('dashboard/pelanggan') ?>">ONU</a></li>
                                     <li><a href="<?= site_url('dashboard/odp') ?>">ODP</a></li>
+                                    <li><a href="<?= site_url('map_cluster/fetchCluster') ?>" target="_blank"><i class="fa fa-map"></i> MAP Cluster</a></li>
                                     <!-- <li><a href="#">ODP</a></li> -->
                                 </ul>
                             </li>

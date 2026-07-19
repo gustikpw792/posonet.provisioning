@@ -186,6 +186,24 @@
 
     });
 
+    // Matikan pencarian otomatis pada tombol bawaan dan buat kustomisasi
+  $('.dataTables_filter input')
+    .unbind() // Memutus fungsi bawaan DataTables
+    .bind('keyup', function(e) {
+        const value = this.value;
+        
+        // Bersihkan timeout sebelumnya (fitur delay)
+        clearTimeout(window.searchTimeout);
+
+        // Setel delay baru sebelum eksekusi pencarian
+        window.searchTimeout = setTimeout(function() {
+            // Cek apakah jumlah karakter memenuhi batas minimum ATAU input dikosongkan
+            if (value.length >= 3 || value.length === 0) {
+                table.search(value).draw();
+            }
+        }, 400); // Delay 400ms
+    });
+
     /**
      * COBA DATATABLE ROW DETAILS
      */
@@ -642,6 +660,9 @@
     if (mode == 'log') {
       url = "<?= site_url('api_rest_client/showLogEvent') ?>";
     }
+    if (mode == 'no-internet') {
+      url = "<?= site_url('api_rest_client/noInternet') ?>";
+    }
 
     $.post(url, {
         data: data,
@@ -665,7 +686,8 @@
 
   function show_on_map(nopel) {
       // Isi source iframe dan tampilkan modal dengan efek transisi halus
-      let targetUrl = 'http://localhost/odp-marker/?cari=' + nopel
+      let targetUrl = '<?= site_url('map_cluster/fetchCluster')?>/?cari=' + nopel
+      // let targetUrl = 'http://localhost/odp-marker/?cari=' + nopel
       $('#iframeOnMap').attr('src', decodeURIComponent(targetUrl));
       $('#mapModal').modal('show');
       $('#mapModalLabel').html('Finding ' + nopel + ' on map');
@@ -1075,6 +1097,11 @@
   function showUncfg(){
     tbl_unconfig.destroy().clear();
     uncfg();
+  }
+
+  function gotoSearch(gpon_onu) {
+    table.search(gpon_onu).draw();
+    $('#exampleModal').modal('hide');
   }
 
 

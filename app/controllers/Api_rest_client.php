@@ -1433,6 +1433,55 @@ Ket	: ";
 
 	}
 
+	public function noInternet() {
+		$q = $this->db->get('v_no_internet');
+		$data = $q->result();
+		$status = ($q->num_rows() > 0) ? true : false;
+
+		$table = "<table class=\"table table-hover\">
+					<thead>
+					<tr>
+						<th>Interface</th>
+						<th>Nama Pelanggan</th>
+						<th>Cause</th>
+					</tr>
+					</thead>
+					<tbody>";
+		$no = 0;
+		$row = '';
+		foreach ($data as $d) {
+			$row .= 
+			"<tr>
+				<td><a href=\"javascript:void(0)\" class=\"btn btn-xs btn-default\" onclick=\"gotoSearch('$d->gpon_onu')\">$d->gpon_onu</a></td>
+				<td>$d->no_pelanggan. $d->nama_pelanggan</td>
+				<td>ONT <span class=\"label label-primary\">$d->ont_phase_state</span> but Internet <span class=\"label label-default\">$d->active_connection</span></td>
+			</tr>";
+			$no++;
+		}
+
+		$table .= $row . "<tr>
+					<td>Total</td>
+					<td>$no Disconnected</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td colspan=\"3\"><pre>Check WAN IP, ONT Attenuation & ONU Detail Information</pre> </td>
+				</tr>
+			</tbody>
+		</table>";
+
+		echo json_encode([
+			"data" => $table,
+			"header" => "Showing Client with NO INTERNET ACCESS!",
+			"status" => $status,
+		]);
+	}
+
 	/*
 	CARA MEMASUKAN DATA PELANGGAN OLT MELALUI FILE .DAT
 	DAN MENGUPDATE DATA PELANGGAN DI DATABASE

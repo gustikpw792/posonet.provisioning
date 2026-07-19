@@ -123,3 +123,23 @@ if ( ! function_exists('tgl_lokal'))
 		return $tgl.' '.$bulan[$bln].' '.$thn;
   }
 }
+
+if ( ! function_exists('format_tgl'))
+{
+  /* Tanggal NamaBulan Tahun (Sesuai request)
+	 * Return bulan tahun Ex. '15 Januari 2018'
+	 * @var String Ex. '2018-01-15'
+	**/
+	function format_tgl($thn_bln_tgl)
+	{
+		$CI =& get_instance();
+
+		// Membuat objek DateTime dari tanggal awal
+		$date = new DateTime($thn_bln_tgl);
+
+		// Memformat tanggal ke format baru
+		$tanggal_baru = $date->format('d-m-Y');
+
+		return $tanggal_baru; // Output: 17-07-2026
+  }
+}

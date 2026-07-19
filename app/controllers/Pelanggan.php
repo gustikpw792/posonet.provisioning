@@ -226,16 +226,18 @@ class Pelanggan extends CI_Controller
 		$data = array(
 			'gpon_olt' => $this->input->post('interface'),
 			'onu_type' => $this->input->post('onutype'),
-			'access_mode' => $this->input->post('service_mode'),
+			// 'access_mode' => $this->input->post('service_mode'),
+			'access_mode' => 'pppoe',
 			'serial_number' => $this->input->post('serial_number'),
 			'vlan_profile' => $this->input->post('vlan_profile'),
 			'cvlan' => $this->input->post('cvlan'),
 
 			'no_pelanggan' => $this->input->post('no_pelanggan'),
-			'nama_pelanggan' => $this->input->post('nama_pelanggan'),
+			'nama_pelanggan' => str_replace(',', '',$this->input->post('nama_pelanggan')),
 			'id_wilayah' => $this->input->post('id_wilayah'),
 			'id_paket' => $this->input->post('id_paket'),
-			'tgl_instalasi' => $this->input->post('tgl_instalasi'),
+			// 'tgl_instalasi' => $this->input->post('tgl_instalasi'),
+			'tgl_instalasi' => date('Y-m-d'),
 			'expired' => $this->input->post('expired'),
 			'lokasi_map' => urlencode($this->input->post('lokasi_map')),
 			'telp' => $this->input->post('telp'),
@@ -344,7 +346,7 @@ class Pelanggan extends CI_Controller
 
 
 		$data = array(
-			'nama_pelanggan' => $this->input->post('nama_pelanggan'),
+			'nama_pelanggan' => str_replace(',', '',$this->input->post('nama_pelanggan')),
 			'id_paket' => $this->input->post('id_paket'),
 			'tgl_instalasi' => $tgl_pasang,
 			'expired' => $this->input->post('expired'),
@@ -354,15 +356,15 @@ class Pelanggan extends CI_Controller
 			'email' => $this->input->post('email'),
 			'status' => $this->input->post('status'),
 			'keterangan' => $this->input->post('keterangan'),
-			'no_ktp' => $this->input->post('no_ktp'),
-			'ktp_filename' => $ktp_filename,
+			// 'no_ktp' => $this->input->post('no_ktp'),
+			// 'ktp_filename' => $ktp_filename,
 			
 			'id_odp' => $this->input->post('id_odp'),
 			// 'odp_number' => $this->input->post('odp_number'),
 			// 'odp_location' => str_replace(' ','',$this->input->post('odp_location')),
 
 			'onu_type' => $this->input->post('onutype'),
-			'access_mode' => $this->input->post('service_mode'),
+			// 'access_mode' => $this->input->post('service_mode'),
 			'vlan_profile' => $this->input->post('vlan_profile'),
 			'cvlan' => $this->input->post('cvlan'),
 			'id_wilayah' => $this->input->post('id_wilayah'),

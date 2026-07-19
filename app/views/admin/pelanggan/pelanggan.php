@@ -12,21 +12,22 @@
                         
                         <div class="ibox-tools">
                             
-                            <button class="btn btn-xs" onclick="showUncfg()">Show Unconfig</button>
+                            <button class="btn btn-xs" onclick="showUncfg()"><i class="fa fa-plus"></i> Unconfig</button>
                             <?php if ($this->session->level == 'administrator' || $this->session->level == 'kolektor'): ?>
-                            <button class="btn btn-xs" id="#btnExpiredContent" onclick="toggleExpired()">Show Expired</button>
+                            <button class="btn btn-xs" id="#btnExpiredContent" onclick="toggleExpired()"><i class="fa fa-warning"></i> Expired</button>
                             <?php endif; ?>
                             
-                            <button class="btn btn-xs" onclick="show_raw_content('log','')">Show Log</button>
-                            <button class="btn btn-xs" data-toggle="modal" data-target="#exampleModal">Recent Request</button>
+                            <button class="btn btn-xs" onclick="show_raw_content('log','')"><i class="fa fa-history"></i> Logs</button>
+                            <!-- <button class="btn btn-xs" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-history"></i> Recent Request</button> -->
                             <button class="btn btn-xs btn-primary v_online" style="display:none">online -</button>
                             <a href="#divoffline" class="btn btn-xs v_offline" style="display:none">offline -</a>
-                            <button class="btn btn-xs btn-danger v_los">LOS -</button>
+                            <button class="btn btn-xs btn-danger"><i class="fa fa-unlink"></i> <span class="v_los"> LOS -</span></button>
+                            <button class="btn btn-xs btn-warning btn_no_internet" onclick="show_raw_content('no-internet','')"><i class="fa fa-unlink"></i> <span class="v_no_internet"> NO INET</span></button>
                             <button class="btn btn-xs btn-info v_ont" style="display:none">total -</button>
                             
                             <div class="btn-group">
                                 <button type="button" class="btn btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    OLT Info<span class="fa fa-info"> <span class="caret"></span>
+                                    <i class="fa fa-laptop"></i> OLT Info<span class="fa fa-info"> <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a href="javascript:void(0)" onclick="show_raw_content('card','')">Show Card</a></li>
@@ -105,7 +106,7 @@
                                                 <div class="col-md-9">
                                                     <div class="row">
                                                         <div class="col-md-6">
-                                                            <input type="text" name="interface" placeholder="Interface OLT" class="form-control">
+                                                            <input type="text" name="interface" placeholder="Interface OLT" class="form-control" readonly>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <select name="onutype" class="form-control">
@@ -119,12 +120,12 @@
                                                 <label class="col-md-3 control-label text-danger">Mode & VLAN</label>
                                                 <div class="col-md-9">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6" style="display:none">
                                                             <select name="service_mode" class="form-control" readonly>
                                                                 <option value="pppoe">PPPoE</option>
                                                             </select> <span class="help-block m-b-none"></span>
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-12">
                                                             <select name="cvlan" id="cvlan" class="form-control" onchange="setVlanProfile()">
                                                                 
                                                             </select> <span class="help-block m-b-none"></span>
@@ -164,7 +165,7 @@
                                                 <div class="col-md-9"><input type="text" name="telp" placeholder="Telepon/HP" class="form-control"> <span class="help-block m-b-none"></span>
                                                 </div>
                                             </div>
-                                            <div class="form-group"><label class="col-md-3 control-label">Tanggal Instalasi</label>
+                                            <div class="form-group" style="display:none"><label class="col-md-3 control-label">Tanggal Instalasi</label>
                                                 <div class="col-md-9"><input type="text" name="tgl_instalasi" placeholder="Tanggal Instalasi" class="form-control date"> <span class="help-block m-b-none"></span>
                                                 </div>
                                             </div>
@@ -217,17 +218,17 @@
                                                 <label class="col-md-3 control-label text-danger">S/N (ONT/STB)</label>
                                                 <div class="col-md-9">
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-12">
                                                             <input type="text" name="serial_number" placeholder="Serial Number ONT" class="form-control">
                                                         </div>
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-6" style="display:none">
                                                             <input type="text" name="sn_stb" placeholder="S/N STB" class="form-control">
                                                         </div>
                                                     </div>
                                                     <span class="help-block m-b-none"></span>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group" style="display:none">
                                                 <label class="col-md-3 control-label text-danger">STB Username & Password</label>
                                                 <div class="col-md-9">
                                                     <div class="row">
