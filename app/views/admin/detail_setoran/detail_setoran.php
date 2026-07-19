@@ -32,7 +32,7 @@
                                             <!-- Tombol Pilihan No. Internet -->
                                             <label class="btn btn-outline-success active" id="btn-mode-internet">
                                                 <input type="radio" name="search_mode" value="internet" checked autocomplete="off"> 
-                                                <i class="fa-solid fa-wifi"></i> No. Internet
+                                                <i class="fa fa-wifi"></i> No. Internet
                                             </label>
                                         </div>
                                         <br><br>

@@ -143,6 +143,8 @@
         } else {
           load_inserted($("#id_master_setoran").val(), invoiceCode);
           $('#myModal5').modal('hide');
+          $('#search_key').focus();
+
           console.log(data.data);
         }
       },

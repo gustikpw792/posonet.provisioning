@@ -43,7 +43,7 @@ class Pembayaran extends CI_Controller
 			$row .= "<tr>
 					<td>$dt->no_pelanggan. $dt->nama_pelanggan</td>
 					<td>$dt->wilayah</td>
-					<td class=\"text-navy\"> <a href=\"#\" class=\"ladda-button btn btn-warning btn-xs\" data-style=\"zoom-in\" onclick=\"getDetailInvoice($dt->no_pelanggan)\">Cek</a> </td>
+					<td class=\"text-navy\"> <a href=\"#\" class=\"ladda-button btn btn-warning btn-xs\" data-style=\"zoom-in\" onclick=\"getDetailInvoice($dt->no_pelanggan)\">Cek Tagihan</a> </td>
 				</tr>";
 		}
 		echo json_encode($row);
@@ -123,6 +123,7 @@ class Pembayaran extends CI_Controller
 
 		// set class
 		$classPaid = ($data['billing']['status'] === 'PAID') ? 'text-success' : 'text-danger';
+		$paidIcon = ($data['billing']['status'] === 'PAID') ? '✅' : '❌';
 		$classExpired = ($data['billing']['status'] === 'PAID') ? 'text-success' : 'text-danger';
 		$classStatus = ($data['subscription']['status'] === 'AKTIF') ? 'label-success' : 'label-danger';
 		// data bisa dilihat di localhost/posonet/billing_api/getBill?no_internet=268
@@ -157,7 +158,7 @@ class Pembayaran extends CI_Controller
 
 					<li class="list-group-item">
 						<span class="pull-right">
-							<strong class="' . $classPaid . '"><span id="dtStatusBayar">'.$data['billing']['status'].'</span></strong>
+							<strong class="' . $classPaid . '"><span id="dtStatusBayar">'.$data['billing']['status']. ' ' . $paidIcon . '</span></strong>
 						</span>
 						<strong>Status Bayar</strong>
 					</li>
