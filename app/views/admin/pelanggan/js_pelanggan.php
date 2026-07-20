@@ -751,16 +751,22 @@
         if (status) {
           // $('.v_online').html(data.online);
           // $('.v_offline').html(data.offline);
-          $('.v_los').html(data.los);
           $('.v_ont').html(data.total);
-
-          if (data.no_internet > 0) {
+          
+          if (data.total_los > 0) {
+            $('.v_los').html(data.los);
+            $('#btnLos').show();
+          }
+          if (data.total_no_internet > 0) {
             $('#btnNoInet').show();
-            $('.v_no_internet').html('NO-INET '+ data.no_internet);
+            $('.v_no_internet').html('NO-INET '+ data.total_no_internet);
           }
 
           reload_table();
-        } else notif('Error getting ontphase', 'Status ONT', 'error');
+        } else {
+          notif('Error getting ontphase', 'Status ONT', 'error');
+            $('#iboxToggle .collapse-link').click();
+        }
       },
       'json')
   }
@@ -828,12 +834,12 @@
           if (d.status == '200') {
             $('#los').hide();
             if (d.interface_los.status) {
-              $('#btnLos').hide();
+              // $('#btnLos').hide();
               $('.iface-los').html(d.interface_los.data);
               $('#los').show()
             }
           } else {
-            $('#btnLos').show();
+            $('#btnLos').hide();
             $('#los').hide();
           }
           return d.data

@@ -475,6 +475,7 @@
                     const formattedDescription = odp.description
                         ? odp.description.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>')
                         : 'Tidak ada';
+
                     let markerIcon = odpIcon;
                     if (odp.type === 'joint') {
                         markerIcon = jointIcon;
@@ -489,7 +490,7 @@
                     }).bindPopup(`
                         <b>ODP: ${odp.name}</b><br>
                         Desc: ${formattedDescription}<br>
-                        Parent ID: ${odp.parentId ? odp.parentId : 'Tidak ada'}
+                        Parent ID: ${odp.parentId ? odp.parentId : 'Tidak ada'}<br>
                     `);
                     const odpSearchText = `${odp.name || ''}`.trim().toLowerCase();
                     searchMarkers.push(Object.assign(marker, { searchText: odpSearchText }));

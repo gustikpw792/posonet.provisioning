@@ -379,7 +379,7 @@
             // Jika ada layout scanner kamera, Anda bisa menampilkannya kembali di sini
             $('.camera-container').show(); 
         } else {
-            inputField.attr('placeholder', 'Masukan minimal 3 digit No. Internet pelanggan...');
+            inputField.attr('placeholder', 'Minimal 3 digit No. Internet...');
             // Menyembunyikan kamera scanner jika sedang mencari lewat No. Internet
             $('.camera-container').hide(); 
         }
@@ -388,17 +388,25 @@
         
     });
 
+    $('#search_key').on('keypress', function(e) {
+        // Cek apakah tombol yang ditekan adalah Enter (kode 13)
+        if (e.which === 13) {
+            e.preventDefault(); // Mencegah form reload atau aksi default
+            $('#btn-go').click();
+        }
+    });
+
     // Event saat tombol Go! diklik
     $('#btn-go').click(function() {
-      var keyword = $('#search_key').val();
+      let keyword = $('#search_key').val().trim();
       let currentMode = $('input[name="search_mode"]:checked').val();
 
-      if (keyword.trim() === "") {
+      if (keyword === "") {
           alert("Isian tidak boleh kosong!");
           return false;
       }
 
-      // Jalankan fungsi berdasarkan tombol yang dipilih
+      // Jalankan fungsi berdasarkan mode yang dipilih
       if (currentMode === 'invoice') {
           prosesCariInvoice(keyword);
       } else {
@@ -412,22 +420,29 @@
 
   });
 
-  var delayTimer;
+  let delayTimer;
   $('#search_key').on('input', function() {
-    var keyword = $(this).val();
+    let keyword = $(this).val().trim(); // Ambil nilai input langsung dari elemen $(this)
     let currentMode = $('input[name="search_mode"]:checked').val();
 
-    if (currentMode === 'internet') {
-      clearTimeout(delayTimer);
-
-      delayTimer = setTimeout(function() {
-          if (keyword.length >= 3) {
-              // Jalankan fungsi AJAX di sini
-              prosesCariNoInternet(keyword);
-          }
-      }, 300); // Menunggu 300 milidetik setelah ketukan terakhir
-    }
+    prosesEvent(keyword, currentMode);
   });
+
+  // Fungsi proses pencarian otomatis
+  function prosesEvent(keyword, currentMode) {
+      if (currentMode === 'internet') {
+          // Cek apakah berupa angka dan tidak kosong
+          if (!isNaN(keyword) && keyword !== "") {
+              clearTimeout(delayTimer);
+
+              delayTimer = setTimeout(function() {
+                  if (keyword.length >= 3) {
+                      prosesCariNoInternet(keyword);
+                  }
+              }, 300); // Menunggu 300ms setelah ketikan terakhir
+          }
+      }
+  }
 
 // Contoh Fungsi Penampung Request Ke Backend
 function prosesCariInvoice(invoiceNum) {
@@ -503,15 +518,6 @@ function getDetailInvoice(nopel) {
 function payNow() {
   prosesInvoice(kodeInvoice);
   console.log(noIntenet + " === " + kodeInvoice + " === " + totalAmount);
-  // $.post("</?=site_url('pembayaran/proses_pembayaran') ?>",
-  // {
-  //   no_internet: noIntenet,
-  //   kode_invoice: kodeInvoice,
-  //   total_amount: totalAmount
-  // },
-  // function(response, status){
-  //   // console.log(response);
-  // }, "json");
 }
 </script>
 

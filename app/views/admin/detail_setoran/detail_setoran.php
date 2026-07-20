@@ -25,20 +25,20 @@
                                         <label class="d-block text-muted small mb-2">Pilih Metode Input:</label>
                                         <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                             <!-- Tombol Pilihan No. Invoice (Aktif secara default) -->
-                                            <label class="btn btn-outline-success active" id="btn-mode-invoice">
-                                                <input type="radio" name="search_mode" value="invoice" checked autocomplete="off"> 
+                                            <label class="btn btn-outline-success" id="btn-mode-invoice">
+                                                <input type="radio" name="search_mode" value="invoice" autocomplete="off"> 
                                                 <i class="fa fa-file-text-o"></i> No. Invoice
                                             </label>
                                             <!-- Tombol Pilihan No. Internet -->
-                                            <label class="btn btn-outline-success" id="btn-mode-internet">
-                                                <input type="radio" name="search_mode" value="internet" autocomplete="off"> 
-                                                <i class="fa fa-wifi"></i> No. Internet
+                                            <label class="btn btn-outline-success active" id="btn-mode-internet">
+                                                <input type="radio" name="search_mode" value="internet" checked autocomplete="off"> 
+                                                <i class="fa-solid fa-wifi"></i> No. Internet
                                             </label>
                                         </div>
                                         <br><br>
                                         <!-- Kolom Input Dinamis -->
                                         <div class="input-group mb-3">
-                                                <input type="text" id="search_key" class="form-control text-center font-bold" placeholder="Masukan No. Invoice jika scanner tidak bekerja!">
+                                                <input type="text" id="search_key" class="form-control text-center font-bold" placeholder="3 digit No. Internet!">
                                                 <div class="input-group-btn">
                                                     <button class="btn btn-emerald" type="button" id="btn-go"><i class="fa fa-search"></i> Go!</button>
                                                 </div>
@@ -53,7 +53,7 @@
                                         </span>
                                     </div> -->
                                     <br>
-                                    <p>Enable Whatsapp notification?</p>
+                                    <!-- <p>Enable Whatsapp notification?</p>
                                     <div class="switch">
                                         <div class="onoffswitch">
                                             <input type="checkbox" class="onoffswitch-checkbox" id="idmodewa" onclick="modewa(this)">
@@ -62,7 +62,7 @@
                                                 <span class="onoffswitch-switch"></span>
                                             </label>
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                 </div>
                             </div>

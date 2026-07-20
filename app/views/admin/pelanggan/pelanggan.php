@@ -10,7 +10,7 @@
                         <!-- <h5></?php echo ucwords(str_replace('_', ' ', $active)); ?></h5> -->
                         <h5>TOOLS</h5>
                         
-                        <div class="ibox-tools">
+                        <div id="iboxToggle" class="ibox-tools">
                             
                             <button class="btn btn-xs" onclick="showUncfg()"><i class="fa fa-plus"></i> Unconfig</button>
                             <?php if ($this->session->level == 'administrator' || $this->session->level == 'kolektor'): ?>
@@ -27,7 +27,7 @@
                             
                             <div class="btn-group">
                                 <button type="button" class="btn btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fa fa-laptop"></i> OLT Info<span class="fa fa-info"> <span class="caret"></span>
+                                    <i class="fa fa-server"></i> OLT Info<span class="fa fa-info"> <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a href="javascript:void(0)" onclick="show_raw_content('card','')">Show Card</a></li>
@@ -388,9 +388,9 @@
                                 <li><a href="#">Config option 2</a>
                                 </li>
                             </ul>
-                            <a class="close-link">
+                            <!-- <a class="close-link">
                                 <i class="fa fa-times"></i>
-                            </a>
+                            </a> -->
                         </div>
                     </div>
                     <div class="ibox-content">
@@ -418,7 +418,7 @@
 
             <!-- TABEL UNSPEC -->
             <div class="col-lg-12">
-                <div class="ibox Xcollapsed" id="divunspec">
+                <div class="ibox collapsed" id="divunspec">
                     <div class="ibox-title">
                         <h5><div class="text-uppercase v_unspec"><span class="fa fa-warning"></span> UNSPEC <small class="m-l-sm"> Laser pada ONT tidak normal!</small></div></h5> 
                         <div class="ibox-tools">

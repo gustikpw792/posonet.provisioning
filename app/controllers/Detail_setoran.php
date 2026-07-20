@@ -98,6 +98,7 @@ class Detail_setoran extends CI_Controller
 				'kode_wilayah' => $dt->kode_wilayah,
 				'tarif' => $dt->tarif,
 				'expired' => $dt->expired,
+				// 'mode' => 'OFFLINE',
 			);
 
 			$dataUpdate = array(

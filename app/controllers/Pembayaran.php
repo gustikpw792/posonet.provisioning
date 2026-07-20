@@ -120,6 +120,11 @@ class Pembayaran extends CI_Controller
 		$data = $billData['data'];
 		$status = $billData['status'];
 		$message = $billData['message'];
+
+		// set class
+		$classPaid = ($data['billing']['status'] === 'PAID') ? 'text-success' : 'text-danger';
+		$classExpired = ($data['billing']['status'] === 'PAID') ? 'text-success' : 'text-danger';
+		$classStatus = ($data['subscription']['status'] === 'AKTIF') ? 'label-success' : 'label-danger';
 		// data bisa dilihat di localhost/posonet/billing_api/getBill?no_internet=268
 		$html = '<ul class="list-group clear-list">
 					<li class="list-group-item fist-item">
@@ -145,14 +150,14 @@ class Pembayaran extends CI_Controller
 
 					<li class="list-group-item">
 						<span class="pull-right">
-							<strong class="text-warning"><span id="dtExpired">'.$data['subscription']['expired_date'].'</span> <span class="label label-xs label-danger">'.$data['subscription']['status'].'</span></strong>
+							<strong class="'.$classExpired.'"><span id="dtExpired">'.$data['subscription']['expired_date'].'</span> <span class="label label-xs ' . $classStatus . '"> '.$data['subscription']['status'].'</span></strong>
 						</span>
 						<strong>Last Expired</strong>
 					</li>
 
 					<li class="list-group-item">
 						<span class="pull-right">
-							<strong class="text-danger"><span id="dtStatusBayar">'.$data['billing']['status'].'</span></strong>
+							<strong class="' . $classPaid . '"><span id="dtStatusBayar">'.$data['billing']['status'].'</span></strong>
 						</span>
 						<strong>Status Bayar</strong>
 					</li>
@@ -179,7 +184,7 @@ class Pembayaran extends CI_Controller
 
 					<li class="list-group-item">
 						<span class="pull-right">
-							<a href="#" class="ladda-button btn btn-warning" data-style="zoom-in" onclick="payNow()">Bayar Sekarang</a>
+							<a href="#" class="ladda-button btn btn-primary" data-style="zoom-in" onclick="payNow()">Proses</a>
 						</span>
 						<strong></strong>
 					</li>
