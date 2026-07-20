@@ -922,12 +922,13 @@ _handled by %s_";
 		}
 
 		echo json_encode([
-			"offline" => "offline ".count($offline),
-			"online" => "online " . count($online),
-			"los" => "LOS " . count($los),
-			"total" => "ont " . $request->onu_number,
-			"status" => "true",
-			"interfaces" => $interfaces,
+			"offline" 		=> "offline ".count($offline),
+			"online" 		=> "online " . count($online),
+			"los" 			=> "LOS " . count($los),
+			"total" 		=> "ont " . $request->onu_number,
+			"status" 		=> "true",
+			"interfaces" 	=> $interfaces,
+			"no_internet"	=> $this->db->get('v_no_internet')->num_rows(),
 			// "baseinfo" => $onuBaseInfos,
 		]);
 

@@ -229,3 +229,8 @@ FROM pelanggan p
 LEFT JOIN odp o on p.id_odp = o.id_odp 
 LEFT JOIN paket k on p.id_paket = k.id_paket  ;
 
+# add v_no_internet
+SELECT *
+FROM v_pelanggan p
+WHERE p.ont_phase_state='working'
+AND p.active_connection='disconnected' 

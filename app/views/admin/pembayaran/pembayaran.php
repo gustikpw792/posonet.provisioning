@@ -17,7 +17,7 @@
                                 <form role="form">
                                     <label>Nama atau No Internet</label>
                                     <div class="input-group">
-                                        <input type="text" id="cari" class="form-control" placeholder="Nama atau No Internet">
+                                        <input type="text" id="search_input" class="form-control" placeholder="Nama atau No Internet">
                                         <span class="input-group-btn">
                                             <button type="button" class="ladda-button btn btn-primary" data-style="zoom-in" onclick="cariz()">
                                             Cari

@@ -676,6 +676,7 @@
             search: true
           });
         }
+
         $('#rawdata').html(data.data);
         $('#exampleModalLabel').html(data.header);
         $('#exampleModal').modal('show');
@@ -752,6 +753,12 @@
           // $('.v_offline').html(data.offline);
           $('.v_los').html(data.los);
           $('.v_ont').html(data.total);
+
+          if (data.no_internet > 0) {
+            $('#btnNoInet').show();
+            $('.v_no_internet').html('NO-INET '+ data.no_internet);
+          }
+
           reload_table();
         } else notif('Error getting ontphase', 'Status ONT', 'error');
       },
@@ -769,7 +776,7 @@
             $('#offline').hide();
           } else {
             $('.v_offline').html('Offline ' + d.total);
-            $('#offline').show()
+            $('#offline').show();
             return d.data
           }
         }
@@ -821,10 +828,12 @@
           if (d.status == '200') {
             $('#los').hide();
             if (d.interface_los.status) {
+              $('#btnLos').hide();
               $('.iface-los').html(d.interface_los.data);
               $('#los').show()
             }
           } else {
+            $('#btnLos').show();
             $('#los').hide();
           }
           return d.data

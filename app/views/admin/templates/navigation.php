@@ -61,7 +61,7 @@
                                     <span class="fa fa-calculator"></span> Transaksi <span class="caret"></span>
                                 </a>
                                 <ul role="menu" class="dropdown-menu">
-                                    <li><a href="<?= site_url('dashboard/pembayaran') ?>">Pembayaran</a></li>
+                                    <!-- <li><a href="</?= site_url('dashboard/pembayaran') ?>">Pembayaran</a></li> -->
                                     <li><a href="<?= site_url('dashboard/kwitansi') ?>">Kwitansi</a></li>
                                     <li><a href="<?= site_url('dashboard/master_setoran') ?>">Setoran</a></li>
                                     <li><a href="<?= site_url('dashboard/transactions') ?>">Transaksi</a></li>

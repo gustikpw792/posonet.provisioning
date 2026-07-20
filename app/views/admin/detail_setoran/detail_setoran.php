@@ -21,12 +21,37 @@
                                     <video class="vidscan img-rounded" id="preview"></video>
                                 </div>
                                 <div class="col-md-8">
-                                    <span class="help-block m-b-none text-warning font-italic">Masukan No. Invoice jika scanner tidak bekerja!</span>
+                                    <div class="form-group mb-3">
+                                        <label class="d-block text-muted small mb-2">Pilih Metode Input:</label>
+                                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                            <!-- Tombol Pilihan No. Invoice (Aktif secara default) -->
+                                            <label class="btn btn-outline-success active" id="btn-mode-invoice">
+                                                <input type="radio" name="search_mode" value="invoice" checked autocomplete="off"> 
+                                                <i class="fa fa-file-text-o"></i> No. Invoice
+                                            </label>
+                                            <!-- Tombol Pilihan No. Internet -->
+                                            <label class="btn btn-outline-success" id="btn-mode-internet">
+                                                <input type="radio" name="search_mode" value="internet" autocomplete="off"> 
+                                                <i class="fa fa-wifi"></i> No. Internet
+                                            </label>
+                                        </div>
+                                        <br><br>
+                                        <!-- Kolom Input Dinamis -->
+                                        <div class="input-group mb-3">
+                                                <input type="text" id="search_key" class="form-control text-center font-bold" placeholder="Masukan No. Invoice jika scanner tidak bekerja!">
+                                                <div class="input-group-btn">
+                                                    <button class="btn btn-emerald" type="button" id="btn-go"><i class="fa fa-search"></i> Go!</button>
+                                                </div>
+                                        </div>
+                                    </div>
+
+
+                                    <!-- <span class="help-block m-b-none text-warning font-italic">Masukan No. Invoice jika scanner tidak bekerja!</span>
                                     <div class="input-group"><input type="search" name="kode_invoice" placeholder="No. Invoice" class="form-control" onkeyup="setUpper()" onsearch="getDetail('kode','inputmanual')">
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-primary" onclick="getDetail('kode','inputmanual')"><span class="fa fa-search"></span> Go!</button>
                                         </span>
-                                    </div>
+                                    </div> -->
                                     <br>
                                     <p>Enable Whatsapp notification?</p>
                                     <div class="switch">
@@ -38,6 +63,7 @@
                                             </label>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
 
@@ -220,6 +246,79 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" id="btnSave" onclick="saveKeterangan()">Save changes</button>
                         <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <!-- <h4 class="modal-title">Modal title</h4> -->
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title panel-primary">
+                                        <h5>Detail Pencarian</h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-down"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content" id="xxpanelDetail">
+                                        <div class="table-responsive">
+                                            <table id="resultcari" class="table table-hover" style="display:none">
+                                                <thead>
+                                                <tr>
+                                                    <th>Nama</th>
+                                                    <th>Wilayah</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody id="tbhasil">
+                                                
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title panel-primary">
+                                        <h5>Detail Tagihan</h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-down"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content" style="display: none;" id="panelDetail">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="p-w-md" id="resDetailInvoice">
+                                                    
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
                     </div>
                 </div>
             </div>

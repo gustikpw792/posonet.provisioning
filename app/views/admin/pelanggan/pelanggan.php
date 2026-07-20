@@ -7,7 +7,7 @@
             <div id="lompatAtas" class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <!-- <h5><?php echo ucwords(str_replace('_', ' ', $active)); ?></h5> -->
+                        <!-- <h5></?php echo ucwords(str_replace('_', ' ', $active)); ?></h5> -->
                         <h5>TOOLS</h5>
                         
                         <div class="ibox-tools">
@@ -21,8 +21,8 @@
                             <!-- <button class="btn btn-xs" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-history"></i> Recent Request</button> -->
                             <button class="btn btn-xs btn-primary v_online" style="display:none">online -</button>
                             <a href="#divoffline" class="btn btn-xs v_offline" style="display:none">offline -</a>
-                            <button class="btn btn-xs btn-danger"><i class="fa fa-unlink"></i> <span class="v_los"> LOS -</span></button>
-                            <button class="btn btn-xs btn-warning btn_no_internet" onclick="show_raw_content('no-internet','')"><i class="fa fa-unlink"></i> <span class="v_no_internet"> NO INET</span></button>
+                            <button id="btnLos" class="btn btn-xs btn-danger" style="display:none"><i class="fa fa-unlink"></i> <span class="v_los"> LOS -</span></button>
+                            <button id="btnNoInet" class="btn btn-xs btn-warning btn_no_internet" onclick="show_raw_content('no-internet','')" style="display:none"><i class="fa fa-unlink"></i> <span class="v_no_internet"> NO INET</span></button>
                             <button class="btn btn-xs btn-info v_ont" style="display:none">total -</button>
                             
                             <div class="btn-group">
