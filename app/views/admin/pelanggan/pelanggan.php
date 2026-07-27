@@ -15,9 +15,9 @@
                             <button class="btn btn-xs" onclick="showUncfg()"><i class="fa fa-plus"></i> Unconfig</button>
                             <?php if ($this->session->level == 'administrator' || $this->session->level == 'kolektor'): ?>
                             <button class="btn btn-xs" id="#btnExpiredContent" onclick="toggleExpired()"><i class="fa fa-warning"></i> Expired</button>
+                            <button class="btn btn-xs" onclick="show_raw_content('log','')"><i class="fa fa-history"></i> Logs</button>
                             <?php endif; ?>
                             
-                            <button class="btn btn-xs" onclick="show_raw_content('log','')"><i class="fa fa-history"></i> Logs</button>
                             <!-- <button class="btn btn-xs" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-history"></i> Recent Request</button> -->
                             <button class="btn btn-xs btn-primary v_online" style="display:none">online -</button>
                             <a href="#divoffline" class="btn btn-xs v_offline" style="display:none">offline -</a>
@@ -37,10 +37,16 @@
                                     <li><a href="javascript:void(0)" onclick="show_raw_content('gpon-profile-traffic','')">Show Profile Traffic</a></li>
                                     <li><a href="javascript:void(0)" onclick="show_raw_content('onu-type','')">Show ONU Type</a></li>
                                     <li><a href="javascript:void(0)" onclick="show_raw_content('ip-route','')">Show IP Route</a></li>
+                            
+                                    <?php if ($this->session->level == 'administrator'): ?>
                                     <li><a href="javascript:void(0)" onclick="show_raw_content('interfaces','')">Show Interfaces</a></li>
+                                    <?php endif; ?>
+
                                     <!-- <li><a href="javascript:void(0)" onclick="show_raw_content('detail-info','')">Backup Config</a></li> -->
                                 </ul>
                             </div>
+                            
+                            <?php if ($this->session->level == 'administrator'): ?>
 
                             <div class="btn-group">
                                 <button type="button" class="btn btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -56,6 +62,8 @@
                                 </ul>
                             </div>
 
+                            <?php endif; ?>
+                            
                             <button id="toggleIntervalBtn" class="btn btn-xs btn-default" title="Refresh data dari OLT setiap 15 Menit">Auto Refresh: OFF</button>
 
                             <a class="collapse-link">

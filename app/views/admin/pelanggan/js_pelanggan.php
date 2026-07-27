@@ -201,7 +201,7 @@
             if (value.length >= 3 || value.length === 0) {
                 table.search(value).draw();
             }
-        }, 400); // Delay 400ms
+        }, 200); // Delay 400ms
     });
 
     /**

@@ -21,6 +21,7 @@ class Detail_setoran extends CI_Controller
 
 	public function detail($id_master_setoran = FALSE)
 	{
+		$data['appName'] = $this->config->item('app_name');
 		$data['profilP'] = $this->dsh->get_by_id(1);
 		$data['detail_setoran'] = $this->setoran->getDetailKolektor($id_master_setoran);
 		$data['paket'] = $this->db->query("SELECT * FROM paket ORDER BY tarif ASC")->result();
@@ -108,7 +109,10 @@ class Detail_setoran extends CI_Controller
 
 			$this->update_status_temp_invoice($kodeInvoice, $dataUpdate);
 			$insert = $this->setoran->save($data);
-			// $extend = $this->olt->perpanjangPaketFromDetailSetoran($dt->no_pelanggan, $dt->expired);
+
+			// reboot ont jika perlu
+			$extend = $this->olt->perpanjangPaketFromDetailSetoran($dt->no_pelanggan, $dt->expired);
+
 			$update = $this->db->query("UPDATE pelanggan SET expired='$dt->expired' WHERE no_pelanggan='$dt->no_pelanggan'");
 			return array('status' => TRUE, 'msg' => "");
 		} else {

@@ -60,7 +60,7 @@ class Pelanggan extends CI_Controller
 				$editButton = "";
 			} elseif ($this->session->level == 'teknisi') {
 				$akses = 	"
-							<li><a href=\"javascript:void(0)\" onclick=\"changeSsid('$br->gpon_onu')\"><span class=\"fa fa-wifi\"></span> Change SSID</a></li>
+							<!--li><a href=\"javascript:void(0)\" onclick=\"changeSsid('$br->gpon_onu')\"><span class=\"fa fa-wifi\"></span> Change SSID</a></li-->
 							<li role=\"separator\" class=\"divider\"></li>
 							<li><a href=\"javascript:void(0)\" onclick=\"restore_factory('$br->gpon_onu')\"><span class=\"fa fa-undo\"></span> Restore Factory</a></li>
 							<li><a href=\"javascript:void(0)\" onclick=\"getReplaceOnt('$br->gpon_onu')\"><span class=\"fa fa-exchange\"></span> Replace ONT</a></li>

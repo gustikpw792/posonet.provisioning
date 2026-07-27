@@ -19,6 +19,7 @@ class Api_rest_client_model extends CI_Model
     // $this->load->model('api_kirimwaid_model','kirimwa');
     $this->load->model('api_telegrambot_model','telegram');
     $this->load->model('ruangwa_model','ruangwa');
+    $this->load->model('api_mikrotik_model','routermodel');
 
     $this->olt = $this->config->item('olt');
 
@@ -522,7 +523,8 @@ class Api_rest_client_model extends CI_Model
   }
 
 
-  public function perpanjangPaketFromDetailSetoran($no_pelanggan, $expired, $wamode=false) {
+  public function perpanjangPaketFromDetailSetoran($no_pelanggan, $expired, $wamode=false) 
+  {
     $qry = $this->db->query("SELECT gpon_onu FROM pelanggan WHERE no_pelanggan='$no_pelanggan'")->row();
     // return [$qry->gpon_onu, $expired];
     $data = (object) array(
@@ -531,16 +533,75 @@ class Api_rest_client_model extends CI_Model
 			'username' => $this->session->username,
 		);
 
-    return $this->extendThisPaket($data, $wamode);
+    return $this->extend_from_setoran($data, $wamode);
   }
 
-  public function extendThisPaket($data, $metodePembayaran='antar', $wamode=false) {
 
-    // $data = (object) array(
-		// 	'gpon_onu' => $this->input->post('gpon_onu'),
-		// 	'expired' => $this->input->post('expired'),
-    //  'username' => $this->session->username, //untuk notif telegram
-		// );
+/**
+ * $data = (object) array(
+  * 	'gpon_onu' => $this->input->post('gpon_onu'),
+  * 	'expired' => $this->input->post('expired'),
+  *  'username' => $this->session->username, //untuk notif telegram
+  * );
+ */
+
+  public function extend_from_setoran($data, $metodePembayaran='antar', $wamode=false) {
+    
+    /*
+		* cek tgl sekarang. jika belum lewat tgl expire yg telah ditentukan maka cukup update kolom expired di database.
+		* atau cek di tabel v_expired apakan data gpon_onu exist
+		*/
+
+    $exp = $this->db->query("SELECT * FROM v_expired WHERE gpon_onu = '$data->gpon_onu'");
+    
+    $cust = $exp->row();
+
+    //kondisi jika perpanjang SESUDAH EXPIRE
+    if ($exp->num_rows() > 0) {
+
+      // ubah secret dari Expire ke paket asli
+      $changeSecret = $this->routermodel->changeSecret($cust->username, $cust->mikrotik_profile);
+
+      // reboot ont (untuk zte F660 versi lama). 
+      if ($cust->ont_phase_state == 'working') {
+        if ($cust->onu_type == 'ZTE-F660' || $cust->onu_type == 'ALL') {
+          $request = $this->api->reboot($cust->gpon_onu);
+        }
+      }
+
+      // close connection di ppp>active connection
+      if ($cust->active_connection == 'connected') {
+        $closeConnection = $this->routermodel->closeConnection($cust->username);
+      }
+
+      return [
+        'message' => "$cust->no_pelanggan. $cust->nama_pelanggan Perpanjang ke $data->expired. <br>ONT pelanggan auto restart!",
+        'status' => true,
+      ];
+    }
+    //kondisi jika perpanjang SEBELUM EXPIRE
+    else {
+      $msg = "Paket berhasil diperpanjang ke $data->expired.";
+      // jika input tgl expire dibawah tgl sekarang maka langsung ubah ke expire
+      if ($data->expired < date('Y-m-d')) {
+        $expp = $this->db->query("SELECT no_pelanggan, nama_pelanggan, username FROM pelanggan WHERE gpon_onu = '$data->gpon_onu'")->row();
+        
+        // change secret mikrotik
+        $changeSecret = $this->routermodel->changeSecret($expp->username, 'Expired');
+
+        $msg = "Paket kembali ke expired";
+        $modewa = false;
+      }
+      
+      return [
+        'message' => $msg, 
+        'status' => true, 
+      ];
+    }
+  }
+
+
+  public function extendThisPaket($data, $metodePembayaran='antar', $wamode=false) {
     
     /*
 		* cek tgl sekarang. jika belum lewat tgl expire yg telah ditentukan maka cukup update kolom expired di database.
