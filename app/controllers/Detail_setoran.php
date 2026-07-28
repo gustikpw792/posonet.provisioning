@@ -10,7 +10,7 @@ class Detail_setoran extends CI_Controller
 		}
 		$this->load->model('detail_setoran_model', 'setoran');
 		$this->load->model('profil_perusahaan_model', 'dsh');
-		$this->load->model('api_rest_client_model', 'olt');
+		$this->load->model('api_rest_client_model', 'api_rest');
 		$this->load->helper('MY_ribuan');;
 	}
 
@@ -111,7 +111,7 @@ class Detail_setoran extends CI_Controller
 			$insert = $this->setoran->save($data);
 
 			// reboot ont jika perlu
-			$extend = $this->olt->perpanjangPaketFromDetailSetoran($dt->no_pelanggan, $dt->expired);
+			$extend = $this->api_rest->perpanjangPaketFromDetailSetoran($dt->no_pelanggan, $dt->expired);
 
 			$update = $this->db->query("UPDATE pelanggan SET expired='$dt->expired' WHERE no_pelanggan='$dt->no_pelanggan'");
 			return array('status' => TRUE, 'msg' => "");

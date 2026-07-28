@@ -19,7 +19,7 @@ class Api_rest_client_model extends CI_Model
     // $this->load->model('api_kirimwaid_model','kirimwa');
     $this->load->model('api_telegrambot_model','telegram');
     $this->load->model('ruangwa_model','ruangwa');
-    $this->load->model('api_mikrotik_model','routermodel');
+    $this->load->model('api_mikrotik_model','api_mikrotik');
 
     $this->olt = $this->config->item('olt');
 
@@ -560,18 +560,18 @@ class Api_rest_client_model extends CI_Model
     if ($exp->num_rows() > 0) {
 
       // ubah secret dari Expire ke paket asli
-      $changeSecret = $this->routermodel->changeSecret($cust->username, $cust->mikrotik_profile);
+      $changeSecret = $this->api_mikrotik->changeSecret($cust->username, $cust->mikrotik_profile);
 
       // reboot ont (untuk zte F660 versi lama). 
       if ($cust->ont_phase_state == 'working') {
         if ($cust->onu_type == 'ZTE-F660' || $cust->onu_type == 'ALL') {
-          $request = $this->api->reboot($cust->gpon_onu);
+          $request = $this->reboot($cust->gpon_onu);
         }
       }
 
       // close connection di ppp>active connection
       if ($cust->active_connection == 'connected') {
-        $closeConnection = $this->routermodel->closeConnection($cust->username);
+        $closeConnection = $this->api_mikrotik->closeConnection($cust->username);
       }
 
       return [
@@ -587,7 +587,7 @@ class Api_rest_client_model extends CI_Model
         $expp = $this->db->query("SELECT no_pelanggan, nama_pelanggan, username FROM pelanggan WHERE gpon_onu = '$data->gpon_onu'")->row();
         
         // change secret mikrotik
-        $changeSecret = $this->routermodel->changeSecret($expp->username, 'Expired');
+        $changeSecret = $this->api_mikrotik->changeSecret($expp->username, 'Expired');
 
         $msg = "Paket kembali ke expired";
         $modewa = false;
@@ -618,18 +618,18 @@ class Api_rest_client_model extends CI_Model
       $updateExp = $this->db->query("UPDATE pelanggan SET expired='$data->expired' WHERE gpon_onu='$data->gpon_onu'");
       
       // ubah secret dari Expire ke paket asli
-      $changeSecret = $this->routermodel->changeSecret($cust->username, $cust->mikrotik_profile);
+      $changeSecret = $this->api_mikrotik->changeSecret($cust->username, $cust->mikrotik_profile);
 
       // reboot ont (untuk zte F660 versi lama). 
       if ($cust->ont_phase_state == 'working') {
         if ($cust->onu_type == 'ZTE-F660' ) {
-          $request = $this->api->reboot($cust->gpon_onu);
+          $request = $this->reboot($cust->gpon_onu);
         }
       }
 
       // close connection di ppp>active connection
       if ($cust->active_connection == 'connected') {
-        $closeConnection = $this->routermodel->closeConnection($cust->username);
+        $closeConnection = $this->api_mikrotik->closeConnection($cust->username);
       }
 
       // Update Invoice Status
@@ -673,7 +673,7 @@ class Api_rest_client_model extends CI_Model
         $expp = $this->db->query("SELECT no_pelanggan, nama_pelanggan, username FROM pelanggan WHERE gpon_onu = '$data->gpon_onu'")->row();
         
         // change secret mikrotik
-        $changeSecret = $this->routermodel->changeSecret($expp->username, 'Expired');
+        $changeSecret = $this->api_mikrotik->changeSecret($expp->username, 'Expired');
 
         $msg = "Paket kembali ke expired";
         $modewa = false;
