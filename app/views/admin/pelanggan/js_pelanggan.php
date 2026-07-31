@@ -722,7 +722,7 @@
 
   function remote(gpon_onu, remote_state) {
     $.post(
-      "<?= site_url('api_rest_client/remote_onu') ?>", {
+      "<?= site_url('api_rest_client/open_remote_onu') ?>", {
         gpon_onu: gpon_onu,
         remote_state: remote_state,
         host_id: '1',
@@ -1015,6 +1015,61 @@
         }
       },
       'json')
+  }
+  function show_detail(gpon_onu) {
+    $.get("<?= site_url('pelanggan/view_by_id') ?>", 
+        { gpon_onu: gpon_onu },
+        function(d,status) {            // Callback function saat sukses
+        console.log(status);
+            if (!d.status) {
+              return;
+            }
+            // Update data ke elemen HTML
+            $('#val-nama-header, #val-id-nama').html(d.client.name);
+            $('#val-ont-phase').html(d.ont.phase);
+            $('#val-tgl-instalasi').html('<i class="fa fa-calendar-check-o text-success"></i> ' + d.client.installation_date);
+            $('#val-vendor-header, #val-vendor-table').html(d.ont.vendor);
+            $('#val-interface, #val-interface-card').text(d.ont.gpon_onu);
+            $('#val-paket').text(d.client.paket);
+            $('#val-tarif').text(d.client.tarif);
+            $('#val-dbm').html(d.ont.attenuation);
+            $('#val-signal-status').html(d.ont.signal_status);
+            $('#val-expire').html(d.client.expired);
+            $('#val-wilayah').text(d.client.wilayah);
+            $('#val-status-langganan').html(d.client.status);
+            $('#val-status-odp').html(d.tools.odp);
+
+            // // Update atribut tombol & link
+            $('#link-maps').html(d.tools.location);
+            $('#btn-show-map').html(d.tools.view_on_map);
+            
+            // Update fungsi tombol kontrol
+            $('#more_action').html(d.tools.more_action);
+            $('#btn-reboot').attr('onclick', "reboot('" + d.ont.gpon_onu + "')");
+            $('#btn-remote').attr('onclick', "remote('" + d.ont.gpon_onu + "','enable')");
+            // $('#btn-extend').attr('onclick', "extendPaket('" + data.interface + "')");
+
+            // 4. Update Event Diagnostic Buttons
+            $('.btn-diag').off('click').on('click', function() {
+                var type = $(this).data('type');
+                show_raw_content(type, d.ont.gpon_onu);
+            });
+
+            $('#info-detail').slideDown(300);
+        }, 
+        "json" // Memastikan respon di-parse sebagai JSON
+    );
+
+  }
+
+  $(document.body).on('click', '.btn-close-panel', function() {
+    // Menyembunyikan panel detail dengan efek slideUp
+    $('#info-detail').slideUp(300);
+  });
+
+  // Jika ingin menampilkan kembali saat tombol "Detail" diklik dari tabel pelanggan:
+  function showDetailPanel() {
+      $('#info-detail').slideDown(300);
   }
 
   function getTickets() {

@@ -824,6 +824,86 @@ _handled by %s_";
 		]);
 	}
 
+	public function open_remote_onu()
+	{
+		$gpon_onu = $this->input->post('gpon_onu');
+		$remote_state = $this->input->post('remote_state');
+		$host_id = $this->input->post('host_id');
+
+		// cek apakah security remote sudah terbuka?
+		$get_remote_state = $this->db->query("SELECT remote_web_state FROM pelanggan WHERE gpon_onu=?",[$gpon_onu])->row()->remote_web_state;
+
+		if ($get_remote_state !== 'enabled') {
+			$request = $this->api->remote_onu($gpon_onu, 'enable', $host_id);
+
+			$state = ($remote_state == 'enable') ? 'enabled' : 'disabled';
+
+			if ($request->ip_address == '0.0.0.0') {
+				//ambil ip dari router berdasarkan username pppoe
+				$userPpp = $this->db->query("SELECT username FROM pelanggan WHERE gpon_onu='$gpon_onu'")->row()->username;
+
+				$getActiveConnection = $this->routermodel->get_ppp_ip_address($userPpp);
+				$ipRemote='';
+				foreach ($getActiveConnection as $key) {
+					$ipRemote = $key['address'];
+				}
+
+			} else {
+				$ipRemote = $request->ip_address;
+			}
+
+			$query = $this->db->query("UPDATE pelanggan 
+			SET ip_address='$request->ip_address', remote_web_state='$state'
+			WHERE gpon_onu='$gpon_onu'");
+
+			$msg = 'Remote web opened!';
+
+
+		} else {
+			// jika sudah open
+			// ambil saja ip dari router berdasarkan username pppoe
+			$userPpp = $this->db->query("SELECT username FROM pelanggan WHERE gpon_onu='$gpon_onu'")->row()->username;
+
+			$getActiveConnection = $this->routermodel->get_ppp_ip_address($userPpp);
+			$ipRemote='';
+			foreach ($getActiveConnection as $key) {
+				$ipRemote = $key['address'];
+			}
+
+			$msg = 'Remote already opened!';
+		}
+
+		$link = '';
+
+		$statusIp = $this->_is_public_ip_access();
+
+		if ($statusIp['public_access']) {
+			$link = 'http://'. $statusIp['remote_ip'] . ":" . $this->ros['PORT_REMOTEWEB'];
+			$this->routermodel->setPublicRemoteOnt(
+				(object) [
+					'to-addresses' => $ipRemote,
+				],$ipRemote
+			);
+		} else if ($statusIp['public_access'] == false && $_SERVER['HTTP_HOST'] != 'localhost' && $statusIp['message'] != 'Accessed locally') {
+			$link = 'http://'. $statusIp['remote_ip'] . ":" . $this->ros['PORT_REMOTEWEB'];
+			$this->routermodel->setPublicRemoteOnt(
+				(object) [
+					'to-addresses' => $ipRemote,
+				],$ipRemote
+			);
+		} else {
+			$link = "http://$ipRemote";
+		}
+
+		echo json_encode([
+			"message" => $msg,
+			"link" => $link,
+			"status" => true,
+		]);
+
+		
+	}
+
 	private function _is_public_ip_access()
 	{
 		$server_ip = $_SERVER['SERVER_ADDR'] ?? gethostbyname(gethostname());
@@ -1232,10 +1312,10 @@ _handled by %s_";
 
 		$icon = ($plgn->ont_phase_state == 'LOS') ? "\xF0\x9F\x9A\xA8" : "\xF0\x9F\x9A\xA8";
 
-		$template = "%s *TICKET*
+		$template = "%s <b>TICKET<b>
 %s
 
-*%s*
+<b>%s<b>
 %s
 
 %s

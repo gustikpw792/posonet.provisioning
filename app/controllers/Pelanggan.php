@@ -149,11 +149,11 @@ class Pelanggan extends CI_Controller
 			
 			//buat text-danger jika active_connection = disconnected
 			if($br->active_connection=='disconnected'){
-				$nm_pelanggan = "<span class='font-bold text-danger'>$br->no_pelanggan. $br->nama_pelanggan</span>";
+				$nm_pelanggan = "<span class='font-bold text-danger' onclick=\"show_detail('$br->gpon_onu')\">$br->no_pelanggan. $br->nama_pelanggan</span>";
 			} else {
-				$nm_pelanggan = "<span class='font-bold'>$br->no_pelanggan. $br->nama_pelanggan</span>";
+				$nm_pelanggan = "<span class='font-bold' onclick=\"show_detail('$br->gpon_onu')\">$br->no_pelanggan. $br->nama_pelanggan</span>";
 			}
-			$row[] = $nm_pelanggan . "<span class='btn btn-xs btn-outline'><small class='text-muted'>$br->onu_type</small></span>";
+			$row[] =  $nm_pelanggan . "<span class='btn btn-xs btn-outline'><small class='text-muted'>$br->onu_type</small></span>";
 			
 			$row[] = $br->wilayah;
 			
@@ -211,6 +211,126 @@ class Pelanggan extends CI_Controller
 		);
 		//output to json format
 		echo json_encode($output);
+	}
+
+
+	public function view_by_id()
+	{
+		$gpon_onu = $this->input->get('gpon_onu');
+
+
+		$getList = $this->db->query("SELECT * FROM v_pelanggan WHERE gpon_onu=?", [$gpon_onu]);
+
+		if ($getList->num_rows() === 0) {
+			return json_encode(
+				array(
+					'data' => [],
+					'status' => false,
+				)
+			);
+			exit();
+		}
+
+		$br = $getList->row();
+
+		
+
+			// $data['tools']['remote_web'] = "<a href=\"javascript:void(0)\" onclick=\"remote('$br->gpon_onu','enable')\"><span class=\"fa fa-globe\"></span> Open Remote Web</a>";
+			// $data['tools']['replace_ont'] = "<a href=\"javascript:void(0)\" onclick=\"getReplaceOnt('$br->gpon_onu')\"><span class=\"fa fa-exchange\"></span> Replace ONT</a>";
+			// $data['tools']['reboot'] = "<a href=\"javascript:void(0)\" onclick=\"reboot('$br->gpon_onu')\"><span class=\"fa fa-refresh\"></span> Reboot</a>";
+
+			// $data['tools']['wanip'] = "<a href=\"javascript:void(0)\" class=\"btn btn-default\" onclick=\"show_raw_content('wanip','$br->gpon_onu')\">Show WAN IP</a>";
+			// $data['tools']['att'] = "<a href=\"javascript:void(0)\" class=\"btn btn-default\" onclick=\"show_raw_content('attenuation','$br->gpon_onu')\">Show Attenuation</a>";
+			// $data['tools']['detail_info'] = "<a href=\"javascript:void(0)\" class=\"btn btn-default\" onclick=\"show_raw_content('detail-info','$br->gpon_onu')\">Show Detail Information</a>";
+			// $data['tools']['running_config'] = "<a href=\"javascript:void(0)\" class=\"btn btn-default\" onclick=\"show_raw_content('onu-run','$br->gpon_onu')\"><i class=\"fa fa-code\"></i>Show Running Config</a>";
+			// $data['tools']['ip_host'] = "<a href=\"javascript:void(0)\" class=\"btn btn-default\" onclick=\"show_raw_content('iphost','$br->gpon_onu')\">Show IP Host</a>";
+
+			$data['tools']['view_on_map'] = '<a href="javascript:void(0)" class="btn btn-xs btn-outline btn-info" title="Show On Map" onclick="show_on_map(' . $br->no_pelanggan . ')"><i class="fa fa-map"></i> Tampilkan di Peta Dashboard</a>';
+			$data['tools']['status_map'] = ($br->lokasi_map == null || empty($br->lokasi_map)) ? '<a href="#" class="btn btn-xs btn-outline btn-danger" title="Lokasi belum di-set"><i class="fa fa-map-marker"></i> Map Kosong</a>' : '<a href="' . urldecode($br->lokasi_map) . '" class="btn btn-xs btn-outline btn-primary" target="_blank" title="Klik untuk melihat lokasi pelanggan"><small><i class="fa fa-map-marker"></i> Lihat di google maps</small></a>';
+			$data['tools']['location'] = ($br->lokasi_map == null || empty($br->lokasi_map)) ? "<a href=\"#\">Lokasi Kosong</a>" : "<a href=\"" . urldecode($br->lokasi_map) . "\" class=\"btn btn-xs btn-outline btn-primary\" target=\"_blank\"><i class=\"fa fa-map-marker\"></i> Lihat Lokasi</a>";
+			$data['tools']['odp_name'] = $br->odp_name ?? 'ODP';
+			$data['tools']['odp'] = (empty($br->latlong) || $br->latlong == null) ? ' <a href="#" class="btn btn-xs btn-outline btn-danger" title="ODP kosong"><small>ODP</small></a>' : ' <a href="https://www.google.com/maps/?q=' . $br->latlong . '" class="btn btn-xs btn-outline btn-primary" target="_blank" title="Klik untuk melihat lokasi ODP"><small>' . $data['tools']['odp_name'] . '</small></a>';
+			$data['tools']['more_action'] = "<li><a href=\"#lompatAtas\" onclick=\"edits('$br->id_pelanggan')\"><i class=\"glyphicon glyphicon-pencil\"></i> Edit</a></li>
+											<li><a href=\"javascript:void(0)\" onclick=\"makeTickets('$br->gpon_onu')\"><span class=\"fa fa-ticket\"></span> Make Ticket</a></li>
+											<li><a href=\"javascript:void(0)\" onclick=\"getReplaceOnt('$br->gpon_onu')\"><span class=\"fa fa-exchange\"></span> Replace ONT</a></li>
+											<li role=\"separator\" class=\"divider\"></li>
+											<li><a href=\"javascript:void(0)\" onclick=\"restore_factory('$br->gpon_onu')\"><span class=\"fa fa-undo\"></span> Restore Factory</a></li>
+											<li><a href=\"javascript:void(0)\" onclick=\"delonu('$br->gpon_onu','no')\"><span class=\"fa fa-trash\"></span> Delete Manual</a></li>
+											<li><a href=\"javascript:void(0)\" onclick=\"delonu('$br->gpon_onu','yes')\"><span class=\"fa fa-trash\"></span> Delete Permanent</a></li>";
+
+			
+			$phase = '<div class="progress progress-striped active">
+                                <div style="width: 90%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="90" role="progressbar" class="progress-bar progress-bar-warning">
+                                    <span class="xsr-only">Registering</span>
+                                </div>
+                            </div>';
+			
+			if ($br->ont_phase_state == 'working') {
+				$phase = '<button class="btn btn-outline btn-primary btn-xs">' . $br->ont_phase_state . '</button> ';
+			} 
+			
+			if ($br->ont_phase_state == 'offline' || $br->ont_phase_state == 'DyingGasp' || $br->ont_phase_state == 'syncMib' || $br->ont_phase_state == 'logging') {
+				$phase = '<button class="btn btn-outline btn-default btn-xs">' . $br->ont_phase_state . '</button> ';
+			}
+			
+			if ($br->ont_phase_state == 'LOS') {
+				$phase = '<button class="btn btn-outline btn-danger btn-xs">' . $br->ont_phase_state . '</button> ';
+			}
+			
+			if ($br->ont_phase_state == 'Unconfigured'){
+				$phase = '<button class="btn btn-outline btn-warning btn-xs"> Unconfigured </button>';
+			} 
+				
+
+			if ($br->onu_db <= -27.0 && $br->onu_db >= -40.0) {
+				$rxPower = "<strong><span class='text-danger'>$br->onu_db</span></strong>";
+				$signalStatus = '<span class="text-danger"><i class="fa fa-signal"></i> Signal UnSpec</span>';
+			} else if($br->onu_db <= -15.0 && $br->onu_db >= -26.0) {
+				$rxPower = $br->onu_db;
+				$signalStatus = '<i class="fa fa-signal"></i> Signal Normal';
+			} else if($br->onu_db <= -14.9 && $br->onu_db >= -0.0) {
+				$rxPower = $br->onu_db;
+				$signalStatus = '<i class="fa fa-signal"></i> Signal High';
+			} else if($br->onu_db == 'N/A') {
+				$rxPower = $br->onu_db;
+				$signalStatus = '<i class="fa fa-signal"></i> --';
+			}
+
+			//buat text-danger jika active_connection = disconnected
+			if($br->active_connection=='disconnected'){
+				$nm_pelanggan = "<span class='font-bold text-danger'>$br->no_pelanggan. $br->nama_pelanggan</span>";
+			} else {
+				$nm_pelanggan = "<span class='font-bold'>$br->no_pelanggan. $br->nama_pelanggan</span>";
+			}
+
+			if ($br->expired < date('Y-m-d')) {
+				$warna = 'text-danger';
+			}
+			elseif ($br->expired == date('Y-m-d')) {
+				$warna = 'text-warning';
+			}
+			elseif ($br->expired > date('Y-m-d')) {
+				$warna = 'text-default';
+			}
+
+
+			$data['ont']['gpon_onu'] = $br->gpon_onu;
+			$data['ont']['phase'] = $phase;
+			$data['ont']['attenuation'] = $rxPower;
+			$data['ont']['vendor'] = $br->onu_type;
+			$data['ont']['signal_status'] = $signalStatus;
+
+			$data['client']['name'] = $nm_pelanggan . "<span class='btn btn-xs btn-outline'><small class='text-muted'>$br->onu_type</small></span>";
+			$data['client']['installation_date'] = tgl_lokal($br->tgl_instalasi);
+			$data['client']['paket'] = $br->nama_paket;
+			$data['client']['tarif'] = ribuan($br->tarif);
+			$data['client']['expired'] = "<strong><span class='$warna'>" . tgl_lokal($br->expired) . "</span></strong>";
+			$data['client']['status'] = ($br->status == 'AKTIF') ? 'AKTIF':'NON-AKTIF';
+			$data['client']['wilayah'] = $br->wilayah;
+			$data['status'] = true;
+
+
+		echo json_encode($data);
 	}
 
 	public function save_pelanggan()

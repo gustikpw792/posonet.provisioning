@@ -93,7 +93,8 @@ class Api_telegrambot_model extends CI_Model
         $data = [
             'chat_id'       => $this->tgrow['tg_chat_id_group'],
             'text'          => $ticket,
-            'parse_mode'    => 'markdown'
+            'parse_mode'    => 'HTML',
+            'disable_web_page_preview' => false
         ];
 
         return $this->telegram->sendMessage($data);
@@ -104,7 +105,9 @@ class Api_telegrambot_model extends CI_Model
             $data = [
                 'chat_id'       => $this->tgrow['tg_chat_id_admin'],
                 'text'          => $msg,
-                'parse_mode'    => 'markdown'
+                'parse_mode'    => 'HTML',
+                'disable_web_page_preview' => false
+
             ];
     
             return $this->telegram->sendMessage($data);
@@ -176,7 +179,7 @@ class Api_telegrambot_model extends CI_Model
                 'telegram_message' => array(
                     'chat_id'       => $this->tgrow['tg_chat_id_admin'],
                     'text'          => $msg_for_telegram,
-                    'parse_mode'    => 'markdown'
+                    'parse_mode'    => 'markdown',
             ));
         }
     }
