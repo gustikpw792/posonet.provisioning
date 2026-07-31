@@ -1312,10 +1312,10 @@ _handled by %s_";
 
 		$icon = ($plgn->ont_phase_state == 'LOS') ? "\xF0\x9F\x9A\xA8" : "\xF0\x9F\x9A\xA8";
 
-		$template = "%s <b>TICKET<b>
+		$template = "%s <b>TICKET</b>
 %s
 
-<b>%s<b>
+<b>%s</b>
 %s
 
 %s
