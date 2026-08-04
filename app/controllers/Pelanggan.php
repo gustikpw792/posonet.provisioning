@@ -494,7 +494,7 @@ class Pelanggan extends CI_Controller
 		);
 
 		if ($this->input->post('id_odp') != '') {
-			$data['id_odp'] = $this->input->post('id_odp'),
+			$data['id_odp'] = $this->input->post('id_odp');
 		}
 
 		$this->pelanggan->update(array('id_pelanggan' => $this->input->post('id_pelanggan')), $data);
