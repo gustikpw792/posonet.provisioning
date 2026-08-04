@@ -34,11 +34,11 @@ class Pelanggan extends CI_Controller
 			//aktifkan tombol jika gpon_olt sdh di set
 			$btn_mode = ($br->gpon_onu == "") ? 'disabled' : '';
 
-			if ($br->remote_web_state == 'enabled') {
-				$remote = "<li><a href=\"javascript:void(0)\" onclick=\"remote('$br->gpon_onu','disable')\"><span class=\"fa fa-globe\"></span> Close Remote Web</a></li>";
-			} else {
+			// if ($br->remote_web_state == 'enabled') {
+			// 	$remote = "<li><a href=\"javascript:void(0)\" onclick=\"remote('$br->gpon_onu','disable')\"><span class=\"fa fa-globe\"></span> Close Remote Web</a></li>";
+			// } else {
 				$remote = "<li><a href=\"javascript:void(0)\" onclick=\"remote('$br->gpon_onu','enable')\"><span class=\"fa fa-globe\"></span> Open Remote Web</a></li>";
-			}
+			// }
 
 			if ($this->session->level == 'administrator') {
 				$akses = 	"<li><a href=\"javascript:void(0)\" onclick=\"extendPaket('$br->gpon_onu')\"><span class=\"fa fa-calendar\"></span> Perpanjang Paket</a></li>

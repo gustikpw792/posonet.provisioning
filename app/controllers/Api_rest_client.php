@@ -102,13 +102,14 @@ class Api_rest_client extends CI_Controller
 								Action <span class=\"caret\"></span>
 							</button>
 							<ul class=\"dropdown-menu\">
-								<li><a href=\"javascript:void(0)\" onclick=\"show_raw_content('attenuation','$br->gpon_onu')\">Show Attenuation</a></li>
-								<li><a href=\"javascript:void(0)\" onclick=\"show_raw_content('wanip','$br->gpon_onu')\">Show WAN IP</a></li>
-								<li><a href=\"javascript:void(0)\" onclick=\"show_raw_content('iphost','$br->gpon_onu')\">Show IP Host</a></li>
-								<li><a href=\"javascript:void(0)\" onclick=\"show_raw_content('detail-info','$br->gpon_onu')\">Show Detail Information</a></li>
-								<li><a href=\"javascript:void(0)\" onclick=\"getReplaceOnt('$br->gpon_onu')\"><span class=\"fa fa-exchange\"></span> Replace ONT</a></li>
-								<li role=\"separator\" class=\"divider\"></li>
-								<li><a href=\"javascript:void(0)\" onclick=\"makeTickets('$br->gpon_onu')\"><span class=\"fa fa-ticket\"></span> Make Ticket</a></li>
+							<li><a href=\"javascript:void(0)\" onclick=\"show_raw_content('attenuation','$br->gpon_onu')\">Show Attenuation</a></li>
+							<li><a href=\"javascript:void(0)\" onclick=\"show_raw_content('wanip','$br->gpon_onu')\">Show WAN IP</a></li>
+							<li><a href=\"javascript:void(0)\" onclick=\"show_raw_content('iphost','$br->gpon_onu')\">Show IP Host</a></li>
+							<li><a href=\"javascript:void(0)\" onclick=\"show_raw_content('detail-info','$br->gpon_onu')\">Show Detail Information</a></li>
+							<li role=\"separator\" class=\"divider\"></li>
+							<li><a href=\"javascript:void(0)\" onclick=\"getReplaceOnt('$br->gpon_onu')\"><span class=\"fa fa-exchange\"></span> Replace ONT</a></li>
+							<li role=\"separator\" class=\"divider\"></li>
+							<li><a href=\"javascript:void(0)\" onclick=\"makeTickets('$br->gpon_onu')\"><span class=\"fa fa-ticket\"></span> Make Ticket</a></li>
 							</ul>
 						</div>";
 			$row[] = $br->gpon_onu;
@@ -117,8 +118,10 @@ class Api_rest_client extends CI_Controller
 			$row[] = $br->ont_phase_state;
 			
 			$ontLocation = ($br->lokasi_map == '' || $br->lokasi_map == null) ? "javascript:void(0)" : urldecode($br->lokasi_map);
+			$viewOnMap = '<a href="javascript:void(0)" class="btn btn-xs btn-outline btn-info" title="Show On Map" onclick="show_on_map(' . $br->no_pelanggan . ')"><i class="fa fa-map"></i> $br->odp_number </a>';
+			$row[] = $viewOnMap;
 			// $row[] = "<a href=\"$odpLocation\" target=\"_blank\" class=\"btn btn-xs btn-danger\"><span class=\"fa fa-map\"></span> $br->odp_number</a>";
-			$row[] = (empty($br->latlong) || $br->latlong == null) ? ' <a href="#" class="btn btn-xs btn-outline btn-danger" title="ODP kosong"><small>ODP</small></a>' : ' <a href="https://www.google.com/maps/?q=' . $br->latlong . '" class="btn btn-xs btn-outline btn-primary" target="_blank" title="Klik untuk melihat lokasi ODP"><small>' .$br->odp_name . '</small></a>';
+			// $row[] = (empty($br->latlong) || $br->latlong == null) ? ' <a href="#" class="btn btn-xs btn-outline btn-danger" title="ODP kosong"><small>ODP</small></a>' : ' <a href="https://www.google.com/maps/?q=' . $br->latlong . '" class="btn btn-xs btn-outline btn-primary" target="_blank" title="Klik untuk melihat lokasi ODP"><small>' .$br->odp_name . '</small></a>';
 			$row[] = "<a href=\"$ontLocation\" target=\"_blank\" class=\"btn btn-sm\"><span class=\"fa fa-map\"></span> Lokasi ONT</a>";
 
 			$data[] = $row;
