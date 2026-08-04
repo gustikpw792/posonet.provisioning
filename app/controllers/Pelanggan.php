@@ -478,9 +478,6 @@ class Pelanggan extends CI_Controller
 			'keterangan' => $this->input->post('keterangan'),
 			// 'no_ktp' => $this->input->post('no_ktp'),
 			// 'ktp_filename' => $ktp_filename,
-			if ($this->input->post('id_odp') != '') {
-				'id_odp' => $this->input->post('id_odp'),
-			}
 			// 'odp_number' => $this->input->post('odp_number'),
 			// 'odp_location' => str_replace(' ','',$this->input->post('odp_location')),
 
@@ -495,6 +492,10 @@ class Pelanggan extends CI_Controller
 			'latitude' => $coordinates['latitude'],
 			'longitude' => $coordinates['longitude'],
 		);
+
+		if ($this->input->post('id_odp') != '') {
+			$data['id_odp'] => $this->input->post('id_odp'),
+		}
 
 		$this->pelanggan->update(array('id_pelanggan' => $this->input->post('id_pelanggan')), $data);
 		echo json_encode(array("status" => TRUE));
