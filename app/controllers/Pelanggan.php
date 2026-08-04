@@ -478,8 +478,9 @@ class Pelanggan extends CI_Controller
 			'keterangan' => $this->input->post('keterangan'),
 			// 'no_ktp' => $this->input->post('no_ktp'),
 			// 'ktp_filename' => $ktp_filename,
-			
-			'id_odp' => $this->input->post('id_odp'),
+			if ($this->input->post('id_odp') != '') {
+				'id_odp' => $this->input->post('id_odp'),
+			}
 			// 'odp_number' => $this->input->post('odp_number'),
 			// 'odp_location' => str_replace(' ','',$this->input->post('odp_location')),
 
