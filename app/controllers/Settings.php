@@ -91,6 +91,93 @@ class Settings extends CI_Controller {
 		echo json_encode($row);
 	}
 
+	public function get_wa_api(){
+		$query = $this->db->query("SELECT * FROM settings where option_name LIKE 'wa_%'")->result();
+		$data = array();
+
+		foreach ($query as $key) {
+			$row[$key->option_name] = $key->option_value;
+		}
+
+		echo json_encode($row);
+	}
+
+	public function update_telegram_bot()
+	{
+		$data = array(
+			array(
+				'option_id' => 30,
+				'option_value' => $this->input->post('tg_base_url'),
+			),
+			array(
+				'option_id' => 31,
+				'option_value' => $this->input->post('tg_token'),
+			),
+			array(
+				'option_id' => 32,
+				'option_value' => $this->input->post('tg_username'),
+			),
+			array(
+				'option_id' => 33,
+				'option_value' => $this->input->post('tg_chat_id_admin'),
+			),
+			array(
+				'option_id' => 34,
+				'option_value' => $this->input->post('tg_chat_id_teknisi'),
+			),
+			array(
+				'option_id' => 35,
+				'option_value' => $this->input->post('tg_chat_id_group'),
+			),
+		);
+
+		$this->db->update_batch('settings', $data, 'option_id'); 
+
+		echo json_encode([
+			"status" => true,
+			"message" => "Berhasil update Telegram settings!",
+		]);
+
+	}
+
+	public function update_whatsapp_api()
+	{
+		$data = array(
+			array(
+				'option_id' => 41,
+				'option_value' => $this->input->post('wa_base_url'),
+			),
+			array(
+				'option_id' => 42,
+				'option_value' => $this->input->post('wa_api_key'),
+			),
+			array(
+				'option_id' => 43,
+				'option_value' => $this->input->post('wa_session'),
+			),
+			array(
+				'option_id' => 44,
+				'option_value' => $this->input->post('wa_chat_id_admin'),
+			),
+			array(
+				'option_id' => 45,
+				'option_value' => $this->input->post('wa_chat_id_group'),
+			),
+			array(
+				'option_id' => 46,
+				'option_value' => $this->input->post('wa_mode'),
+			),
+		);
+
+		$this->db->update_batch('settings', $data, 'option_id'); 
+
+		echo json_encode([
+			"status" => true,
+			"message" => "Berhasil update WhatsAp API settings!",
+		]);
+
+	}
+
 	/**
 	 * Users Access
 	 * Create privillege login access
@@ -178,19 +265,6 @@ class Settings extends CI_Controller {
 		echo json_encode($data);
 	}
 
-	//tes
-	public function getTgSettings()
-	{
-		// $data= $this->tg->getTgSettings();
-		$data= $this->tg->sendNewClientToAdmin(array(
-			'no_pelanggan' => 222,
-			'nama_pelanggan' => 'Tes Regis',
-			'telp' => '082378901234',
-			'tgl_instalasi' => '2024-03-02',
-			'id_paket' => 15,
-			'expired' => '2024-03-21',
-		));
-		echo json_encode($data);
-	}
+	
 
 }

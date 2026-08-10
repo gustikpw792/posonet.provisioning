@@ -93,7 +93,7 @@ class Api_telegrambot_model extends CI_Model
         $data = [
             'chat_id'       => $this->tgrow['tg_chat_id_group'],
             'text'          => $ticket,
-            'parse_mode'    => 'HTML',
+            'parse_mode'    => 'markdown',
             'disable_web_page_preview' => false
         ];
 
@@ -105,7 +105,7 @@ class Api_telegrambot_model extends CI_Model
             $data = [
                 'chat_id'       => $this->tgrow['tg_chat_id_admin'],
                 'text'          => $msg,
-                'parse_mode'    => 'HTML',
+                'parse_mode'    => 'markdown',
                 'disable_web_page_preview' => false
 
             ];

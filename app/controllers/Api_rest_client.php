@@ -1315,10 +1315,10 @@ _handled by %s_";
 
 		$icon = ($plgn->ont_phase_state == 'LOS') ? "\xF0\x9F\x9A\xA8" : "\xF0\x9F\x9A\xA8";
 
-		$template = "%s <b>TICKET</b>
+		$template = "%s *TICKET*
 %s
 
-<b>%s</b>
+*%s*
 %s
 
 %s
@@ -1328,7 +1328,7 @@ Ket	: ";
 		$text = sprintf(
 			$template,
 			$icon,
-			urldecode($plgn->lokasi_map),
+			str_replace('g_st=', '', urldecode($plgn->lokasi_map)),
 			$plgn->no_pelanggan .'. '. $plgn->nama_pelanggan,
 			$plgn->telp,
 			$plgn->wilayah,
@@ -1348,14 +1348,36 @@ Ket	: ";
 	 */
 
 	public function sendTicket(){
+		$this->load->model('whatsapp_model','whatsappModel');
+
+
 		$ticket = $this->input->post('tic_scripts');
+		$to = $this->input->post('app');
 
-		$response = $this->telegrambot->sendToGroup($ticket);
+		$response = null;
 
-		echo json_encode([
-			'status' => true,
-			'data' => $response,
-		]);
+		// Menggunakan elseif/switch agar opsi berikutnya tidak dievaluasi jika sudah cocok
+		if ($to === 'grouptg') {
+			$response = $this->telegrambot->sendToGroup($ticket);
+		} elseif ($to === 'groupwa') {
+			$response = $this->whatsappModel->send_message($ticket);
+		} else {
+			// Penanganan jika nilai 'to' tidak valid/tidak ditemukan
+			return $this->output
+				->set_content_type('application/json')
+				->set_output(json_encode([
+					'status'  => false,
+					'message' => 'Tujuan pengiriman tidak valid.'
+				]));
+		}
+
+		// Mengembalikan response JSON standar CodeIgniter
+		return $this->output
+			->set_content_type('application/json')
+			->set_output(json_encode([
+				'status' => true,
+				'data'   => $response,
+			]));
 	}
 
 

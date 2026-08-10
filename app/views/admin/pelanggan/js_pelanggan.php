@@ -1099,6 +1099,7 @@
       "<?= site_url('api_rest_client/sendTicket') ?>", {
         gpon_onu: $('[name="tic_gpon_onu"]').val(),
         tic_scripts: $('[name="tic_scripts"]').val(),
+        app: to,
       },
       function(data, status) {
         console.log(data.data.chat.title);

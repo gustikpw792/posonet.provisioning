@@ -54,6 +54,7 @@
     });
 
     var save_method;
+    let waMode = false;
 
     function reload_table(){
         tableUsers.ajax.reload(null,false); //reload datatable ajax
@@ -84,6 +85,8 @@
     }
     
     function getTgBot(){
+        $("#btnSaveTgBot").text('Save').attr('disabled',false);
+
         $.get("<?= site_url('settings/get_tg_bot') ?>",
         function(data, status) {
             $('[name="tg_base_url"]').val(data['tg_base_url']);
@@ -92,6 +95,27 @@
             $('[name="tg_chat_id_admin"]').val(data["tg_chat_id_admin"]);
             $('[name="tg_chat_id_teknisi"]').val(data["tg_chat_id_teknisi"]);
             $('[name="tg_chat_id_group"]').val(data["tg_chat_id_group"]);
+
+            console.log(data);
+        }, 'json');
+    }
+
+    function getWaApi(){
+        $("#btnSaveWa").text('Save').attr('disabled',false);
+
+        $.get("<?= site_url('settings/get_wa_api') ?>",
+        function(data, status) {
+            $('[name="wa_base_url"]').val(data['wa_base_url']);
+            $('[name="wa_api_key"]').val(data["wa_api_key"]);
+            $('[name="wa_session"]').val(data["wa_session"]);
+            $('[name="wa_chat_id_admin"]').val(data["wa_chat_id_admin"]);
+            $('[name="wa_chat_id_group"]').val(data["wa_chat_id_group"]);
+            
+            if(data["wa_mode"] == 'true') {
+                $('#waFlipswitch').prop('checked', true);
+            } else {
+                $('#waFlipswitch').prop('checked', false);
+            }
 
             console.log(data);
         }, 'json');
@@ -113,43 +137,93 @@
                     }
                 },
                 'json')
+
+        } else if(settings == 'users'){
+
+            $("#btnSaveUsers").text('Updating').attr('disabled',true);
+
+            if($('[name="password"]').val() == '') {
+                alert('Masukan password baru!');
+                return;
             }
-            if(settings == 'users'){
+            var url;
+            if(save_method == 'add_user') {
+                url = "<?php echo site_url('settings/save_users')?>";
+            } else {
+                url = "<?php echo site_url('settings/update_users')?>";
+            }
 
-                $("#btnSaveUsers").text('Updating').attr('disabled',true);
-
-                if($('[name="password"]').val() == '') {
-                    alert('Masukan password baru!');
-                    return;
-                }
-                var url;
-                if(save_method == 'add_user') {
-                    url = "<?php echo site_url('settings/save_users')?>";
-                } else {
-                    url = "<?php echo site_url('settings/update_users')?>";
-                }
-
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: $("#form_users").serialize(),
-                    dataType: "JSON",
-                    success: function(data) {
-                        if (data.status) {
-                            console.log(data.message);
-                            alert(data.message);
-                            $("#btnSaveUsers").text('Save').attr('disabled',false);
-                            reload_table();
-                            $('#myModalUser').modal('hide'); // hide bootstrap modal
-
-                        }
-                    },
-                    error: function(e){
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: $("#form_users").serialize(),
+                dataType: "JSON",
+                success: function(data) {
+                    if (data.status) {
+                        console.log(data.message);
+                        alert(data.message);
+                        $("#btnSaveUsers").text('Save').attr('disabled',false);
+                        reload_table();
+                        $('#myModalUser').modal('hide'); // hide bootstrap modal
 
                     }
-                });
+                },
+                error: function(e){
 
-            }
+                }
+            });
+
+        } else if(settings == 'tg_bot'){
+            $.post(
+                "<?= site_url('settings/update_telegram_bot') ?>", {
+                    tg_base_url: $('[name="tg_base_url"]').val(),
+                    tg_token: $('[name="tg_token"]').val(),
+                    tg_username: $('[name="tg_username"]').val(),
+                    tg_chat_id_admin: $('[name="tg_chat_id_admin"]').val(),
+                    tg_chat_id_teknisi: $('[name="tg_chat_id_teknisi"]').val(),
+                    tg_chat_id_group: $('[name="tg_chat_id_group"]').val(),
+                },
+                function(data, status) {
+                    if (status) {
+                        console.log(data.message);
+                        alert(data.message);
+                        $("#btnSaveTgBot").text('Saved').attr('disabled',true);
+                    }
+                },
+                'json')
+
+        } else if(settings == 'whatsapp'){
+            $.post(
+                "<?= site_url('settings/update_whatsapp_api') ?>", {
+                    wa_base_url     : $('[name="wa_base_url"]').val(),
+                    wa_api_key      : $('[name="wa_api_key"]').val(),
+                    wa_session      : $('[name="wa_session"]').val(),
+                    wa_chat_id_admin: $('[name="wa_chat_id_admin"]').val(),
+                    wa_chat_id_group: $('[name="wa_chat_id_group"]').val(),
+                    wa_mode         : $('#waFlipswitch').prop('checked'),
+                },
+                function(data, status) {
+                    if (status) {
+                        console.log(data.message);
+                        alert(data.message);
+                        $("#btnSaveWa").text('Saved').attr('disabled',true);
+                    }
+                },
+                'json')
+
+        }
+    }
+
+    function handleSwitchChange(checkbox) {
+      if (checkbox.checked) {
+        $('#waFlipswitch').prop('checked', true);
+        console.log("Status: ENABLED");
+        // Tambahkan fungsi/aksi saat di-Enable di sini
+    } else {
+        console.log("Status: DISABLED");
+        $('#waFlipswitch').prop('checked', false);
+        // Tambahkan fungsi/aksi saat di-Disable di sini
+      }
     }
 
     function delete_user(id){

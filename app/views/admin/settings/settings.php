@@ -24,7 +24,8 @@
                                     <!-- <li class=""><a data-toggle="tab" href="#tab-7"><span class="fa fa-warning"></span> Keamanan</a></li> -->
                                     <li class="active"><a data-toggle="tab" href="#tab-7"><span class="fa fa-ticket"></span> Rekening</a></li>
                                     <li class=""><a data-toggle="tab" href="#tab-8"><span class="fa fa-database"></span> Users Access</a></li>
-                                    <li class=""><a data-toggle="tab" href="#tab-9" onclick="getTgBot()"><span class="fa fa-bell"></span> Notifications</a></li>
+                                    <li class=""><a data-toggle="tab" href="#tab-9" onclick="getTgBot()"><span class="fa fa-telegram"></span> Telegram</a></li>
+                                    <li class=""><a data-toggle="tab" href="#tab-10" onclick="getWaApi()"><span class="fa fa-whatsapp"></span> WhatsApp</a></li>
                                 </ul>
                                 <div class="tab-content ">
                                     <div id="tab-6" class="tab-pane">
@@ -232,11 +233,64 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group"><label class="col-md-2 control-label">CHAT_ID GROUP</label>
+                                                        
                                                         <div class="col-md-10"><input type="text" name="tg_chat_id_group" placeholder="CHAT_ID GROUP" class="form-control"> <span class="help-block m-b-none"></span>
                                                         </div>
                                                     </div>
                                                     
                                                     <button type="button" class="btn btn-primary btn-block" id="btnSaveTgBot" onclick="save('tg_bot')">Save Notif</button>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div id="tab-10" class="tab-pane" >
+                                        <div class="panel-body">
+                                            <h3>Notif to WhatsApp</h3>
+
+                                            <form id="formWhatsApp" action="#" class="form-horizontal">
+                                                <div class="col-md-6 b-r">
+                                                    <div class="form-group"><label class="col-md-2 control-label">Base URL API</label>
+                                                        <div class="col-md-10"><input id="wa_base_url" type="text" name="wa_base_url" placeholder="http://IP:PORT/" class="form-control"> <span class="help-block m-b-none"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group"><label class="col-md-2 control-label">API Key</label>
+                                                        <div class="col-md-10"><input id="wa_api_key" type="text" name="wa_api_key" placeholder="xxxxxxxxxx" class="form-control"> <span class="help-block m-b-none"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group"><label class="col-md-2 control-label">Session Name</label>
+                                                        <div class="col-md-10"><input id="wa_session" type="text" name="wa_session" value="default" placeholder="default" class="form-control"> <span class="help-block m-b-none"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group"><label class="col-md-2 control-label">Chat Id ADMIN</label>
+                                                        <div class="col-md-10"><input type="text" name="wa_chat_id_admin" placeholder="628xxxxxxxxxx@c.us" class="form-control"> <span class="help-block m-b-none"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group"><label class="col-md-2 control-label">Chat Id GROUP</label>
+                                                        <div class="col-md-10"><input type="text" name="wa_chat_id_group" placeholder="xxxxxxxxxxxxxx@g.us" class="form-control"> <span class="help-block m-b-none"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group"><label class="col-md-2 control-label">Mode</label>
+                                                        <div class="col-md-10">
+                                                            <div class="switch">
+                                                                <div class="onoffswitch">
+                                                                    <input type="checkbox" name="wa_mode" class="onoffswitch-checkbox form-control" id="waFlipswitch" onchange="handleSwitchChange(this)">
+                                                                    <label class="onoffswitch-label" for="waFlipswitch">
+                                                                        <span class="onoffswitch-inner"></span>
+                                                                        <span class="onoffswitch-switch"></span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <span class="help-block m-b-none">Enable or Disable service</span>
+
+                                                            <!-- <input type="text" name="wa_mode" placeholder="enable | disable" class="form-control"> <span class="help-block m-b-none"></span> -->
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <button type="button" class="btn btn-primary btn-block" id="btnSaveWa" onclick="save('whatsapp')">Save</button>
                                                 </div>
 
                                                 <div class="col-md-6">

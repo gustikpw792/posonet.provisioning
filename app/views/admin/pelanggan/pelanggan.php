@@ -929,7 +929,8 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" onclick="copyText()">Copy Scripts</button> 
                     <!-- <button type="button" class="btn btn-primary" id="btnSaveTickets" onclick="getTickets()"><span class="fa fa-clock"></span> Send to Teknisi</button> -->
-                    <button type="button" class="btn btn-primary" id="btnSendTicketGroup" onclick="sendTicket('group')"><span class="fa fa-send"></span> Send to Group</button>
+                    <button type="button" class="btn btn-danger" id="btnSendTicketGroupTg" onclick="sendTicket('grouptg')"><span class="fa fa-telegram"></span> Group Telegram</button>
+                    <button type="button" class="btn btn-primary" id="btnSendTicketGroupWa" onclick="sendTicket('groupwa')"><span class="fa fa-whatsapp"></span> Group WhatsApp</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>

@@ -234,3 +234,13 @@ SELECT *
 FROM v_pelanggan p
 WHERE p.ont_phase_state='working'
 AND p.active_connection='disconnected' 
+
+# tabel settings
+INSERT INTO settings (option_id, option_name, option_value) 
+VALUES 
+    (41, 'wa_base_url'),
+    (42, 'wa_api_key'),
+    (43, 'wa_session'),
+    (44, 'wa_chat_id_admin'),
+    (45, 'wa_chat_id_group'),
+    (46, 'wa_mode','false');
