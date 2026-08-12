@@ -1078,7 +1078,7 @@
     $.post(
       "<?= site_url('api_rest_client/getTickets') ?>", {
         gpon_onu: $('[name="tic_gpon_onu"]').val(),
-        tic_keluhan: $('[name="tic_keluhan"]').val(),
+        tic_keluhan: $('[name="tic_keluhan"]').val() ,
       },
       function(data, status) {
         if (status) {
