@@ -50,7 +50,6 @@ class Whatsapp_model extends CI_Model {
                         'status'  => 'error',
                         'message' => 'Mode WhatsApp belum aktif!'
                     ]));
-            exit();
         }
 
 
