@@ -32,55 +32,55 @@
   });
 
   id_odp = $('#id_odp').select2({
-      minimumInputLength: 3, // Optional: Minimum characters to type before searching
-      ajax: {
-          url: '<?= site_url('odp/s2_get_data_for_select2') ?>', // Your CodeIgniter AJAX endpoint
-          dataType: 'json',
-          delay: 250, // Delay in milliseconds before sending the request
-          data: function (params) {
-              return {
-                  search: params.term, // Search term from the user input
-                  page: params.page // For pagination
-              };
-          },
-          processResults: function (data, params) {
-              params.page = params.page || 1;
-              return {
-                  results: data.items, // Array of objects with 'id' and 'text'
-                  pagination: {
-                      more: (params.page * 10) < data.total_count // Example for pagination
-                  }
-              };
-          },
-          cache: true
+    minimumInputLength: 3, // Optional: Minimum characters to type before searching
+    ajax: {
+      url: '<?= site_url('odp/s2_get_data_for_select2') ?>', // Your CodeIgniter AJAX endpoint
+      dataType: 'json',
+      delay: 250, // Delay in milliseconds before sending the request
+      data: function(params) {
+        return {
+          search: params.term, // Search term from the user input
+          page: params.page // For pagination
+        };
       },
-      placeholder: 'Cari ODP...',
-      width: "100%",
-      // dropdownParent : $('#myModal')
+      processResults: function(data, params) {
+        params.page = params.page || 1;
+        return {
+          results: data.items, // Array of objects with 'id' and 'text'
+          pagination: {
+            more: (params.page * 10) < data.total_count // Example for pagination
+          }
+        };
+      },
+      cache: true
+    },
+    placeholder: 'Cari ODP...',
+    width: "100%",
+    // dropdownParent : $('#myModal')
 
   });
 
-  $('.table-responsive').on('show.bs.dropdown', function () {
-     $('.table-responsive').css( "overflow", "inherit" );
+  $('.table-responsive').on('show.bs.dropdown', function() {
+    $('.table-responsive').css("overflow", "inherit");
   });
 
-  $('.table-responsive').on('hide.bs.dropdown', function () {
-      $('.table-responsive').css( "overflow", "auto" );
+  $('.table-responsive').on('hide.bs.dropdown', function() {
+    $('.table-responsive').css("overflow", "auto");
   })
 
   var table, logTable;
   $(document).ready(function() {
     $("#formChangeSsid").validate({
-        rules: {
-            wpa_keyx: {
-                required: true,
-                minlength: 8
-            },
-            wpa_keyz: {
-                required: true,
-                minlength: 8
-            },
-        }
+      rules: {
+        wpa_keyx: {
+          required: true,
+          minlength: 8
+        },
+        wpa_keyz: {
+          required: true,
+          minlength: 8
+        },
+      }
     });
     // $('.btnFokus').focus(); // fokus ke field ketika tombol tambah di klik
     $('.date').datepicker({
@@ -121,8 +121,7 @@
       // paging:         false,
       // fixedColumns:   true,
       //Set column definition initialisation properties.
-      columnDefs: [
-        {
+      columnDefs: [{
           visible: false,
           targets: [3], //last column
           // orderable: false, //set not orderable
@@ -187,27 +186,27 @@
     });
 
     // Matikan pencarian otomatis pada tombol bawaan dan buat kustomisasi
-  $('.dataTables_filter input')
-    .unbind() // Memutus fungsi bawaan DataTables
-    .bind('keyup', function(e) {
+    $('.dataTables_filter input')
+      .unbind() // Memutus fungsi bawaan DataTables
+      .bind('keyup', function(e) {
         const value = this.value;
-        
+
         // Bersihkan timeout sebelumnya (fitur delay)
         clearTimeout(window.searchTimeout);
 
         // Setel delay baru sebelum eksekusi pencarian
         window.searchTimeout = setTimeout(function() {
-            // Cek apakah jumlah karakter memenuhi batas minimum ATAU input dikosongkan
-            if (value.length >= 3 || value.length === 0) {
-                table.search(value).draw();
-            }
+          // Cek apakah jumlah karakter memenuhi batas minimum ATAU input dikosongkan
+          if (value.length >= 3 || value.length === 0) {
+            table.search(value).draw();
+          }
         }, 200); // Delay 400ms
-    });
+      });
 
     /**
      * COBA DATATABLE ROW DETAILS
      */
-    
+
 
     /**
      * END 
@@ -253,7 +252,7 @@
       type: "GET",
       dataType: "JSON",
       success: function(data) {
-        if(data.newCode == '----FULL----'){
+        if (data.newCode == '----FULL----') {
           $("#btnSave").text('Slot NoPel FULL');
           $("#btnSave").attr('disabled', true);
         } else {
@@ -327,13 +326,13 @@
           if (data.status) //if success close modal and reload ajax table
           {
             showUncfg();
-            
+
             setTimeout(function() {
               connection_status();
               reload_table();
               l.ladda('stop');
             }, 5000);
-                        
+
             // $('#myModal').modal('hide');
             $('#divRegisterForm').hide('slow');
             notif('Berhasil menambah/edit data!', 'Sukses', 'success');
@@ -343,7 +342,7 @@
               $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]); //select span help-block class set text error string
             }
           }
-  
+
           $('#btnSave').text('Register ONU'); //change button text
           $('#btnSave').attr('disabled', false); //set button enable
         },
@@ -378,12 +377,12 @@
         id_wilayah.val(data.id_wilayah).trigger('change');
         wilMethod = 'on';
         id_paket.val(data.id_paket).trigger('change');
-        if(data.id_odp == null) {
+        if (data.id_odp == null) {
           id_odp.val(null).trigger('change');
-        } else{
+        } else {
           id_odp.val(data.id_odp).trigger('change');
         }
-        
+
         zstatus.val(data.status).trigger('change');
         $('[name="nama_pelanggan"]').val(data.nama_pelanggan);
         $('[name="telp"]').val(data.telp);
@@ -394,7 +393,7 @@
         $('[name="no_ktp"]').val(data.no_ktp);
 
         //OLT
-        if(data.gpon_olt == '') {
+        if (data.gpon_olt == '') {
           $('[name="interface"]').val(data.gpon_onu.split(':')[0]);
         } else {
           $('[name="interface"]').val(data.gpon_olt);
@@ -408,8 +407,8 @@
         $('[name="odp_number"]').val(data.odp_number);
         $('[name="stb_username"]').val(data.stb_username);
         $('[name="stb_password"]').val(data.stb_password);
-        
-        $('#odpName').html("<a href='https://www.google.com/maps/?q="+data.latlong+"' class='btn btn-outline btn-sm btn-primary' target='_blank'>"+data.odp_name+"</a>");
+
+        $('#odpName').html("<a href='https://www.google.com/maps/?q=" + data.latlong + "' class='btn btn-outline btn-sm btn-primary' target='_blank'>" + data.odp_name + "</a>");
         // $('[name="odp_location"]').val(decodeURIComponent(data.odp_location));
         id_odp.val(data.id_odp).trigger('change');
         $('[name="sort"]').val(data.sort);
@@ -421,7 +420,7 @@
         $('.modal-title').text('Edit <?= ucwords(str_replace('_', ' ', $active)); ?>');
         $('#btnSave').text('Update');
         $('#btnSave').attr('disabled', false); //set button enable
-        
+
       },
       error: function(jqXHR, textStatus, errorThrown) {
         $('#btnSave').text('Update');
@@ -686,14 +685,14 @@
   }
 
   function show_on_map(nopel) {
-      // Isi source iframe dan tampilkan modal dengan efek transisi halus
-      let targetUrl = '<?= site_url('map_cluster/fetchCluster')?>/?cari=' + nopel
-      // let targetUrl = 'http://localhost/odp-marker/?cari=' + nopel
-      $('#iframeOnMap').attr('src', decodeURIComponent(targetUrl));
-      $('#mapModal').modal('show');
-      $('#mapModalLabel').html('Finding ' + nopel + ' on map');
+    // Isi source iframe dan tampilkan modal dengan efek transisi halus
+    let targetUrl = '<?= site_url('map_cluster/fetchCluster') ?>/?cari=' + nopel
+    // let targetUrl = 'http://localhost/odp-marker/?cari=' + nopel
+    $('#iframeOnMap').attr('src', decodeURIComponent(targetUrl));
+    $('#mapModal').modal('show');
+    $('#mapModalLabel').html('Finding ' + nopel + ' on map');
 
-      
+
   }
 
   function reboot(gpon_onu) {
@@ -752,20 +751,20 @@
           // $('.v_online').html(data.online);
           // $('.v_offline').html(data.offline);
           $('.v_ont').html(data.total);
-          
+
           if (data.total_los > 0) {
             $('.v_los').html(data.los);
             $('#btnLos').show();
           }
           if (data.total_no_internet > 0) {
             $('#btnNoInet').show();
-            $('.v_no_internet').html('NO-INET '+ data.total_no_internet);
+            $('.v_no_internet').html('NO-INET ' + data.total_no_internet);
           }
 
           reload_table();
         } else {
           notif('Error getting ontphase', 'Status ONT', 'error');
-            $('#iboxToggle .collapse-link').click();
+          $('#iboxToggle .collapse-link').click();
         }
       },
       'json')
@@ -815,7 +814,7 @@
     });
   }
 
-  function toggleExpired(){
+  function toggleExpired() {
     $('#expired').toggle();
   }
 
@@ -919,9 +918,9 @@
           $('#extendPaket').modal('hide');
           notif(data.message, 'Perpanjang Paket', 'success');
           reload_table();
-          setTimeout(function(){
-              l.ladda('stop');
-          },2000);
+          setTimeout(function() {
+            l.ladda('stop');
+          }, 2000);
           $("#btnSaveExtendPaket").text('Perpanjang');
           $('#btnSaveExtendPaket').attr('disabled', false);
         }
@@ -1016,48 +1015,50 @@
       },
       'json')
   }
+
   function show_detail(gpon_onu) {
-    $.get("<?= site_url('pelanggan/view_by_id') ?>", 
-        { gpon_onu: gpon_onu },
-        function(d,status) {            // Callback function saat sukses
+    $.get("<?= site_url('pelanggan/view_by_id') ?>", {
+        gpon_onu: gpon_onu
+      },
+      function(d, status) { // Callback function saat sukses
         console.log(status);
-            if (!d.status) {
-              return;
-            }
-            // Update data ke elemen HTML
-            $('#val-nama-header, #val-id-nama').html(d.client.name);
-            $('#val-ont-phase').html(d.ont.phase);
-            $('#val-tgl-instalasi').html('<i class="fa fa-calendar-check-o text-success"></i> ' + d.client.installation_date);
-            $('#val-vendor-header, #val-vendor-table').html(d.ont.vendor);
-            $('#val-interface, #val-interface-card').text(d.ont.gpon_onu);
-            $('#val-paket').text(d.client.paket);
-            $('#val-tarif').text(d.client.tarif);
-            $('#val-dbm').html(d.ont.attenuation);
-            $('#val-signal-status').html(d.ont.signal_status);
-            $('#val-expire').html(d.client.expired);
-            $('#val-wilayah').text(d.client.wilayah);
-            $('#val-status-langganan').html(d.client.status);
-            $('#val-status-odp').html(d.tools.odp);
+        if (!d.status) {
+          return;
+        }
+        // Update data ke elemen HTML
+        $('#val-nama-header, #val-id-nama').html(d.client.name);
+        $('#val-ont-phase').html(d.ont.phase);
+        $('#val-tgl-instalasi').html('<i class="fa fa-calendar-check-o text-success"></i> ' + d.client.installation_date);
+        $('#val-vendor-header, #val-vendor-table').html(d.ont.vendor);
+        $('#val-interface, #val-interface-card').text(d.ont.gpon_onu);
+        $('#val-paket').text(d.client.paket);
+        $('#val-tarif').text(d.client.tarif);
+        $('#val-dbm').html(d.ont.attenuation);
+        $('#val-signal-status').html(d.ont.signal_status);
+        $('#val-expire').html(d.client.expired);
+        $('#val-wilayah').text(d.client.wilayah);
+        $('#val-status-langganan').html(d.client.status);
+        $('#val-status-odp').html(d.tools.odp);
 
-            // // Update atribut tombol & link
-            $('#link-maps').html(d.tools.location);
-            $('#btn-show-map').html(d.tools.view_on_map);
-            
-            // Update fungsi tombol kontrol
-            $('#more_action').html(d.tools.more_action);
-            $('#btn-reboot').attr('onclick', "reboot('" + d.ont.gpon_onu + "')");
-            $('#btn-remote').attr('onclick', "remote('" + d.ont.gpon_onu + "','enable')");
-            // $('#btn-extend').attr('onclick', "extendPaket('" + data.interface + "')");
+        // // Update atribut tombol & link
+        $('#link-maps').html(d.tools.location);
+        $('#btn-show-map').html(d.tools.view_on_map);
 
-            // 4. Update Event Diagnostic Buttons
-            $('.btn-diag').off('click').on('click', function() {
-                var type = $(this).data('type');
-                show_raw_content(type, d.ont.gpon_onu);
-            });
+        // Update fungsi tombol kontrol
+        $('#more_action').html(d.tools.more_action);
+        $('#btn-reboot').attr('onclick', "reboot('" + d.ont.gpon_onu + "')");
+        $('#btn-remote').attr('onclick', "remote('" + d.ont.gpon_onu + "','enable')");
+        // $('#btn-extend').attr('onclick', "extendPaket('" + data.interface + "')");
 
-            $('#info-detail').slideDown(300);
-        }, 
-        "json" // Memastikan respon di-parse sebagai JSON
+        // 4. Update Event Diagnostic Buttons
+        $('.btn-diag').off('click').on('click', function() {
+          var type = $(this).data('type');
+          show_raw_content(type, d.ont.gpon_onu);
+        });
+
+        $('#info-detail').slideDown(300);
+      },
+      "json" // Memastikan respon di-parse sebagai JSON
     );
 
   }
@@ -1069,7 +1070,7 @@
 
   // Jika ingin menampilkan kembali saat tombol "Detail" diklik dari tabel pelanggan:
   function showDetailPanel() {
-      $('#info-detail').slideDown(300);
+    $('#info-detail').slideDown(300);
   }
 
   function getTickets() {
@@ -1078,7 +1079,7 @@
     $.post(
       "<?= site_url('api_rest_client/getTickets') ?>", {
         gpon_onu: $('[name="tic_gpon_onu"]').val(),
-        tic_keluhan: $('[name="tic_keluhan"]').val() ,
+        tic_keluhan: $('[name="tic_keluhan"]').val(),
       },
       function(data, status) {
         if (status) {
@@ -1112,6 +1113,20 @@
       'json')
   }
 
+  function updateCoordinate() {
+    $.post(
+      "<?= site_url('Map_cluster/update_all_coordinate') ?>",
+      function(data, status) {
+        console.log(data);
+        if (status) {
+          notif('Coodinate', data + 'data Update successfull', 'success');
+          // $("#btnSaveTickets").text('Make Ticket');
+          // $('#btnSaveTickets').attr('disabled', false);
+        }
+      },
+      'json')
+  }
+
   function copyText() {
     // Get the text field
     var copyText = document.getElementById("skrip");
@@ -1124,48 +1139,48 @@
     navigator.clipboard.writeText(copyText.value);
   }
 
-  function setVlanProfile(){
+  function setVlanProfile() {
     vlanp = $('#cvlan option:selected').text();
     $('#vlan_profile').val(vlanp);
     // $('[name="keterangan"]').val(vlanp);
   }
 
-  function getVlanProfile(){
+  function getVlanProfile() {
     $.get("<?= site_url('api_rest_client/get_profile_vlan') ?>",
       function(data, status) {
         $("#cvlan").html(data.select_option);
       }, 'json');
   }
 
-  function changeSsid(gpon_onu){
+  function changeSsid(gpon_onu) {
     $('#changessidModal').modal('show');
     $('[name="cs_gpon_onu"]').val(gpon_onu);
   }
 
-  function setSsid(mode){
+  function setSsid(mode) {
     var dataSsid = $('#formChangeSsid').serialize();
     // return;
     $.post(
-      "<?=site_url('api_rest_client/changeSsid/')?>" + mode, dataSsid,
+      "<?= site_url('api_rest_client/changeSsid/') ?>" + mode, dataSsid,
       function(d, status) {
         // console.log(d);
         if (status) {
           notif(d.message, 'Change SSID', 'success');
           $('#formChangeSsid')[0].reset();
           $('#changessidModal').modal('hide');
-          setTimeout(function(){
-              l.ladda('stop');
-          },2000)
+          setTimeout(function() {
+            l.ladda('stop');
+          }, 2000)
         }
       },
       'json')
   }
 
-  function hideRegisForm(){
+  function hideRegisForm() {
     $("#divRegisterForm").hide();
   }
 
-  function showUncfg(){
+  function showUncfg() {
     tbl_unconfig.destroy().clear();
     uncfg();
   }
@@ -1256,47 +1271,46 @@
     let isIntervalOn = false;
 
     toggleBtn.addEventListener('click', function() {
-        isIntervalOn = !isIntervalOn;
-        if (isIntervalOn) {
-            toggleBtn.textContent = 'Auto Interval: ON';
-            toggleBtn.classList.remove('btn-default');
-            toggleBtn.classList.add('btn-success');
-            // Start the interval
-            intervalID = setInterval(function() {
-                // Add your auto-refresh logic here
-                console.log('Auto-refreshing data...');
-                // For example, you could call a function that reloads table data
-                // table.ajax.reload(); 
-                connection_status();
-                tbl_offline.destroy().clear();
-                tbl_expired.destroy().clear();
-                tbl_unconfig.destroy().clear();
-                tbl_los.destroy().clear();
-                onustate();
-                offline();
-                expired();
-                uncfg();
-                los();
-            }, 900000); // 15 minutes interval
-        } else {
-            toggleBtn.textContent = 'Auto Interval: OFF';
-            toggleBtn.classList.remove('btn-success');
-            toggleBtn.classList.add('btn-default');
-            // Stop the interval
-            clearInterval(intervalID);
-            console.log('Auto-refresh stopped.');
-        }
+      isIntervalOn = !isIntervalOn;
+      if (isIntervalOn) {
+        toggleBtn.textContent = 'Auto Interval: ON';
+        toggleBtn.classList.remove('btn-default');
+        toggleBtn.classList.add('btn-success');
+        // Start the interval
+        intervalID = setInterval(function() {
+          // Add your auto-refresh logic here
+          console.log('Auto-refreshing data...');
+          // For example, you could call a function that reloads table data
+          // table.ajax.reload(); 
+          connection_status();
+          tbl_offline.destroy().clear();
+          tbl_expired.destroy().clear();
+          tbl_unconfig.destroy().clear();
+          tbl_los.destroy().clear();
+          onustate();
+          offline();
+          expired();
+          uncfg();
+          los();
+        }, 900000); // 15 minutes interval
+      } else {
+        toggleBtn.textContent = 'Auto Interval: OFF';
+        toggleBtn.classList.remove('btn-success');
+        toggleBtn.classList.add('btn-default');
+        // Stop the interval
+        clearInterval(intervalID);
+        console.log('Auto-refresh stopped.');
+      }
     });
   });
-
 </script>
 
 <script type="text/javascript">
-var l = $( '.ladda-button-demo' ).ladda();
+  var l = $('.ladda-button-demo').ladda();
 
-l.click(function(){
+  l.click(function() {
     // Start loading
-    l.ladda( 'start' );
+    l.ladda('start');
 
     // Timeout example
     // Do something in backend and then stop ladda
@@ -1305,7 +1319,7 @@ l.click(function(){
     // },2000)
 
 
-});
+  });
 </script>
 </body>
 
