@@ -471,7 +471,7 @@ class Kwitansi extends CI_Controller
 		// $periode = [
 		// '2025-01-02', '2025-02-02','2025-03-02','2025-04-02','2025-05-02','2025-06-02',
 		// '2025-07-02','2025-08-02','2025-09-02','2025-10-02','2025-11-02','2025-12-02',];
-		$periode = ['2026-01-02',];
+		$periode = ['2025-12-02',];
 		
 		$query = $this->db->query("SELECT no_pelanggan,nama_pelanggan,wilayah,alamat,
 		nama_paket,tarif,serial_number,tgl_instalasi,expired,keterangan,lokasi_map,telp,status,
