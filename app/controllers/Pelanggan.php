@@ -291,7 +291,10 @@ class Pelanggan extends CI_Controller
 			} else if($br->onu_db <= -14.9 && $br->onu_db >= -0.0) {
 				$rxPower = $br->onu_db;
 				$signalStatus = '<i class="fa fa-signal"></i> Signal High';
-			} else if($br->onu_db == 'N/A') {
+			} else if($br->onu_db == 'N/A' || $br->onu_db == '0') {
+				$rxPower = $br->onu_db;
+				$signalStatus = '<i class="fa fa-signal"></i> --';
+			} else {
 				$rxPower = $br->onu_db;
 				$signalStatus = '<i class="fa fa-signal"></i> --';
 			}
