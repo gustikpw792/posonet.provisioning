@@ -359,7 +359,7 @@ class Pelanggan extends CI_Controller
 			'nama_pelanggan' => str_replace(',', '',$this->input->post('nama_pelanggan')),
 			'id_wilayah' => $this->input->post('id_wilayah'),
 			'id_paket' => $this->input->post('id_paket'),
-			// 'tgl_instalasi' => $this->input->post('tgl_instalasi'),
+			'tgl_instalasi' => $this->input->post('tgl_instalasi'),
 			'tgl_instalasi' => date('Y-m-d'),
 			'expired' => $this->input->post('expired'),
 			'lokasi_map' => urlencode($this->input->post('lokasi_map')),
