@@ -143,7 +143,7 @@
         } else {
           load_inserted($("#id_master_setoran").val(), invoiceCode);
           $('#myModal5').modal('hide');
-          $('#search_key').focus();
+          $('#search_key').focus().select();
 
           console.log(data.data);
         }
@@ -385,7 +385,7 @@
         // Menyembunyikan kamera scanner jika sedang mencari lewat No. Internet
         $('.camera-container').hide();
         setTimeout(() => {
-          document.getElementById('search_key').focus();
+          document.getElementById('search_key').focus().select();
         }, 500);
 
       } else {
@@ -393,7 +393,7 @@
         // Menyembunyikan kamera scanner jika sedang mencari lewat No. Internet
         $('.camera-container').hide();
         setTimeout(() => {
-          document.getElementById('search_key').focus();
+          document.getElementById('search_key').focus().select();
         }, 500);
 
       }
@@ -430,7 +430,7 @@
         }
 
         getDetailInvoice(keyword, function(status) {
-          if(status) {
+          if (status) {
             $('#myModal5').modal('show');
           }
         });
@@ -514,6 +514,7 @@
           }
 
         } else {
+          $('#myModal5').modal('hide');
           alert('Data tidak ditemukan');
           html = '<tr><td colspan="3">Data tidak ditemukan</td></tr>';
         }
@@ -537,6 +538,7 @@
       },
       function(response) {
         let statusModal = response.data.status;
+        $('#resDetailInvoice').html('<strong>Loading...</strong>');
 
         if (response.data.status) {
           $('#resDetailInvoice').html(response.html);
@@ -565,6 +567,12 @@
         }
       }, "json");
   }
+
+  $('#myModal5').on('hidden.bs.modal', function() {
+    setTimeout(function() {
+      $('#search_key').focus().select();
+    }, 50);
+  });
 
   function payNow() {
     prosesInvoice(kodeInvoice);
