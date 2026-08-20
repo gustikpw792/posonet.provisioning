@@ -1,4 +1,8 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
+<?php
+
+use phpDocumentor\Reflection\Types\This;
+
+ defined('BASEPATH') or exit('No direct script access allowed');
 class Pembayaran extends CI_Controller
 {
 
@@ -37,84 +41,42 @@ class Pembayaran extends CI_Controller
 
 	public function cari(){
 		$cari = html_escape($this->input->get('cari'));
-		$results = $this->db->query("SELECT no_pelanggan,nama_pelanggan,wilayah,nama_paket,tarif,expired FROM v_pelanggan WHERE no_pelanggan LIKE '$cari%' OR nama_pelanggan LIKE '%$cari%'")->result();
-		$row = '';
-		foreach ($results as $dt) {
-			$row .= "<tr>
-					<td>$dt->no_pelanggan. $dt->nama_pelanggan</td>
-					<td>$dt->wilayah</td>
-					<td class=\"text-navy\"> <a href=\"#\" class=\"ladda-button btn btn-warning btn-xs\" data-style=\"zoom-in\" onclick=\"getDetailInvoice($dt->no_pelanggan)\">Cek Tagihan</a> </td>
-				</tr>";
+		$mode = html_escape($this->input->get('mode'));
+
+		if ($mode == 'nama') {
+			$results = $this->db->query("SELECT no_pelanggan,nama_pelanggan,wilayah,nama_paket,tarif,expired FROM v_pelanggan WHERE no_pelanggan LIKE '$cari%' OR nama_pelanggan LIKE '%$cari%'")->result();
+
+			$row = '';
+			foreach ($results as $dt) {
+				$row .= "<tr>
+						<td>$dt->no_pelanggan. $dt->nama_pelanggan</td>
+						<td>$dt->wilayah</td>
+						<td class=\"text-navy\"> <a href=\"#\" class=\"ladda-button btn btn-warning btn-xs\" data-style=\"zoom-in\" onclick=\"getDetailInvoice($dt->no_pelanggan)\">Cek Tagihan</a> </td>
+					</tr>";
+			}
+
+			$data = array(
+				'status' => true,
+				'data' => $row,
+				'mode' => $mode,
+			);
+			echo json_encode($data);
 		}
-		echo json_encode($row);
+
 	}
 
-
-	public function getDetailInvoice() {
-		$nopel = html_escape($this->input->post('no_pelanggan'));
-		
-		$rp = $this->db->query("SELECT * FROM v_pelanggan WHERE no_pelanggan = $nopel")->row();
-		$rs = $this->db->query("SELECT * FROM v_temp_invoice WHERE bulan_penagihan = (SELECT MAX(bulan_penagihan) FROM v_temp_invoice) AND no_pelanggan = $nopel")->row();
-
-		$data = '<ul class="list-group clear-list">
-                                        <li class="list-group-item fist-item">
-                                            <span class="pull-right">
-                                                <h3><strong class="text-success"><span id="dtNopelNama">'.$rs->no_pelanggan."-".$rs->nama_pelanggan.'</span></strong></h3>
-                                            </span>
-                                            <strong>No Internet/Pelanggan</strong>
-                                        </li>
-
-                                        <li class="list-group-item fist-item">
-                                            <span class="pull-right">
-                                                <strong class="text-success"><span id="dtPaket">'.$rs->kode_invoice.'<span></strong>
-                                            </span>
-                                            <strong>Kode Invoice</strong>
-                                        </li>
-
-                                        <li class="list-group-item fist-item">
-                                            <span class="pull-right">
-                                                <strong class="text-success"><span id="dtPaket">'.$rp->nama_paket.'<span></strong>
-                                            </span>
-                                            <strong>Paket</strong>
-                                        </li>
-
-                                        <li class="list-group-item">
-                                            <span class="pull-right">
-                                                <strong class="text-warning"><span id="dtExpired">'.$rp->expired.'</span></strong>
-                                            </span>
-                                            <strong>Last Expired</strong>
-                                        </li>
-                                        
-                                        <li class="list-group-item">
-                                            <span class="pull-right" id="dtTarif" style="font-size: 12pt; font-weight: bold;">
-                                                '. number_format($rp->tarif, 0, ",", ".").'
-                                            </span>
-                                            <strong>Tagihan Rp</strong>
-                                        </li>
-
-                                        <li class="list-group-item">
-                                            <span class="pull-right">
-                                                <strong class="text-danger"><span id="dtStatusBayar">'.$rs->status.'</span></strong>
-                                            </span>
-                                            <strong>Status Bayar</strong>
-                                        </li>
-
-                                        <li class="list-group-item">
-                                            <span class="pull-right">
-                                                <a href="#" class="ladda-button btn btn-warning" data-style="zoom-in" onclick="proses_pembayaran('.$rs->no_pelanggan.')">Bayar Sekarang</a>
-                                            </span>
-                                            <strong></strong>
-                                        </li>
-                                    </ul>';
-		
-		echo $data;
-	}
 
 	public function get_detail_invoice()
 	{
-		$this->load->model('billing_model','billingModel');
-
 		$no_internet = html_escape($this->input->post('no_internet'));
+
+		echo json_encode($this->_get_detail_invoice($no_internet));
+	}
+
+
+	private function _get_detail_invoice($no_internet)
+	{
+		$this->load->model('billing_model','billingModel');
 
 		$billData = $this->billingModel->getBillData($no_internet);
 		$data = $billData['data'];
@@ -122,80 +84,76 @@ class Pembayaran extends CI_Controller
 		$message = $billData['message'];
 
 		// set class
-		$classPaid = ($data['billing']['status'] === 'PAID') ? 'text-success' : 'text-danger';
+		$classPaid = ($data['billing']['status'] === 'PAID') ? 'label-success' : 'label-danger';
 		$paidIcon = ($data['billing']['status'] === 'PAID') ? '✅' : '❌';
 		$classExpired = ($data['billing']['status'] === 'PAID') ? 'text-success' : 'text-danger';
-		$classStatus = ($data['subscription']['status'] === 'AKTIF') ? 'label-success' : 'label-danger';
+		$classStatus = ($data['subscription']['status'] === 'AKTIF') ? 'label-info' : 'label-danger';
 		// data bisa dilihat di localhost/posonet/billing_api/getBill?no_internet=268
-		$html = '<ul class="list-group clear-list">
-					<li class="list-group-item fist-item">
-						<span class="pull-right">
-							<h3><strong class="text-success"><span id="dtNopelNama">'.$data['account']['no_internet'].". ".$data['account']['nama_pelanggan'].'</span></strong></h3>
-						</span>
-						<strong>No Internet/Pelanggan</strong>
-					</li>
+		$html = '<div class="bill-card-bs3">
+					<!-- Badge AKTIF dipindah ke Kanan Atas Card -->
+  					<span class="label '. $classStatus .' badge-top-right">' . $data['subscription']['status'] . '</span>
 
-					<li class="list-group-item fist-item">
-						<span class="pull-right">
-							<strong class="text-success"><span id="dtPaket">'.$data['billing']['kode_invoice'].'<span></strong>
-						</span>
-						<strong>Kode Invoice</strong>
-					</li>
+					<!-- Header Pelanggan -->
+					<div class="bill-header-bs3">
+						<small class="text-muted" style="display:block; font-size: 11px;">NAMA PELANGGAN</small>
+						<h4 class="customer-title m-t-sm">' . $data['account']['no_internet'] . ". " . $data['account']['nama_pelanggan'] . '</h4>
+					</div>
 
-					<li class="list-group-item fist-item">
-						<span class="pull-right">
-							<strong class="text-success"><span id="dtPaket">'.$data['subscription']['paket'].'<span></strong>
-						</span>
-						<strong>Paket</strong>
-					</li>
+					<!-- Body Detail Tagihan -->
+					<div class="bill-body-bs3">
+						<div class="bill-row-bs3">
+							<span class="bill-label">Kode Invoice</span>
+							<span class="bill-val">' . $data['billing']['kode_invoice'] . '</span>
+						</div>
 
-					<li class="list-group-item">
-						<span class="pull-right">
-							<strong class="'.$classExpired.'"><span id="dtExpired">'.$data['subscription']['expired_date'].'</span> <span class="label label-xs ' . $classStatus . '"> '.$data['subscription']['status'].'</span></strong>
-						</span>
-						<strong>Last Expired</strong>
-					</li>
+						<div class="bill-row-bs3">
+							<span class="bill-label">Paket</span>
+							<span class="bill-val">' . $data['subscription']['paket'] . '</span>
+						</div>
 
-					<li class="list-group-item">
-						<span class="pull-right">
-							<strong class="' . $classPaid . '"><span id="dtStatusBayar">'.$data['billing']['status']. ' ' . $paidIcon . '</span></strong>
-						</span>
-						<strong>Status Bayar</strong>
-					</li>
-
-					<li class="list-group-item">
-						<span class="pull-right">
-							<strong class="text-danger">
-								<span id="dtStatusBayar">'.
-								tgl_lokal($data['billing']['billing_periode_start']).' - '.tgl_lokal($data['billing']['billing_periode_end']).'
+						<div class="bill-row-bs3">
+							<span class="bill-label">Last Expired</span>
+							<span class="bill-val '. $classExpired. '">
+								<span class="' . $classExpired . '">
+								' . $data['subscription']['expired_date'] . '
 								</span>
-							</strong>
-						</span>
-						<strong>Periode Pemakaian</strong>
-					</li>
-					
-					<li class="list-group-item">
-						<span class="pull-right" id="dtTarif" style="font-size: 12pt; font-weight: bold;">
-							'. number_format($data['billing']['total_amount'], 0, ",", ".").'
-						</span>
-						<strong>Tagihan Rp</strong>
-					</li>
+							</span>
+						</div>
 
-					
+						<div class="bill-row-bs3">
+							<span class="bill-label">Status Bayar</span>
+							<span class="bill-val">
+								<span class="label '. $classPaid .'">
+								' . $data['billing']['status'] . ' ' . $paidIcon . '
+								</span>
+							</span>
+						</div>
 
-					<li class="list-group-item">
-						<span class="pull-right">
-							<a href="#" class="ladda-button btn btn-primary" data-style="zoom-in" onclick="payNow()">Proses</a>
+						<div class="bill-row-bs3">
+							<span class="bill-label">Periode Pemakaian</span>
+							<span class="bill-val" style="font-size: 12px;">
+							' .	tgl_lokal($data['billing']['billing_periode_start']) . ' - ' . tgl_lokal($data['billing']['billing_periode_end']) . '
+							</span>
+						</div>
+					</div>
+
+					<!-- Total Tagihan -->
+					<div class="bill-total-bs3">
+						<span class="bill-label" style="font-weight: 600; color: #333;">Total Tagihan</span>
+						<span class="amount" id="dtTarif">
+						' . number_format($data['billing']['total_amount'], 0, ",", ".") . '
 						</span>
-						<strong></strong>
-					</li>
-				</ul>';
+					</div>
 
-		echo json_encode(
-			array(
+					<!-- Tombol Proses -->
+					<button type="button" id="btnProses" class="btn btn-success text-uppercase btn-lg btn-proses-block" onclick="payNow()">
+						Proses
+					</button>
+				</div>';
+
+		return array(
 				'html' => $html,
 				'data' => $billData,
-			)
 		);
 
 	}

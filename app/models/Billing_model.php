@@ -12,7 +12,7 @@ class Billing_model extends CI_Model {
         $this->load->helper('MY_bulan');
     }
 
-    public function getBillData($noInternet)
+    public function getBillData(string $noInternet)
     {
         // activate the following line if you need to check authentication
         // get_auth_bearer();
@@ -38,7 +38,7 @@ class Billing_model extends CI_Model {
                 LEFT JOIN temp_invoice t 
                 ON v.no_pelanggan=t.no_pelanggan
                 WHERE v.no_pelanggan=?
-                ORDER BY id_trx DESC
+                ORDER BY t.id_trx DESC
                 LIMIT 1", [$noInternet]);
             
             $profil = $this->db->query("SELECT telp_cs FROM profil_perusahaan")->row();

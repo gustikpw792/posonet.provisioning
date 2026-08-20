@@ -15,6 +15,7 @@
 <script>
   $(function() {
     getSelect();
+    document.getElementById('search_key').focus();
   });
 
   function getSelect() {
@@ -126,8 +127,7 @@
 
   }
 
-  function prosesInvoice(invoiceCode)
-  {
+  function prosesInvoice(invoiceCode) {
     url = "<?= site_url('detail_setoran/checkInvoice/') ?>" + $('#id_master_setoran').val() + '/' + invoiceCode + '/' + $("[name='id_kolektor']").val() + '/' + $('#id_karyawan_kolektor').val();
 
     $.ajax({
@@ -373,29 +373,41 @@
   $(document).ready(function() {
     // Event ketika tombol mode pencarian berubah
     $('input[name="search_mode"]').change(function() {
-        var mode = $(this).val();
-        var inputField = $('#search_key');
-        
-        if (mode === 'invoice') {
-            inputField.attr('placeholder', 'Masukan No. Invoice jika scanner tidak bekerja!');
-            // Jika ada layout scanner kamera, Anda bisa menampilkannya kembali di sini
-            $('.camera-container').show(); 
-        } else {
-            inputField.attr('placeholder', 'Minimal 3 digit No. Internet...');
-            // Menyembunyikan kamera scanner jika sedang mencari lewat No. Internet
-            $('.camera-container').hide(); 
-        }
-        inputField.val('').focus(); // Kosongkan inputan lama dan arahkan kursor kembali
-        console.log(mode);
-        
+      var mode = $(this).val();
+      var inputField = $('#search_key');
+
+      if (mode === 'invoice') {
+        inputField.attr('placeholder', 'Masukan No. Invoice jika scanner tidak bekerja!');
+        // Jika ada layout scanner kamera, Anda bisa menampilkannya kembali di sini
+        $('.camera-container').show();
+      } else if (mode === 'nama') {
+        inputField.attr('placeholder', 'Minimal 3 karakter...');
+        // Menyembunyikan kamera scanner jika sedang mencari lewat No. Internet
+        $('.camera-container').hide();
+        setTimeout(() => {
+          document.getElementById('search_key').focus();
+        }, 500);
+
+      } else {
+        inputField.attr('placeholder', 'Minimal 3 digit...');
+        // Menyembunyikan kamera scanner jika sedang mencari lewat No. Internet
+        $('.camera-container').hide();
+        setTimeout(() => {
+          document.getElementById('search_key').focus();
+        }, 500);
+
+      }
+      inputField.val('').focus(); // Kosongkan inputan lama dan arahkan kursor kembali
+      console.log(mode);
+
     });
 
     $('#search_key').on('keypress', function(e) {
-        // Cek apakah tombol yang ditekan adalah Enter (kode 13)
-        if (e.which === 13) {
-            e.preventDefault(); // Mencegah form reload atau aksi default
-            $('#btn-go').click();
-        }
+      // Cek apakah tombol yang ditekan adalah Enter (kode 13)
+      if (e.which === 13) {
+        e.preventDefault(); // Mencegah form reload atau aksi default
+        $('#btn-go').click();
+      }
     });
 
     // Event saat tombol Go! diklik
@@ -404,19 +416,30 @@
       let currentMode = $('input[name="search_mode"]:checked').val();
 
       if (keyword === "") {
-          alert("Isian tidak boleh kosong!");
-          return false;
+        alert("Isian tidak boleh kosong!");
+        return false;
       }
 
       // Jalankan fungsi berdasarkan mode yang dipilih
       if (currentMode === 'invoice') {
-          prosesCariInvoice(keyword);
-      } else {
-          if (keyword.length < 3) {
-              alert("Masukkan minimal 3 karakter untuk mencari No. Internet!");
-              return false;
+        prosesCariInvoice(keyword);
+      } else if (currentMode === 'internet') {
+        if (keyword.length < 3) {
+          alert("Masukkan minimal 3 karakter untuk mencari No. Internet!");
+          return false;
+        }
+
+        getDetailInvoice(keyword, function(status) {
+          if(status) {
+            $('#myModal5').modal('show');
           }
-          prosesCariNoInternet(keyword);
+        });
+      } else {
+        if (keyword.length < 3) {
+          alert("Masukkan minimal 3 karakter untuk mencari Nama!");
+          return false;
+        }
+        prosesCariNoInternet(currentMode, keyword);
       }
     });
 
@@ -432,36 +455,41 @@
 
   // Fungsi proses pencarian otomatis
   function prosesEvent(keyword, currentMode) {
-      if (currentMode === 'internet') {
-          // Cek apakah berupa angka dan tidak kosong
-          if (!isNaN(keyword) && keyword !== "") {
-              clearTimeout(delayTimer);
+    if (currentMode === 'internet') {
+      // Cek apakah berupa angka dan tidak kosong
+      if (!isNaN(keyword) && keyword !== "") {
+        clearTimeout(delayTimer);
 
-              delayTimer = setTimeout(function() {
-                  if (keyword.length >= 3) {
-                      prosesCariNoInternet(keyword);
-                  }
-              }, 300); // Menunggu 300ms setelah ketikan terakhir
+        delayTimer = setTimeout(function() {
+          if (keyword.length >= 3) {
+            // prosesCariNoInternet(currentMode, keyword);
+            getDetailInvoice(keyword);
+            $('#myModal5').modal('show');
           }
+        }, 300); // Menunggu 300ms setelah ketikan terakhir
       }
+    }
   }
 
-// Contoh Fungsi Penampung Request Ke Backend
-function prosesCariInvoice(invoiceNum) {
-    getDetail('kode','inputmanual');
+  // Contoh Fungsi Penampung Request Ke Backend
+  function prosesCariInvoice(invoiceNum) {
+    getDetail('kode', 'inputmanual');
     console.log("Mencari data berdasarkan Invoice: " + invoiceNum);
     // Masukkan Ajax pencarian invoice di sini
-}
+  }
 
 
 
-function prosesCariNoInternet(keyword) {
+  function prosesCariNoInternet(mode, keyword) {
     console.log("Mencari data berdasarkan No Internet: " + keyword);
-    
+
     $.ajax({
-      url: '<?=site_url('pembayaran/cari')?>', // Ubah dengan route/prosesor backend Anda
+      url: '<?= site_url('pembayaran/cari') ?>', // Ubah dengan route/prosesor backend Anda
       type: 'GET',
-      data: { cari: keyword },
+      data: {
+        cari: keyword,
+        mode: mode,
+      },
       dataType: 'json',
       beforeSend: function() {
         // Opsional: Tampilkan loading spinner atau teks "Mencari..."
@@ -470,57 +498,78 @@ function prosesCariNoInternet(keyword) {
       },
       success: function(response) {
         var html = '';
-        
-        if(response.length > 0) {
-          html += response;
+
+        if (response.status) {
+          html += response.data;
+
+          if (response.mode == 'nama') {
+            $('#myModal5').modal('show');
+            // Masukkan hasil ke dalam tabel/container hasil pencarian
+            $('#tbhasil').html(html);
+
+            document.getElementById('panelDetailPencarian').style.display = '';
+
+            $('#resDetailInvoice').hide();
+            $('#resultcari').show();
+          }
+
         } else {
+          alert('Data tidak ditemukan');
           html = '<tr><td colspan="3">Data tidak ditemukan</td></tr>';
         }
-        
-        $('#myModal5').modal('show');
-        // Masukkan hasil ke dalam tabel/container hasil pencarian
-        $('#tbhasil').html(html);
-        $('#resDetailInvoice').hide();
-        $('#resultcari').show();
+
       },
       error: function() {
-          $('#tbhasil').html('<tr><td colspan="3">Terjadi kesalahan sistem.</td></tr>');
+        $('#tbhasil').html('<tr><td colspan="3">Terjadi kesalahan sistem.</td></tr>');
       }
     });
-    
-    // Masukkan Ajax pencarian nomor internet di sini
-}
 
-let noIntenet     = '';
-let kodeInvoice   = '';
-let totalAmount   = 0;
-let paymentMethod = '';
+  }
 
-function getDetailInvoice(nopel) {
-  // $.post("</?=site_url('pembayaran/getDetailInvoice') ?>",
-  $.post("<?=site_url('pembayaran/get_detail_invoice') ?>",
-  {
-    no_internet: nopel,
-  },
-  function(response, status){
-    $('#resDetailInvoice').html(response.html);
-    $('#resDetailInvoice').show();
+  let noIntenet = '';
+  let kodeInvoice = '';
+  let totalAmount = 0;
+  let paymentMethod = '';
 
-    $('#resultcari').hide();
-    $('#panelDetail').show();
+  function getDetailInvoice(nopel, callback) {
+    $.post("<?= site_url('pembayaran/get_detail_invoice') ?>", {
+        no_internet: nopel,
+      },
+      function(response) {
+        let statusModal = response.data.status;
 
-    noIntenet     = response.data.data.account.no_internet;
-    kodeInvoice   = response.data.data.billing.kode_invoice;
-    totalAmount   = response.data.data.billing.total_amount;
-    paymentMethod = '';
-    // console.log(data);
-  }, "json");
-}
+        if (response.data.status) {
+          $('#resDetailInvoice').html(response.html);
+          $('#resDetailInvoice').show();
 
-function payNow() {
-  prosesInvoice(kodeInvoice);
-  console.log(noIntenet + " === " + kodeInvoice + " === " + totalAmount);
-}
+          $('#resultcari').hide();
+          $('#panelDetail').show();
+
+          noIntenet = response.data.data.account.no_internet;
+          kodeInvoice = response.data.data.billing.kode_invoice;
+          totalAmount = response.data.data.billing.total_amount;
+          paymentMethod = '';
+
+          document.getElementById('panelDetailPencarian').style.display = 'none';
+
+          setTimeout(() => {
+            document.getElementById('btnProses').focus();
+          }, 500);
+        } else {
+          alert(response.data.message);
+        }
+
+        // Kirim status ke callback
+        if (typeof callback === 'function') {
+          callback(statusModal);
+        }
+      }, "json");
+  }
+
+  function payNow() {
+    prosesInvoice(kodeInvoice);
+    console.log(noIntenet + " === " + kodeInvoice + " === " + totalAmount);
+  }
 </script>
 
 </body>

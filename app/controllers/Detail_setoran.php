@@ -45,8 +45,8 @@ class Detail_setoran extends CI_Controller
 		if ($cek == 3) {
 			$data = array(
 				'status' => TRUE,
-				'message' => 'Duplikat input! Data sudah ada dalam setoran sebelumnya.',
-				'title' => 'Sudah diinput!',
+				'message' => 'Data sudah ada dalam setoran sebelumnya.',
+				'title' => 'Duplikat input!',
 				'data' => null,
 				'code' => 3,
 			);
@@ -62,7 +62,7 @@ class Detail_setoran extends CI_Controller
 			$simpan = $this->_save_detail_setoran($id, $kodeInvoice, $id_kolektor, $id_karyawan_kolektor);
 			$data = array(
 				'status' => TRUE,
-				'message' => 'Invoice manifested!',
+				'message' => 'Invoice berhasil disimpan!',
 				'title' => 'Sukses!',
 				'data' => $simpan,
 				'code' => 4,

@@ -17,7 +17,7 @@
                                 <input type="number" name="id_master_setoran" id="id_master_setoran" value="<?= $detail_setoran->id_master_setoran ?>" hidden>
                                 <input type="number" name="id_kolektor" id="id_kolektor" value="<?= $detail_setoran->id_kolektor ?>" hidden>
                                 <!-- <input type="number" name="id_transfer" id="id_transfer" value="</?= $transfer->id_karyawan ?>" hidden> -->
-                                <div class="col-md-4">
+                                <div class="col-md-4 camera-container">
                                     <video class="vidscan img-rounded" id="preview"></video>
                                 </div>
                                 <div class="col-md-8">
@@ -26,22 +26,26 @@
                                         <div class="btn-group btn-group-toggle" data-toggle="buttons">
                                             <!-- Tombol Pilihan No. Invoice (Aktif secara default) -->
                                             <label class="btn btn-outline-success" id="btn-mode-invoice">
-                                                <input type="radio" name="search_mode" value="invoice" autocomplete="off"> 
-                                                <i class="fa fa-file-text-o"></i> No. Invoice
+                                                <input type="radio" name="search_mode" value="invoice" autocomplete="off">
+                                                <i class="fa fa-file-text-o"></i> Invoice
                                             </label>
                                             <!-- Tombol Pilihan No. Internet -->
                                             <label class="btn btn-outline-success active" id="btn-mode-internet">
-                                                <input type="radio" name="search_mode" value="internet" checked autocomplete="off"> 
-                                                <i class="fa fa-wifi"></i> No. Internet
+                                                <input type="radio" name="search_mode" value="internet" checked autocomplete="off">
+                                                <i class="fa fa-wifi"></i> Internet
+                                            </label>
+                                            <label class="btn btn-outline-success" id="btn-mode-nama">
+                                                <input type="radio" name="search_mode" value="nama" autocomplete="off">
+                                                <i class="fa fa-user"></i> Name
                                             </label>
                                         </div>
                                         <br><br>
                                         <!-- Kolom Input Dinamis -->
                                         <div class="input-group mb-3">
-                                                <input type="text" id="search_key" class="form-control text-center font-bold" placeholder="3 digit No. Internet!">
-                                                <div class="input-group-btn">
-                                                    <button class="btn btn-emerald" type="button" id="btn-go"><i class="fa fa-search"></i> Go!</button>
-                                                </div>
+                                            <input type="text" id="search_key" class="form-control text-center font-bold" placeholder="3 digit No. Internet!">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-emerald" type="button" id="btn-go"><i class="fa fa-search"></i> Go!</button>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -251,7 +255,7 @@
             </div>
         </div>
 
-        <div class="modal inmodal fade" id="myModal5" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal inmodal" id="myModal5" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -260,7 +264,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" id="panelDetailPencarian">
                                 <div class="ibox float-e-margins">
                                     <div class="ibox-title panel-primary">
                                         <h5>Detail Pencarian</h5>
@@ -274,22 +278,22 @@
                                         <div class="table-responsive">
                                             <table id="resultcari" class="table table-hover" style="display:none">
                                                 <thead>
-                                                <tr>
-                                                    <th>Nama</th>
-                                                    <th>Wilayah</th>
-                                                    <th>Action</th>
-                                                </tr>
+                                                    <tr>
+                                                        <th>Nama</th>
+                                                        <th>Wilayah</th>
+                                                        <th>Action</th>
+                                                    </tr>
                                                 </thead>
                                                 <tbody id="tbhasil">
-                                                
+
                                                 </tbody>
                                             </table>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="ibox float-e-margins">
                                     <div class="ibox-title panel-primary">
                                         <h5>Detail Tagihan</h5>
@@ -302,18 +306,19 @@
                                     <div class="ibox-content" style="display: none;" id="panelDetail">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="p-w-md" id="resDetailInvoice">
-                                                    
+                                                <div class="xp-w-md" id="resDetailInvoice">
+
                                                 </div>
+                                                
                                             </div>
 
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
-                        
+
                     </div>
 
                     <div class="modal-footer">

@@ -8560,3 +8560,87 @@ body.md-skin {
     margin: 0;
   }
 }
+
+/* Card Container dibuat relative agar elemen absolute mengacu ke sini */
+.bill-card-bs3 {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 10px;
+}
+
+/* Badge Posisi Kanan Atas */
+.badge-top-right {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 11px;
+  padding: 4px 8px;
+}
+
+/* Header diberi jarak kanan agar teks nama tidak tertutup badge */
+.bill-header-bs3 {
+  border-bottom: 2px dashed #e2e8f0;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+  padding-right: 60px;
+  /* Space untuk badge */
+}
+
+.bill-header-bs3 .customer-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+}
+
+/* List Item Key-Value (Sejajar Kiri-Kanan) */
+.bill-row-bs3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid #f7f9fa;
+  font-size: 13px;
+}
+
+.bill-row-bs3 .bill-label {
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.bill-row-bs3 .bill-val {
+  color: #2c3e50;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* Panel Total Tagihan Highlight */
+.bill-total-bs3 {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 12px 15px;
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bill-total-bs3 .amount {
+  font-size: 18px;
+  font-weight: 700;
+  color: #00a65a;
+  /* Warna hijau AdminLTE / Bootstrap 3 */
+}
+
+/* Tombol Full Width */
+.btn-proses-block {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  font-weight: 600;
+}
