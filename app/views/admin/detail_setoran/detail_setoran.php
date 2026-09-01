@@ -6,7 +6,8 @@
             <div class="col-md-6">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title panel-primary">
-                        <h5>Pindai Kwitansi <small><?php echo ucwords(str_replace('_', ' ', $active)); ?></small></h5>
+                        <h5>Pindai Kwitansi <small><?php //echo ucwords(str_replace('_', ' ', $active)); 
+                                                    ?></small></h5>
                         <div class="ibox-tools list-cam">
 
                         </div>
@@ -18,7 +19,7 @@
                                 <input type="number" name="id_kolektor" id="id_kolektor" value="<?= $detail_setoran->id_kolektor ?>" hidden>
                                 <!-- <input type="number" name="id_transfer" id="id_transfer" value="</?= $transfer->id_karyawan ?>" hidden> -->
                                 <div class="col-md-4 camera-container">
-                                    <video class="vidscan img-rounded" id="preview"></video>
+                                    <video class="vidscan img-rounded" id="preview" onclick="toggleFlip(this)" style=" cursor: pointer; transition: transform 0.3s ease;"></video>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="form-group mb-3">
@@ -67,6 +68,8 @@
                                             </label>
                                         </div>
                                     </div> -->
+
+                                    <span class="btn btn-default btn-outline btn-block btn-disabled font-bold"><?= strtoupper($detail_setoran->kolektor) ?></span>
 
                                 </div>
                             </div>
@@ -309,7 +312,7 @@
                                                 <div class="xp-w-md" id="resDetailInvoice">
 
                                                 </div>
-                                                
+
                                             </div>
 
                                         </div>

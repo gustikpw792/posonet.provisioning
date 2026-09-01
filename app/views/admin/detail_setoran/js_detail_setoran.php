@@ -69,10 +69,17 @@
   Instascan.Camera.getCameras().then(function(cameras) {
     listKamera = cameras;
     if (cameras.length > 0) {
-      let kamera = "";
+      let kamera = '<div class="btn-group">' +
+        '<button data-toggle="dropdown" class="btn btn-default btn-xs dropdown-toggle"><i class="fa fa-camera"></i> Camera <span class="caret"></span></button>' +
+        '<ul class="dropdown-menu">';
+
       for (let i = 0; i < cameras.length; i++) {
-        kamera += "<button class='btn btn-xs' title='" + cameras[i].name + "' onclick='scanner.start(listKamera[" + i + "])'> Cam " + i + "</button> ";
+        // kamera += "<button class='btn btn-xs' title='" + cameras[i].name + "' onclick='scanner.start(listKamera[" + i + "])'> Cam " + i + "</button> ";
+        kamera += "<li><a href='javascript:void(0)' class='btn btn-xs' title='" + cameras[i].name + "' onclick='scanner.start(listKamera[" + i + "])'> Cam " + i + "</a> </li>";
       }
+
+      kamera += "</ul> </div>";
+
       $('.list-cam').html(kamera);
       // var selectedCam = cameras[0];
       scanner.start(cameras[0]);
@@ -85,6 +92,15 @@
     console.error(e);
     // alert(e);
   });
+
+  function toggleFlip(element) {
+    // Cek apakah gambar sedang di-flip
+    if (element.style.transform === "scaleX(-1)") {
+      element.style.transform = "scaleX(1)";
+    } else {
+      element.style.transform = "scaleX(-1)";
+    }
+  }
 
   var cekMethod = '';
 
