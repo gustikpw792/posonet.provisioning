@@ -73,4 +73,11 @@ class TestRedis extends CI_Controller
 
         echo json_encode($this->olt->gpon_onu_state());
     }
+
+    public function onutype()
+    {
+        $this->load->model('api_rest_client_model','olt');
+
+        echo json_encode($this->olt->onu_type());
+    }
 }

@@ -456,7 +456,7 @@ class Api_rest_client_model extends CI_Model
 
   public function gpon_onu_state($interface="")
   {
-    $parsed_data = $this->cache_model->get_cached_data();
+    $parsed_data = $this->cache_model->get_cached_data_onustate();
     
     if ($parsed_data) {
       $data['source'] = 'Redis Cache (Model Driven)';
@@ -479,7 +479,7 @@ class Api_rest_client_model extends CI_Model
         $parsed_data = json_decode($response->getBody());
 
         // 3. Simpan hasil akhir ke Redis via Model
-        $this->cache_model->save_to_cache($parsed_data);
+        $this->cache_model->save_to_cache_onustate($parsed_data);
 
         $data['source'] = 'Direct OLT Telnet (Cache Refreshed via Model!)';
         $data['onu_list'] = $parsed_data;
@@ -488,6 +488,34 @@ class Api_rest_client_model extends CI_Model
       }
     
   }
+
+  public function onu_type()
+  {
+    ini_set('max_execution_time', 1200);
+
+    $parsed_data = $this->cache_model->get_cached_data_onutype();
+
+    if ($parsed_data) {
+      $body = $parsed_data;
+    } else {
+      $response = $this->_client->get('onutype');
+      $body = json_decode($response->getBody());
+    }
+
+
+    $data = "";
+    foreach ($body as $d) {
+      $data .= "<option value='$d->onu_type'>$d->onu_type</option>";
+    }
+
+    $output = array(
+      "data" => $data,
+      "message" => "Onu Type from OLT",
+      "status" => '200',
+    );
+
+    return $output;
+  }  
   
   public function checkOnuBySN($sn) {
     $response = $this->_client->request('GET', 'rawshowgpononubysn', [

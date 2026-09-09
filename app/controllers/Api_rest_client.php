@@ -502,21 +502,7 @@ class Api_rest_client extends CI_Controller
 
 	public function onutype()
 	{
-		ini_set('max_execution_time', 1200);
-
-		$response = $this->_client->get('onutype');
-		$body = json_decode($response->getBody());
-
-		$data = "";
-		foreach ($body as $d) {
-			$data .= "<option value='$d->onu_type'>$d->onu_type</option>";
-		}
-
-		$output = array(
-			"data" => $data,
-			"message" => "Onu Type from OLT",
-			"status" => '200',
-		);
+		$output = $this->api->onu_type();
 
 		echo json_encode($output);
 	}
@@ -992,8 +978,14 @@ _handled by %s_";
 			if($row->phase_state == "working") {
 				$online[] = $row->onu_index;
 			}
-			
-			$this->api->update_pelanggan(array('gpon_onu' => $row->onu_index), array('ont_phase_state' => $row->phase_state));
+
+			$this->load->model('cache_model');
+
+			$parsed_data = $this->cache_model->get_cached_data_onustate();
+			// update ketika ada data baru dari cache
+			if (!$parsed_data) {
+				$this->api->update_pelanggan(array('gpon_onu' => $row->onu_index), array('ont_phase_state' => $row->phase_state));
+			}
 		}
 
 		
