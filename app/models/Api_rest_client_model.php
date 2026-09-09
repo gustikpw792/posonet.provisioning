@@ -20,6 +20,7 @@ class Api_rest_client_model extends CI_Model
     $this->load->model('api_telegrambot_model','telegram');
     $this->load->model('ruangwa_model','ruangwa');
     $this->load->model('api_mikrotik_model','api_mikrotik');
+    $this->load->model('cache_model');
 
     $this->olt = $this->config->item('olt');
 
@@ -438,19 +439,54 @@ class Api_rest_client_model extends CI_Model
     return json_decode($response->getBody());
   }
 
-  public function gpon_onu_state($interface)
-  {
-    if ($interface != "") {
-      $response = $this->_client->request('GET', 'onustate', [
-        'form_params' => [
-          'gpon_olt' => $interface,
-        ]
-      ]);
-    } else {
-      $response = $this->_client->request('GET', 'onustate');
-    }
+  // public function gpon_onu_state($interface)
+  // {
+  //   if ($interface != "") {
+  //     $response = $this->_client->request('GET', 'onustate', [
+  //       'form_params' => [
+  //         'gpon_olt' => $interface,
+  //       ]
+  //     ]);
+  //   } else {
+  //     $response = $this->_client->request('GET', 'onustate');
+  //   }
 
-    return json_decode($response->getBody());
+  //   return json_decode($response->getBody());
+  // }
+
+  public function gpon_onu_state($interface="")
+  {
+    $parsed_data = $this->cache_model->get_cached_data();
+    
+    if ($parsed_data) {
+      $data['source'] = 'Redis Cache (Model Driven)';
+      $data['onu_list'] = $parsed_data;
+
+      return $parsed_data;
+
+    } else {
+      // 2. Jika cache kosong, jalankan scraping/telnet
+        if ($interface != "") {
+          $response = $this->_client->request('GET', 'onustate', [
+            'form_params' => [
+              'gpon_olt' => $interface,
+            ]
+          ]);
+        } else {
+          $response = $this->_client->request('GET', 'onustate');
+        }
+
+        $parsed_data = json_decode($response->getBody());
+
+        // 3. Simpan hasil akhir ke Redis via Model
+        $this->cache_model->save_to_cache($parsed_data);
+
+        $data['source'] = 'Direct OLT Telnet (Cache Refreshed via Model!)';
+        $data['onu_list'] = $parsed_data;
+      
+        return $parsed_data;
+      }
+    
   }
   
   public function checkOnuBySN($sn) {

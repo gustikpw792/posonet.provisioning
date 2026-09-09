@@ -38,7 +38,7 @@
                     <h3 class="font-bold">Login to your account</h3>
                     <form class="m-t" role="form" action="<?php echo site_url('login/login?_rdr=' . urlencode($this->input->get('_rdr'))) ?>" method="post">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Username" name="username" required="" autocomplete="off">
+                            <input type="text" class="form-control" placeholder="Username" name="username" required="" autofocus autocomplete="off">
                         </div>
                         <div class="form-group">
                             <input type="password" class="form-control" placeholder="Password" name="password" required="">

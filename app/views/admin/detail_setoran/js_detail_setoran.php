@@ -448,6 +448,7 @@
         getDetailInvoice(keyword, function(status) {
           if (status) {
             $('#myModal5').modal('show');
+
           }
         });
       } else {
@@ -478,9 +479,9 @@
 
         delayTimer = setTimeout(function() {
           if (keyword.length >= 3) {
-            // prosesCariNoInternet(currentMode, keyword);
             getDetailInvoice(keyword);
             $('#myModal5').modal('show');
+
           }
         }, 300); // Menunggu 300ms setelah ketikan terakhir
       }
@@ -509,8 +510,11 @@
       dataType: 'json',
       beforeSend: function() {
         // Opsional: Tampilkan loading spinner atau teks "Mencari..."
-        $('#resultcari').show();
-        $('#tbhasil').html('<tr><td colspan="3">Mencari data...</td></tr>');
+        // $('#resultcari').show();
+        $('#myModal5').modal('show');
+
+        $('#modalLoading').show();
+        $('#konten').hide();
       },
       success: function(response) {
         var html = '';
@@ -519,7 +523,9 @@
           html += response.data;
 
           if (response.mode == 'nama') {
-            $('#myModal5').modal('show');
+            $('#konten').show();
+            $('#modalLoading').hide();
+
             // Masukkan hasil ke dalam tabel/container hasil pencarian
             $('#tbhasil').html(html);
 
@@ -557,6 +563,9 @@
         $('#resDetailInvoice').html('<strong>Loading...</strong>');
 
         if (response.data.status) {
+          $('#konten').show();
+          $('#modalLoading').hide();
+
           $('#resDetailInvoice').html(response.html);
           $('#resDetailInvoice').show();
 
@@ -594,6 +603,7 @@
     prosesInvoice(kodeInvoice);
     console.log(noIntenet + " === " + kodeInvoice + " === " + totalAmount);
   }
+
 </script>
 
 </body>

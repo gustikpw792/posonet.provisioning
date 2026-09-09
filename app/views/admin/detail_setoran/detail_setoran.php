@@ -45,7 +45,7 @@
                                         <div class="input-group mb-3">
                                             <input type="text" id="search_key" class="form-control text-center font-bold" placeholder="3 digit No. Internet!">
                                             <div class="input-group-btn">
-                                                <button class="btn btn-emerald" type="button" id="btn-go"><i class="fa fa-search"></i> Go!</button>
+                                                <button class="btn btn-emerald" type="button" id="btn-go"><i class="fa fa-search"></i></button>
                                             </div>
                                         </div>
                                     </div>
@@ -68,8 +68,7 @@
                                             </label>
                                         </div>
                                     </div> -->
-
-                                    <span class="btn btn-default btn-outline btn-block btn-disabled font-bold"><?= strtoupper($detail_setoran->kolektor) ?></span>
+                                    <div class="bg-muted p-xs b-r-sm font-bold text-center"> <?= strtoupper($detail_setoran->kolektor) ?></div>
 
                                 </div>
                             </div>
@@ -266,60 +265,71 @@
                         <!-- <h4 class="modal-title">Modal title</h4> -->
                     </div>
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" id="panelDetailPencarian">
-                                <div class="ibox float-e-margins">
-                                    <div class="ibox-title panel-primary">
-                                        <h5>Detail Pencarian</h5>
-                                        <div class="ibox-tools">
-                                            <a class="collapse-link">
-                                                <i class="fa fa-chevron-down"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="ibox-content" id="xxpanelDetail">
-                                        <div class="table-responsive">
-                                            <table id="resultcari" class="table table-hover" style="display:none">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Nama</th>
-                                                        <th>Wilayah</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id="tbhasil">
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-
+                        <div id="modalLoading">
+                            <div class=" sk-spinner sk-spinner-wave">
+                                <div class="sk-rect1"></div>
+                                <div class="sk-rect2"></div>
+                                <div class="sk-rect3"></div>
+                                <div class="sk-rect4"></div>
+                                <div class="sk-rect5"></div>
                             </div>
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                                <div class="ibox float-e-margins">
-                                    <div class="ibox-title panel-primary">
-                                        <h5>Detail Tagihan</h5>
-                                        <div class="ibox-tools">
-                                            <a class="collapse-link">
-                                                <i class="fa fa-chevron-down"></i>
-                                            </a>
+                        </div>
+                        <div id="konten">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" id="panelDetailPencarian">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title panel-primary" id="ibox-modal15">
+                                            <h5>Detail Pencarian</h5>
+                                            <div class="ibox-tools">
+                                                <a class="collapse-link">
+                                                    <i class="fa fa-chevron-down"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="ibox-content" id="xxpanelDetail">
+
+                                            <div class="table-responsive">
+                                                <table id="resultcari" class="table table-hover" style="display:none">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Nama</th>
+                                                            <th>Wilayah</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbhasil">
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="ibox-content" style="display: none;" id="panelDetail">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="xp-w-md" id="resDetailInvoice">
+
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <div class="ibox float-e-margins">
+                                        <div class="ibox-title panel-primary">
+                                            <h5>Detail Tagihan</h5>
+                                            <div class="ibox-tools">
+                                                <a class="collapse-link">
+                                                    <i class="fa fa-chevron-down"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="ibox-content" style="display: none;" id="panelDetail">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="xp-w-md" id="resDetailInvoice">
+
+                                                    </div>
 
                                                 </div>
 
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
 
                     </div>
@@ -331,3 +341,7 @@
                 </div>
             </div>
         </div>
+
+
+
+    </div>

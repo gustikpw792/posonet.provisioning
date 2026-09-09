@@ -81,7 +81,7 @@
                             <!-- LOS -->
                         </div>
 
-                        <div class="xtable-responsive" id="unconfig" style="display:none">
+                        <div class="table-responsive" id="unconfig" style="display:none">
                             <table class="table table-condensed table-hover" id="tb-unconfig">
                                 <thead class="bg-info">
                                     <tr>

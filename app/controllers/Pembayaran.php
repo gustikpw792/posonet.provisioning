@@ -16,6 +16,7 @@ class Pembayaran extends CI_Controller
 		$this->load->model('profil_perusahaan_model', 'dsh');
 		$this->load->model('api_rest_client_model', 'olt');
 		$this->load->helper('MY_ribuan');;
+		$this->load->helper('MY_bulan');;
 	}
 
 	public function index()
@@ -115,7 +116,7 @@ class Pembayaran extends CI_Controller
 							<span class="bill-label">Last Expired</span>
 							<span class="bill-val '. $classExpired. '">
 								<span class="' . $classExpired . '">
-								' . $data['subscription']['expired_date'] . '
+								' . format_tgl($data['subscription']['expired_date']) . '
 								</span>
 							</span>
 						</div>
@@ -132,7 +133,7 @@ class Pembayaran extends CI_Controller
 						<div class="bill-row-bs3">
 							<span class="bill-label">Periode Pemakaian</span>
 							<span class="bill-val" style="font-size: 12px;">
-							' .	tgl_lokal($data['billing']['billing_periode_start']) . ' - ' . tgl_lokal($data['billing']['billing_periode_end']) . '
+							' .	tgl_lokal($data['billing']['billing_periode_start']) . ' s/d ' . tgl_lokal($data['billing']['billing_periode_end']) . '
 							</span>
 						</div>
 					</div>
@@ -146,7 +147,7 @@ class Pembayaran extends CI_Controller
 					</div>
 
 					<!-- Tombol Proses -->
-					<button type="button" id="btnProses" class="btn btn-success text-uppercase btn-lg btn-proses-block" onclick="payNow()">
+					<button type="button" id="btnProses" class="btn btn-outline btn-primary text-uppercase btn-lg btn-proses-block" onclick="payNow()">
 						Proses
 					</button>
 				</div>';

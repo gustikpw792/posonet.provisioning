@@ -1545,7 +1545,7 @@ Ket	: ";
 		$data = $q->result();
 		$status = ($q->num_rows() > 0) ? true : false;
 
-		$table = "<table class=\"table table-hover\">
+		$table = "<div class=\"table-responsive\"><table class=\"table table-hover\">
 					<thead>
 					<tr>
 						<th>Interface</th>
@@ -1580,7 +1580,7 @@ Ket	: ";
 					<td colspan=\"3\"><pre>Check WAN IP, ONT Attenuation & ONU Detail Information</pre> </td>
 				</tr>
 			</tbody>
-		</table>";
+		</table></div>";
 
 		echo json_encode([
 			"data" => $table,

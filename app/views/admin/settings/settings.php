@@ -22,10 +22,10 @@
                                 <ul class="nav nav-tabs">
                                     <!-- <li class="active"><a data-toggle="tab" href="#tab-6"><span class="fa fa-wrench"></span> Profil</a></li> -->
                                     <!-- <li class=""><a data-toggle="tab" href="#tab-7"><span class="fa fa-warning"></span> Keamanan</a></li> -->
-                                    <li class="active"><a data-toggle="tab" href="#tab-7"><span class="fa fa-ticket"></span> Rekening</a></li>
-                                    <li class=""><a data-toggle="tab" href="#tab-8"><span class="fa fa-database"></span> Users Access</a></li>
-                                    <li class=""><a data-toggle="tab" href="#tab-9" onclick="getTgBot()"><span class="fa fa-telegram"></span> Telegram</a></li>
-                                    <li class=""><a data-toggle="tab" href="#tab-10" onclick="getWaApi()"><span class="fa fa-whatsapp"></span> WhatsApp</a></li>
+                                    <li class="active"><a data-toggle="tab" href="#tab-7"><span class="fa fa-ticket"></span> <span class="hidden-xs"> Rekening</span></a></li>
+                                    <li class=""><a data-toggle="tab" href="#tab-8"><span class="fa fa-database"></span> <span class="hidden-xs"> Users Access</span></a></li>
+                                    <li class=""><a data-toggle="tab" href="#tab-9" onclick="getTgBot()"><span class="fa fa-telegram"></span> <span class="hidden-xs"> Telegram</span></a></li>
+                                    <li class=""><a data-toggle="tab" href="#tab-10" onclick="getWaApi()"><span class="fa fa-whatsapp"></span> <span class="hidden-xs"> WhatsApp</span></a></li>
                                 </ul>
                                 <div class="tab-content ">
                                     <div id="tab-6" class="tab-pane">
@@ -98,12 +98,12 @@
                                                         <div class="col-md-10"><input type="text" name="nama_pemilik_pekening" placeholder="Nama Pemilik Rekening" class="form-control"> <span class="help-block m-b-none"></span>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <button type="button" class="btn btn-primary btn-block" id="btnSaveRek" onclick="save('rekening')">Save Rekening</button>
                                                 </div>
 
                                                 <div class="col-md-6">
-                                                    
+
                                                 </div>
                                             </form>
 
@@ -113,8 +113,8 @@
                                     <div id="tab-8" class="tab-pane">
                                         <div class="panel-body">
                                             <h3>User Login</h3>
-                                            
-                                            <div class="table-responsiveX">
+
+                                            <div class="table-responsive">
                                                 <table class="table table-hover" id="tableUsers">
                                                     <thead>
                                                         <tr>
@@ -180,10 +180,10 @@
                                                                         <div class="form-group"><label class="col-md-2 control-label">Block Wilayah</label>
                                                                             <div class="col-md-10">
                                                                                 <select name="akses_wilayah[]" class="multiSelect" multiple="multiple"></select>
-                                                                            <span class="has-error">Pilih wilayah yang disembunyikan!</span>
+                                                                                <span class="has-error">Pilih wilayah yang disembunyikan!</span>
                                                                             </div>
                                                                         </div>
-                                                                        
+
                                                                     </div>
 
                                                                     <div class="col-md-6">
@@ -194,19 +194,19 @@
                                                                     </div>
                                                                 </form>
                                                             </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-primary" id="btnSaveUsers" onclick="save('users')"><span class="fa fa-clock"></span> Save User</button>
-                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-primary" id="btnSaveUsers" onclick="save('users')"><span class="fa fa-clock"></span> Save User</button>
+                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
 
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="tab-9" class="tab-pane" >
+                                    <div id="tab-9" class="tab-pane">
                                         <div class="panel-body">
                                             <h3>Notif to TelegramBot</h3>
 
@@ -233,21 +233,21 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group"><label class="col-md-2 control-label">CHAT_ID GROUP</label>
-                                                        
+
                                                         <div class="col-md-10"><input type="text" name="tg_chat_id_group" placeholder="CHAT_ID GROUP" class="form-control"> <span class="help-block m-b-none"></span>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <button type="button" class="btn btn-primary btn-block" id="btnSaveTgBot" onclick="save('tg_bot')">Save Notif</button>
                                                 </div>
 
                                                 <div class="col-md-6">
-                                                    
+
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
-                                    <div id="tab-10" class="tab-pane" >
+                                    <div id="tab-10" class="tab-pane">
                                         <div class="panel-body">
                                             <h3>Notif to WhatsApp</h3>
 
@@ -289,12 +289,12 @@
                                                             <!-- <input type="text" name="wa_mode" placeholder="enable | disable" class="form-control"> <span class="help-block m-b-none"></span> -->
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <button type="button" class="btn btn-primary btn-block" id="btnSaveWa" onclick="save('whatsapp')">Save</button>
                                                 </div>
 
                                                 <div class="col-md-6">
-                                                    
+
                                                 </div>
                                             </form>
                                         </div>

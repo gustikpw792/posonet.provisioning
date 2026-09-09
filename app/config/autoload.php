@@ -9,3 +9,6 @@ $autoload['helper'] = array('url','file','MY_is_login');
 $autoload['config'] = array();
 $autoload['language'] = array();
 $autoload['model'] = array();
+// redis library
+$bicyclists['libraries'] = array('cache'); // pastikan ada 'cache' di dalam array
+
