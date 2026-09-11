@@ -459,8 +459,8 @@ class Api_rest_client_model extends CI_Model
     $parsed_data = $this->cache_model->get_cached_data_onustate();
     
     if ($parsed_data) {
-      $data['source'] = 'Redis Cache (Model Driven)';
-      $data['onu_list'] = $parsed_data;
+      // $data['source'] = 'Redis Cache (Model Driven)';
+      // $data['onu_list'] = $parsed_data;
 
       return $parsed_data;
 
@@ -481,8 +481,8 @@ class Api_rest_client_model extends CI_Model
         // 3. Simpan hasil akhir ke Redis via Model
         $this->cache_model->save_to_cache_onustate($parsed_data);
 
-        $data['source'] = 'Direct OLT Telnet (Cache Refreshed via Model!)';
-        $data['onu_list'] = $parsed_data;
+        // $data['source'] = 'Direct OLT Telnet (Cache Refreshed via Model!)';
+        // $data['onu_list'] = $parsed_data;
       
         return $parsed_data;
       }

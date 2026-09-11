@@ -981,11 +981,11 @@ _handled by %s_";
 
 			$this->load->model('cache_model');
 
-			$parsed_data = $this->cache_model->get_cached_data_onustate();
-			// update ketika ada data baru dari cache
-			if (!$parsed_data) {
+			// $parsed_data = $this->cache_model->get_cached_data_onustate();
+			// // update ketika ada data baru dari cache
+			// if (!$parsed_data) {
 				$this->api->update_pelanggan(array('gpon_onu' => $row->onu_index), array('ont_phase_state' => $row->phase_state));
-			}
+			// }
 		}
 
 		

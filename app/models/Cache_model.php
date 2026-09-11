@@ -22,6 +22,7 @@ class Cache_model extends CI_Model
         $this->olt_name  = $this->config->item('olt_name','redis') ? $this->config->item('olt_name','redis') : 'DEFAULT_OLT';
         $this->cache_key_onustate = 'onustate_' . $this->olt_name;
         $this->cache_key_onutype = 'onutype_' . $this->olt_name;
+        $this->cache_ttl = $this->config->item('cache_ttl', 'redis');
     }
 
     /**
@@ -46,7 +47,7 @@ class Cache_model extends CI_Model
      */
     public function save_to_cache_onustate($data, $custom_ttl = NULL)
     {
-        $custom_ttl = $this->config->item('cache_ttl', 'redis');
+        // $custom_ttl_cfg = $this->config->item('cache_ttl', 'redis');
 
         $ttl = ($custom_ttl !== NULL) ? $custom_ttl : $this->cache->ttl;
         return $this->cache->redis->save($this->cache_key_onustate, $data, $ttl);
@@ -54,7 +55,7 @@ class Cache_model extends CI_Model
 
     public function save_to_cache_onutype($data, $custom_ttl = NULL)
     {
-        $custom_ttl = $this->config->item('cache_ttl', 'redis');
+        // $custom_ttl = $this->config->item('cache_ttl', 'redis');
 
         $ttl = ($custom_ttl !== NULL) ? $custom_ttl : $this->cache->ttl;
         return $this->cache->redis->save($this->cache_key_onutype, $data, $ttl);
