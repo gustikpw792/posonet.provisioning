@@ -269,7 +269,10 @@ class Api_mikrotik_model extends CI_Model
     $response = $this->_restClient->put('ppp/secret',
     [
       'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
-      'headers' => ['Content-type: application/json'],
+      'headers' => [
+          'Content-type' => 'application/json',
+          'Accept'       => 'application/json',
+        ],
       'body' => json_encode($data),
     ]);
     return true;
@@ -296,7 +299,10 @@ class Api_mikrotik_model extends CI_Model
     $response = $this->_restClient->patch("ppp/secret/$id",
     [
       'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
-      'headers' => ['Content-type: application/json'],
+      'headers' => [
+          'Content-type' => 'application/json',
+          'Accept'       => 'application/json',
+        ],
       'body' => json_encode($data),
     ]);
 
@@ -314,7 +320,10 @@ class Api_mikrotik_model extends CI_Model
     $response = $this->_restClient->patch("ppp/secret/$id",
     [
       'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
-      'headers' => ['Content-type: application/json'],
+      'headers' => [
+          'Content-type' => 'application/json',
+          'Accept'       => 'application/json',
+        ],
       'body' => json_encode($data),
     ]);
 
@@ -412,7 +421,10 @@ class Api_mikrotik_model extends CI_Model
     $response = $this->_restClient->patch("ip/firewal/nat/$id",
     [
       'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
-      'headers' => ['Content-type: application/json'],
+      'headers' => [
+          'Content-type' => 'application/json',
+          'Accept'       => 'application/json',
+        ],
       'body' => json_encode($data),
     ]);
 
@@ -447,7 +459,10 @@ class Api_mikrotik_model extends CI_Model
       $response = $this->_restClient->put("ip/firewal/nat",
       [
         'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
-        'headers' => ['Content-type: application/json'],
+        'headers' => [
+            'Content-type' => 'application/json',
+            'Accept'       => 'application/json',
+          ],
         'body' => json_encode($putData),
       ]);
       return $response->getBody();

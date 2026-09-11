@@ -37,21 +37,24 @@ class TestRedis extends CI_Controller
 
     public function tampil()
     {
+        $custom_ttl = $this->config->item('cache_ttl', 'redis');
+
         // 3. Mengambil data dari Redis
-        $aplikasi = $this->cache->redis->get('nama_aplikasi');
-        $user      = $this->cache->redis->get('user_1');
+        $aplikasi = $this->cache->redis->get('onustate_oltc320_pdl');
+        // $user      = $this->cache->redis->get('user_1');
+        echo $custom_ttl;
+    echo json_encode($aplikasi);
+        // echo "<h3>Menampilkan Data dari Redis:</h3>";
+        // echo "Nama Aplikasi: " . ($aplikasi ? $aplikasi : "Data sudah kadaluarsa/dihapus") . "<br>";
 
-        echo "<h3>Menampilkan Data dari Redis:</h3>";
-        echo "Nama Aplikasi: " . ($aplikasi ? $aplikasi : "Data sudah kadaluarsa/dihapus") . "<br>";
+        // echo "Data User: ";
+        // if ($user) {
+        //     print_r($user);
+        // } else {
+        //     echo "Data sudah kadaluarsa/dihapus";
+        // }
 
-        echo "Data User: ";
-        if ($user) {
-            print_r($user);
-        } else {
-            echo "Data sudah kadaluarsa/dihapus";
-        }
-
-        echo "<br><br><a href='" . site_url('testredis/hapus') . "'>Hapus Data</a>";
+        // echo "<br><br><a href='" . site_url('testredis/hapus') . "'>Hapus Data</a>";
     }
 
     public function hapus()
@@ -69,9 +72,11 @@ class TestRedis extends CI_Controller
 
     public function onustate()
     {
-        $this->load->model('api_rest_client_model','olt');
-
-        echo json_encode($this->olt->gpon_onu_state());
+        // $this->load->model('api_rest_client_model','olt');
+        $this->load->model('cache_model', 'cache_model');
+        $parsed_data = $this->cache_model->get_cached_data_onustate();
+        echo json_encode($parsed_data);
+        // echo json_encode($this->olt->gpon_onu_state());
     }
 
     public function onutype()
@@ -80,4 +85,5 @@ class TestRedis extends CI_Controller
 
         echo json_encode($this->olt->onu_type());
     }
+
 }

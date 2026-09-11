@@ -49,7 +49,7 @@ class Cache_model extends CI_Model
     {
         // $custom_ttl_cfg = $this->config->item('cache_ttl', 'redis');
 
-        $ttl = ($custom_ttl !== NULL) ? $custom_ttl : $this->cache->ttl;
+        $ttl = ($custom_ttl !== NULL) ? $custom_ttl : $this->cache_ttl;
         return $this->cache->redis->save($this->cache_key_onustate, $data, $ttl);
     }
 
@@ -57,7 +57,7 @@ class Cache_model extends CI_Model
     {
         // $custom_ttl = $this->config->item('cache_ttl', 'redis');
 
-        $ttl = ($custom_ttl !== NULL) ? $custom_ttl : $this->cache->ttl;
+        $ttl = ($custom_ttl !== NULL) ? $custom_ttl : $this->cache_ttl;
         return $this->cache->redis->save($this->cache_key_onutype, $data, $ttl);
     }
 
