@@ -24,7 +24,7 @@ class Maps_model extends CI_Model {
                 'protocols' => ['http', 'https'],
                 'track_redirects' => true,
                 ],
-            'verify' => false, // Tambahkan baris ini HANYA untuk testing lokal
+            // 'verify' => false, // Tambahkan baris ini HANYA untuk testing lokal
             'headers' => [
                 'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
@@ -152,7 +152,10 @@ class Maps_model extends CI_Model {
             ];
         }
 
-        return null; // Jika kedua pola tidak cocok
+        return [
+            'latitude'  => null,
+            'longitude' => null,
+        ]; // Jika kedua pola tidak cocok
         
     }
     

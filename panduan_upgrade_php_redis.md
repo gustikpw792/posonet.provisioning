@@ -91,3 +91,13 @@ Sebelum memulai, pastikan Anda telah **mematikan (Stop)** semua layanan (Apache 
    ```cmd
    php -m
    ```
+## 🧪 Bagian 4: Install cacert.pem untuk Telegram-bot-sdk
+1. Download link https://curl.se/ca/cacert-2026-08-13.pem
+2. Simpan berkas tersebut dengan nama `cacert.pem` di direktori XAMPP Anda, misalnya di dalam folder PHP: C:\xampp\php\cacert.pem.
+3. Buka XAMPP Control Panel.
+   - Pada baris Apache, klik tombol Config lalu pilih PHP (php.ini). Berkas tersebut akan terbuka di Notepad.
+   - Tekan Ctrl + F dan cari baris berikut: ;curl.cainfo. 
+   - Hilangkan tanda titik koma (;) di awal baris tersebut untuk mengaktifkannya, lalu masukkan jalur absolut (path) ke berkas cacert.pem yang sudah Anda unduh tadi:
+   - curl.cainfo = "C:\xampp\php\cacert.pem"
+   - Simpan perubahan berkas php.ini tersebut.
+4. Restart Apache di XAMPP

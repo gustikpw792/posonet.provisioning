@@ -287,7 +287,7 @@
                             </div> <!-- end registerForm -->
                         </div>
 
-                        <div class="xtable-responsive" id="los" style="display:none">
+                        <div class="table-responsive" id="los" style="display:none">
                             <table class="table table-condensed table-hover" id="tb-los">
                                 <thead>
                                     <tr>
@@ -306,7 +306,7 @@
                             </table>
                         </div>
 
-                        <div class="xtable-responsive " id="expired" style="display:none">
+                        <div class="table-responsive " id="expired" style="display:none">
                             <table class="table table-condensed table-hover" id="tb-expired">
                                 <thead>
                                     <tr>
