@@ -190,10 +190,10 @@ class Api_telegrambot_model extends CI_Model
         $feedback = $this->telegram->sendMessage($data['telegram_message']);
         $kontak = $this->telegram->sendContact($data['telegram_contact']);
 
-        if ($this->tgrow['ruangwa_enable']) {
-            $this->load->model('Ruangwa_model', 'ruangwa');
-            $wa = $this->ruangwa->sendMessageRegisterSuccess($data['wa_message']);
-        }
+        // if ($this->tgrow['ruangwa_enable']) {
+        //     $this->load->model('Ruangwa_model', 'ruangwa');
+        //     $wa = $this->ruangwa->sendMessageRegisterSuccess($data['wa_message']);
+        // }
         return $data;
     }
 
