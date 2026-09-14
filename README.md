@@ -1,7 +1,7 @@
 # PosoNet.Provisioning
  App for Inet
 # Requirements
-- Xampp with php 7.3.9 (Enable manually extention=sockets,php_redis.dll,mysqli,exif,mbstring,curl in php.ini)
+- Xampp with php 7.3.9 (Enable manually extention=sockets,php_redis.dll,mysqli,exif,mbstring,curl,gd2 in php.ini)
 - Composer
 - Python 3.8.10 (support windows 7)
 
@@ -224,7 +224,7 @@ WHERE onu_db <= -26.00  ;
 # (2026-05-12) add column max_client enum 4,8,16 in table odp
 
 # add v_map_pelanggan
-ALTER ALGORITHM = UNDEFINED DEFINER=`rahtut`@`localhost` SQL SECURITY DEFINER VIEW `v_map_pelanggan` AS SELECT p.id_pelanggan, p.no_pelanggan, p.nama_pelanggan, p.onu_type, k.nama_paket, p.ip_address,
+ALTER ALGORITHM = UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_map_pelanggan` AS SELECT p.id_pelanggan, p.no_pelanggan, p.nama_pelanggan, p.onu_type, k.nama_paket, p.ip_address,
 CONCAT(p.latitude, ', ',p.longitude) AS cust_latlong, o.odp_name, o.latlong AS odp_latlong, o.max_client,
 CONCAT('<a href="https://wa.me/',p.telp,'" target="_blank">wa.me/',p.telp,'</a>') AS telp, CONCAT(p.onu_db,' dBm') AS onu_db,p.gpon_olt
 FROM pelanggan p

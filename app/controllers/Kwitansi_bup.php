@@ -75,65 +75,33 @@ class Kwitansi extends CI_Controller
 					$dateExp = $this->db->query("SELECT option_value FROM settings WHERE option_name = 'tgl_expired_paket' ")->row();
 					if ($q->jumlah != 0) {
 						$takeKode = $this->kwitansi->plgn_ByWilayah($idWil->id_wilayah, $sort); // ambil semua kode pelanggan berdasarkan wilayah
-						$data_invoices = [];
-
 						try {
-							// $this->db->trans_begin();
-							
+							$this->db->trans_begin();
 							foreach ($takeKode as $kode) {
-								$kode_invoice = $this->_invoiceCode($kode_wilayah, $bulanPenagihan);
-								
-								$data_invoices[] = array(
-									'kode_invoice' => $kode_invoice,
+								$cekinv = $this->_invoiceCode($kode_wilayah, $bulanPenagihan);
+								$data = array(
+									'kode_invoice' => $cekinv,
 									'no_pelanggan' => $kode->no_pelanggan,
 									'bulan_penagihan' => $bulanPenagihan,
 									'expired' => date('Y-m', strtotime('+1 months', strtotime($bulanPenagihan))) . '-' . $dateExp->option_value,
 									'kode_wilayah' => $kode_wilayah,
 									'tarif' => $kode->tarif,
 								);
-								// $this->db->insert('temp_invoice', $data);
+								$this->db->insert('temp_invoice', $data);
 							}
 
-							// 1. Mulai Transaksi Database
-							$this->db->trans_begin();
-
-							// 2. Lakukan Batch Insert Data Invoice (misal dipotong per 500)
-							$chunks = array_chunk($data_invoices, 500);
-							foreach ($chunks as $batch) {
-								$this->db->insert_batch('temp_invoice', $batch);
+							// setelah data invoice dimasukan pada database, generateInvoice membuat file PDF dan menyimpannya pada server
+							$pathf = $this->generateInvoice($idWil->id_wilayah, substr($bulanPenagihan, 0, 7), $sort, $kode_wilayah);
+							if (file_exists($pathf['namafile']) && $pathf['rollback'] == true) {
+								unlink($pathf['namafile']);
+								throw new Exception("DB rolling back!");
 							}
-
-							// 3. (Opsional) Query lain yang berhubungan, misal insert log transaksi
-							// $log_data = array(
-							// 	'total_invoice' => count($data_invoices),
-							// 	'created_at'    => date('Y-m-d H:i:s')
-							// );
-							// $this->db->insert('invoice_logs', $log_data);
-
-							// 4. Cek Status Transaksi
-							if ($this->db->trans_status() === FALSE) {
-								// Jika ada query yang gagal, BATALKAN SEMUA
-								$this->db->trans_rollback();
-								// return false;
-							} else {
-								// Jika semua sukses, SIMPAN PERMANEN
-								$this->db->trans_commit();
-
-								// setelah data invoice dimasukan pada database, generateInvoice membuat file PDF dan menyimpannya pada server
-								$pathf = $this->generateInvoice($idWil->id_wilayah, substr($bulanPenagihan, 0, 7), $sort, $kode_wilayah);
-								if (file_exists($pathf['namafile']) && $pathf['rollback'] == true) {
-									unlink($pathf['namafile']);
-									throw new Exception("DB rolling back!");
-								}
-
-								$pesan = array(
-									'pesan' => 'Sukses, <strong>' . $q->jumlah . '</strong> data telah dimasukan!',
-									'title' => 'Berhasil!',
-									'msgtype' => 'success'
-								);
-							}
-
-							// $this->db->trans_commit();
+							$this->db->trans_commit();
+							$pesan = array(
+								'pesan' => 'Sukses, <strong>' . $q->jumlah . '</strong> data telah dimasukan!',
+								'title' => 'Berhasil!',
+								'msgtype' => 'success'
+							);
 						} catch (Exception $e) {
 							$pesan = array(
 								'pesan' => 'System Error, terjadi kesalahan dalam pembuatan kwitansi! Hubungi developer!',
@@ -160,7 +128,6 @@ class Kwitansi extends CI_Controller
 				'msgtype' => 'error'
 			);
 		}
-
 		echo json_encode($pesan);
 	}
 
