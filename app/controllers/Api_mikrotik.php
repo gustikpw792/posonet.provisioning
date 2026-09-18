@@ -97,9 +97,9 @@ class Api_mikrotik extends CI_Controller
 	 */
 
 	
-	function getPPPSecret($username = false) {
+	function getPPPSecret($username = '210.-ENDANG-JAYCE7DD841') {
 	   $body = $this->routermodel->getRestSecret($username);
-	   echo $body;
+	   echo json_encode($body);
 	}
 
 	function putPPPSecret() {

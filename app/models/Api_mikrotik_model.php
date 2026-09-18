@@ -29,15 +29,23 @@ class Api_mikrotik_model extends CI_Model
       'port' => $this->mikrotik['PORT'],
     ]);
     
+    $this->_clientMtik = new RClient($this->_mikrotik);
+
     $this->_restClient = new GClient([
       'base_uri' => $this->mikrotik['REST_URL'],
-      'timeout' => 9.0,
-      'headers' => [
+      'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
+      'verify'   => false, // Set false jika menggunakan self-signed SSL bawaan MikroTik
+      'timeout' => 5.0,
+      'headers'  => [
         'Connection' => 'keep-alive',
-      ],
+      ]
+      // Optimasi agar koneksi TCP tidak terus-menerus dibuka-tutup
+      // 'curl' => [
+      //   CURLOPT_TCP_KEEPALIVE => 1,
+      //   CURLOPT_HTTPAUTH      => CURLAUTH_BASIC
+      // ]
     ]);
 
-    $this->_clientMtik = new RClient($this->_mikrotik);
 
   }
 
@@ -167,11 +175,6 @@ class Api_mikrotik_model extends CI_Model
     return "$no Profile changed! [$changedProfile]";
   }
 
-  
-
-  
-
-
   public function get_ppp_ip_address($username = false)
   {
     //get by name for return .id
@@ -187,7 +190,7 @@ class Api_mikrotik_model extends CI_Model
    * Set to Expire
    */
 
-  public function match_paket_rest()
+  public function match_paket_rest2()
   {
     /***
      * apabila paket ppp secret mikrotik tidak sama dengan yang ada di database. 
@@ -242,14 +245,70 @@ class Api_mikrotik_model extends CI_Model
     return "$no PPP Secret Profile changed! <br>Expired = [$changedToExpired]<br>Not Match = [$notMatch]";
   }
 
+  public function match_paket_rest()
+  {
+    /***
+     * apabila paket ppp secret mikrotik tidak sama dengan yang ada di database. 
+     * maka ubah ppp secret di mikrotik dengan yang di database
+     * kemudian close connection
+     */
+    $no = 0;
+    $notMatch = $changedToExpired = '';
+    $secretMtik = json_decode($this->getRestSecret(), true);
+    // return json_decode($secretMtik);
+    // exit();
+
+    foreach ($secretMtik as $d) {
+      $name = $this->db->escape($d['name']);
+      $cekdb = $this->db->query("SELECT id_pelanggan, username, mikrotik_profile, status_berlangganan FROM v_pelanggan WHERE username=$name");
+
+      // echo "M=$d->name<br>";
+
+      // jika name sama maka cek profile
+      if ($cekdb->num_rows() > 0) {
+        $data = $cekdb->row();
+
+        // echo "M=$d[name] | DB=$data->username <br>";
+
+        if ($data->status_berlangganan == 'Expired' && $d['profile'] != 'Expired') {
+          // set to Expired
+          $this->patchRestSecretById(
+            $d['.id'],
+            (object) array(
+              'profile' => 'Expired'
+            )
+          );
+
+          // close connection ppp
+          $this->pppCloseConnection($d['name']);
+
+          $changedToExpired .= "$name, ";
+          $no++;
+        } elseif ($data->status_berlangganan == 'Active' && $d['profile'] != $data->mikrotik_profile) {
+          $this->patchRestSecretById(
+            $d['.id'],
+            (object) array(
+              'profile' => $data->mikrotik_profile
+            )
+          );
+
+          $this->pppCloseConnection($d['name']);
+
+          $notMatch .= "$name, ";
+          $no++;
+        } else {
+          // nothing changed!
+        }
+      }
+    }
+    return "$no PPP Secret Profile changed! <br>Expired = [$changedToExpired]<br>Not Match = [$notMatch]";
+  }
+
+
    function getRestSecret($username=false) 
    {
     $query = (!$username) ? "" : "?name=$username";
-
-    $response = $this->_restClient->get("ppp/secret$query",
-    [
-      'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']]
-    ]);
+    $response = $this->_restClient->get("ppp/secret$query");
 
     return $response->getBody();
    }
@@ -268,7 +327,7 @@ class Api_mikrotik_model extends CI_Model
 
     $response = $this->_restClient->put('ppp/secret',
     [
-      'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
+      // 'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
       'headers' => [
           'Content-type' => 'application/json',
           'Accept'       => 'application/json',
@@ -298,7 +357,7 @@ class Api_mikrotik_model extends CI_Model
     
     $response = $this->_restClient->patch("ppp/secret/$id",
     [
-      'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
+      // 'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
       'headers' => [
           'Content-type' => 'application/json',
           'Accept'       => 'application/json',
@@ -319,7 +378,7 @@ class Api_mikrotik_model extends CI_Model
 
     $response = $this->_restClient->patch("ppp/secret/$id",
     [
-      'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
+      // 'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
       'headers' => [
           'Content-type' => 'application/json',
           'Accept'       => 'application/json',
@@ -348,7 +407,7 @@ class Api_mikrotik_model extends CI_Model
     if ($id!='') {
       $response = $this->_restClient->delete("ppp/secret/$id",
       [
-        'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']]
+        // 'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']]
       ]);
   
       return $response->getBody();
@@ -363,7 +422,7 @@ class Api_mikrotik_model extends CI_Model
 
     $response = $this->_restClient->get("ppp/active$query",
     [
-      'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']]
+      // 'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']]
     ]);
 
     return $response->getBody();
@@ -387,7 +446,7 @@ class Api_mikrotik_model extends CI_Model
     if ($id!='') {
       $response = $this->_restClient->delete("ppp/active/$id",
       [
-        'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']]
+        // 'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']]
       ]);
   
       return $response->getBody();
@@ -404,7 +463,7 @@ class Api_mikrotik_model extends CI_Model
    
     $response = $this->_restClient->get("ip/firewal/nat$query",
     [
-      'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']]
+      // 'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']]
     ]);
    
     return $response->getBody();
@@ -420,7 +479,7 @@ class Api_mikrotik_model extends CI_Model
 
     $response = $this->_restClient->patch("ip/firewal/nat/$id",
     [
-      'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
+      // 'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
       'headers' => [
           'Content-type' => 'application/json',
           'Accept'       => 'application/json',
@@ -458,7 +517,7 @@ class Api_mikrotik_model extends CI_Model
 
       $response = $this->_restClient->put("ip/firewal/nat",
       [
-        'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
+        // 'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
         'headers' => [
             'Content-type' => 'application/json',
             'Accept'       => 'application/json',
