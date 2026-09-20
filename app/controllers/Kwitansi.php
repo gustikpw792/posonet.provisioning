@@ -260,11 +260,20 @@ class Kwitansi extends CI_Controller
 				'namafile' => $namafile,
 				'outputMode' => 'FILE', // STREAM = just temporarly open in browser | FILE = save to storage server
 			);
-			$fl = $this->load->view('admin/kwitansi/invoice_inet', $kirim, true);
-			if (strlen($fl) > 0) { // jika ada teks error, return rollback db
-				return ['namafile' => $namafile, 'rollback' => true, 'message' => $fl];
-			} else {
-				return ['namafile' => $namafile, 'rollback' => false, 'message' => $fl];
+
+			try {
+				$fl = $this->load->view('admin/kwitansi/invoice_inet', $kirim, true);
+				
+				if (strlen($fl) > 0) { // jika ada teks error, return rollback db
+					return ['namafile' => $namafile, 'rollback' => true, 'message' => $fl];
+				} else {
+					return ['namafile' => $namafile, 'rollback' => false, 'message' => $fl];
+				}
+				
+			} catch (\Throwable $th) {
+				//throw $th;
+				$del = $this->db->query("DELETE FROM temp_invoice WHERE kode_wilayah='$kodewil' 
+						AND bulan_penagihan='$bulanPenagihan'");
 			}
 		} else {
 			return ['namafile' => FCPATH . 'assets/invoice/XXX.txt', 'rollback' => true, 'message' => 'Data invoice tidak ada!'];

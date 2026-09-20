@@ -78,11 +78,11 @@ class Detail_setoran_model extends CI_Model
       qti = 0 : kode invoice belum terdaftar dalam database,
       qti = 1 : data ada terdaftar database,
       qtk = 2 : invoice tidak sesuai dengan kolektor
-      qds = 3 : data sudah ada di detail_setoran, tidak bisa 2x input
+      qds = 3 : duplikat. sudah ada di detail_setoran, tidak bisa 2x input
       qds = 4 : simpan hasil scan kedalam detail_setoran
     */
 
-    $qtk = $this->db->query("SELECT kode_invoice FROM temp_invoice WHERE kode_invoice LIKE '%$kodeInvoice%'");
+    $qtk = $this->db->query("SELECT kode_invoice FROM temp_invoice WHERE kode_invoice=?",[$kodeInvoice]);
 
     // cek di temp_invoice apakah INVOICE ada dalam database
     if ($qtk->num_rows() != 1) {
@@ -100,7 +100,7 @@ class Detail_setoran_model extends CI_Model
           - jika data kolektor sesuai dengan master setoran,
           - cek apakah invoice sudah ada di detail_setoran?
         */
-      $qds = $this->db->query("SELECT kode_invoice FROM detail_setoran WHERE kode_invoice LIKE '%$kodeInvoice%'");
+      $qds = $this->db->query("SELECT kode_invoice FROM detail_setoran WHERE kode_invoice=?",[$kodeInvoice]);
       // jika invoice sudah ada di detail_setoran, maka tidak bisa input 2x. return 4
       if ($qds->num_rows() != 1) {
         // OK, simpan hasil scan kedalam detail_setoran
