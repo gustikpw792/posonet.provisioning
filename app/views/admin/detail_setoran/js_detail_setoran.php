@@ -518,6 +518,7 @@
       },
       success: function(response) {
         var html = '';
+        // console.log(response.status);
 
         if (response.status) {
           html += response.data;
@@ -559,10 +560,10 @@
         no_internet: nopel,
       },
       function(response) {
-        let statusModal = response.data.status;
+        let statusModal = response.status;
         $('#resDetailInvoice').html('<strong>Loading...</strong>');
 
-        if (response.data.status) {
+        if (response.status) {
           $('#konten').show();
           $('#modalLoading').hide();
 
@@ -581,9 +582,10 @@
 
           setTimeout(() => {
             document.getElementById('btnProses').focus();
-          }, 500);
+          }, 300);
         } else {
-          alert(response.data.message);
+          alert(response.message);
+          $('#myModal5').modal('hide');
         }
 
         // Kirim status ke callback
@@ -603,7 +605,6 @@
     prosesInvoice(kodeInvoice);
     console.log(noIntenet + " === " + kodeInvoice + " === " + totalAmount);
   }
-
 </script>
 
 </body>

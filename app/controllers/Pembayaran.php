@@ -80,8 +80,17 @@ class Pembayaran extends CI_Controller
 		$this->load->model('billing_model','billingModel');
 
 		$billData = $this->billingModel->getBillData($no_internet);
+		
+		if (!$billData['status']) {
+			return array(
+				'html' => "",
+				'data' => [],
+				'status' => false,
+				'message' => $billData['message'],
+			); 
+		}
+
 		$data = $billData['data'];
-		$status = $billData['status'];
 		$message = $billData['message'];
 
 		// set class
@@ -147,7 +156,7 @@ class Pembayaran extends CI_Controller
 					</div>
 
 					<!-- Tombol Proses -->
-					<button type="button" id="btnProses" class="btn btn-outline btn-primary text-uppercase btn-lg btn-proses-block" onclick="payNow()">
+					<button type="button" id="btnProses" tabindex="0" class="btn btn-outline btn-primary text-uppercase btn-lg btn-proses-block" onclick="payNow()">
 						Proses
 					</button>
 				</div>';
@@ -155,6 +164,7 @@ class Pembayaran extends CI_Controller
 		return array(
 				'html' => $html,
 				'data' => $billData,
+				'status' => true,
 		);
 
 	}
