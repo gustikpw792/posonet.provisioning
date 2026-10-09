@@ -36,14 +36,6 @@ class Api_mikrotik_model extends CI_Model
       'auth' => [$this->mikrotik['USERNAME'], $this->mikrotik['PASSWORD']],
       'verify'   => false, // Set false jika menggunakan self-signed SSL bawaan MikroTik
       'timeout' => 5.0,
-      'headers'  => [
-        'Connection' => 'keep-alive',
-      ]
-      // Optimasi agar koneksi TCP tidak terus-menerus dibuka-tutup
-      // 'curl' => [
-      //   CURLOPT_TCP_KEEPALIVE => 1,
-      //   CURLOPT_HTTPAUTH      => CURLAUTH_BASIC
-      // ]
     ]);
 
 
