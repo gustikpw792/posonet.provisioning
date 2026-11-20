@@ -743,9 +743,13 @@
       'json')
   }
 
-  function onustate() {
+  function onustate(mode = '') {
+    const payload = mode ? {
+      mode: mode
+    } : {};
     $.post(
-      "<?= site_url('api_rest_client/onustate') ?>",
+      "<?= site_url('api_rest_client/onustate') ?>", 
+      payload,
       function(data, status) {
         if (status) {
           // $('.v_online').html(data.online);

@@ -954,7 +954,15 @@ _handled by %s_";
  */
 	public function onustate()
 	{
-		$gpon_olt = $this->input->get('gpon_olt');
+		$this->load->model('cache_model');
+
+		$gpon_olt = $this->input->post('gpon_olt');
+		$mode = $this->input->post('mode');
+		if ($mode === 'force') {
+			// Logika refresh / ambil data paksa dari sumber/OLT
+			$clear_cache = $this->cache_model->clear_cache();
+		}
+
 		$request = $this->api->gpon_onu_state($gpon_olt='');
 
 		$los = $offline = $online = array();
@@ -979,7 +987,6 @@ _handled by %s_";
 				$online[] = $row->onu_index;
 			}
 
-			$this->load->model('cache_model');
 
 			// $parsed_data = $this->cache_model->get_cached_data_onustate();
 			// // update ketika ada data baru dari cache

@@ -12,6 +12,7 @@
 
                         <div id="iboxToggle" class="ibox-tools">
 
+                            <button class="btn btn-xs" onclick="onustate('force')"><i class="fa fa-refresh"></i> Force OnuState</button>
                             <button class="btn btn-xs" onclick="showUncfg()"><i class="fa fa-plus"></i> Unconfig</button>
                             <?php if ($this->session->level == 'administrator' || $this->session->level == 'kolektor'): ?>
                                 <button class="btn btn-xs" id="#btnExpiredContent" onclick="toggleExpired()"><i class="fa fa-warning"></i> Expired</button>
