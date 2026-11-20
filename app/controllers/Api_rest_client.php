@@ -813,37 +813,49 @@ _handled by %s_";
 		]);
 	}
 
+	private function _get_ip_from_ppp($gpon_onu) 
+	{
+		$userPpp = $this->db->query("SELECT username FROM pelanggan WHERE gpon_onu='$gpon_onu'")->row()->username;
+
+		$getActiveConnection = $this->routermodel->get_ppp_ip_address($userPpp);
+		$ipRemote = '';
+		foreach ($getActiveConnection as $key) {
+			$ipRemote = $key['address'];
+		}
+
+		return $ipRemote;
+	}
+
 	public function open_remote_onu()
 	{
 		$gpon_onu = $this->input->post('gpon_onu');
 		$remote_state = $this->input->post('remote_state');
 		$host_id = $this->input->post('host_id');
-
+		$ipRemote = '';
 		// cek apakah security remote sudah terbuka?
-		$get_remote_state = $this->db->query("SELECT remote_web_state FROM pelanggan WHERE gpon_onu=?",[$gpon_onu])->row()->remote_web_state;
+		$get_remote_state = $this->db->query("SELECT onu_type, remote_web_state FROM pelanggan WHERE gpon_onu=?",[$gpon_onu])->row();
 
-		if ($get_remote_state !== 'enabled') {
-			$request = $this->api->remote_onu($gpon_onu, 'enable', $host_id);
-
-			$state = ($remote_state == 'enable') ? 'enabled' : 'disabled';
-
-			if ($request->ip_address == '0.0.0.0') {
-				//ambil ip dari router berdasarkan username pppoe
-				$userPpp = $this->db->query("SELECT username FROM pelanggan WHERE gpon_onu='$gpon_onu'")->row()->username;
-
-				$getActiveConnection = $this->routermodel->get_ppp_ip_address($userPpp);
-				$ipRemote='';
-				foreach ($getActiveConnection as $key) {
-					$ipRemote = $key['address'];
+		if ($get_remote_state->remote_web_state !== 'enabled') {
+			if ($get_remote_state->onu_type !== 'FIBERHOME') {
+				
+				$request = $this->api->remote_onu($gpon_onu, 'enable', $host_id);
+	
+				$state = ($remote_state == 'enable') ? 'enabled' : 'disabled';
+	
+				if ($request->ip_address == '0.0.0.0') {
+					//ambil ip dari router berdasarkan username pppoe
+					$ipRemote = $this->_get_ip_from_ppp($gpon_onu);
+				} else {
+					$ipRemote = $request->ip_address;
 				}
 
+				$query = $this->db->query("UPDATE pelanggan 
+				SET ip_address='$request->ip_address', remote_web_state='$state'
+				WHERE gpon_onu='$gpon_onu'");
 			} else {
-				$ipRemote = $request->ip_address;
+				$ipRemote = $this->_get_ip_from_ppp($gpon_onu);
 			}
 
-			$query = $this->db->query("UPDATE pelanggan 
-			SET ip_address='$request->ip_address', remote_web_state='$state'
-			WHERE gpon_onu='$gpon_onu'");
 
 			$msg = 'Remote web opened!';
 
@@ -851,13 +863,7 @@ _handled by %s_";
 		} else {
 			// jika sudah open
 			// ambil saja ip dari router berdasarkan username pppoe
-			$userPpp = $this->db->query("SELECT username FROM pelanggan WHERE gpon_onu='$gpon_onu'")->row()->username;
-
-			$getActiveConnection = $this->routermodel->get_ppp_ip_address($userPpp);
-			$ipRemote='';
-			foreach ($getActiveConnection as $key) {
-				$ipRemote = $key['address'];
-			}
+			$ipRemote = $this->_get_ip_from_ppp($gpon_onu);
 
 			$msg = 'Remote already opened!';
 		}
@@ -867,13 +873,6 @@ _handled by %s_";
 		$statusIp = $this->_is_public_ip_access();
 
 		if ($statusIp['public_access']) {
-			$link = 'http://'. $statusIp['remote_ip'] . ":" . $this->ros['PORT_REMOTEWEB'];
-			$this->routermodel->setPublicRemoteOnt(
-				(object) [
-					'to-addresses' => $ipRemote,
-				],$ipRemote
-			);
-		} else if ($statusIp['public_access'] == false && $_SERVER['HTTP_HOST'] != 'localhost' && $statusIp['message'] != 'Accessed locally') {
 			$link = 'http://'. $statusIp['remote_ip'] . ":" . $this->ros['PORT_REMOTEWEB'];
 			$this->routermodel->setPublicRemoteOnt(
 				(object) [
@@ -895,25 +894,59 @@ _handled by %s_";
 
 	private function _is_public_ip_access()
 	{
+		// 1. Ambil IP server
 		$server_ip = $_SERVER['SERVER_ADDR'] ?? gethostbyname(gethostname());
-		// $server_ip = $_SERVER['SERVER_ADDR'] ?? gethostbyname($_SERVER['HTTP_HOST']);
-		// $remote_ip = $_SERVER['HTTP_HOST'] ?? $_SERVER['REMOTE_ADDR'] ?? null;
-		$remote_ip = $_SERVER['HTTP_HOST'] ?? $_SERVER['REMOTE_ADDR'] ?? null;
 
-		// If accessed from the same IP, it's local
-		if ($server_ip == $_SERVER['REMOTE_ADDR']) {
-			return ['public_access' => false, 'message' => 'Accessed locally', 'server_ip' => $server_ip, 'remote_ip' => $remote_ip];
+		// 2. Ambil IP Remote (klien) yang sebenarnya
+		$remote_ip = $_SERVER['HTTP_X_FORWARDED_FOR']
+			?? $_SERVER['HTTP_CLIENT_IP']
+			?? $_SERVER['REMOTE_ADDR']
+			?? null;
+
+		// Jika HTTP_X_FORWARDED_FOR berisi beberapa IP (chaining proxy), ambil IP pertama
+		if ($remote_ip && strpos($remote_ip, ',') !== false) {
+			$remote_ip = trim(explode(',', $remote_ip)[0]);
 		}
-		// Remove port from remote_ip if present
-		if (strpos($remote_ip, ':') !== false) {
+
+		// Hapus port dari IP jika ada (misal IPv4 dengan port atau format tertentu)
+		if ($remote_ip && strpos($remote_ip, ':') !== false && filter_var($remote_ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) {
 			$remote_ip = explode(':', $remote_ip)[0];
 		}
-		// Check if remote IP is private
-		if (filter_var($remote_ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-			return ['public_access' => true, 'message' => "Accessed via public IP",'server_ip' => $server_ip, 'remote_ip' => $remote_ip];
-		} else {
-			return ['public_access' => false, 'message' => "Accessed via private IP",'server_ip' => $server_ip, 'remote_ip' => $remote_ip];
+
+		// 3. Jika IP klien tidak valid / tidak terdeteksi
+		if (!$remote_ip || !filter_var($remote_ip, FILTER_VALIDATE_IP)) {
+			return [
+				'public_access' => false,
+				'message'       => 'IP Remote tidak valid atau tidak terdeteksi',
+				'server_ip'     => $server_ip,
+				'remote_ip'     => $remote_ip
+			];
 		}
+
+		// 4. Cek apakah IP remote sama dengan IP server (akses lokal/loopback)
+		if ($remote_ip === $server_ip || $remote_ip === '127.0.0.1' || $remote_ip === '::1') {
+			return [
+				'public_access' => false,
+				'message'       => 'Accessed locally (Same Server/Loopback)',
+				'server_ip'     => $server_ip,
+				'remote_ip'     => $remote_ip
+			];
+		}
+
+		// 5. Cek apakah IP remote adalah IP Publik
+		// FILTER_FLAG_NO_PRIV_RANGE & FILTER_FLAG_NO_RES_RANGE mengembalikan true jika IP PUBLIK
+		$is_public = filter_var(
+			$remote_ip,
+			FILTER_VALIDATE_IP,
+			FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+		) !== false;
+
+		return [
+			'public_access' => $is_public,
+			'message'       => $is_public ? 'Accessed via public IP' : 'Accessed via private IP',
+			'server_ip'     => $server_ip,
+			'remote_ip'     => $remote_ip
+		];
 	}
 
 

@@ -744,11 +744,16 @@
   }
 
   function onustate(mode = '') {
+    if (mode == 'force') {
+      notif('Silahkan tunggu beberapa saat!', 'Force ONUSTATE', 'warning');
+    }
+
     const payload = mode ? {
       mode: mode
     } : {};
+
     $.post(
-      "<?= site_url('api_rest_client/onustate') ?>", 
+      "<?= site_url('api_rest_client/onustate') ?>",
       payload,
       function(data, status) {
         if (status) {
